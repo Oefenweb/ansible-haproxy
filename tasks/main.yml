@@ -1,8 +1,8 @@
-# tasks file for haproxy
 ---
+# tasks file for haproxy
 - name: add repository from PPA and install its signing key
   apt_repository:
-    repo: 'ppa:vbernat/haproxy-1.5'
+    repo: "{{ haproxy_ppa }}"
     update_cache: yes
   tags: [configuration, haproxy, haproxy-add-repository]
 
@@ -21,3 +21,20 @@
   with_items: haproxy_install
   when: haproxy_install
   tags: [configuration, haproxy, haproxy-install]
+
+- name: update configuration file
+  template:
+    src: etc/haproxy/haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: 0640
+  notify: restart haproxy
+  tags: [configuration, haproxy, haproxy-configuration]
+
+- name: start and enable service
+  service:
+    name: haproxy
+    state: started
+    enabled: yes
+  tags: [configuration, haproxy, haproxy-start-enable-service]
