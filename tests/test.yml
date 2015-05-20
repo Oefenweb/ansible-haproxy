@@ -1,0 +1,6 @@
+# test file for haproxy
+---
+- hosts: localhost
+  remote_user: root
+  roles:
+    - ansible-haproxy

@@ -1,0 +1,18 @@
+# meta file for haproxy
+---
+galaxy_info:
+  author: Mischa ter Smitten
+  company: Oefenweb.nl B.V.
+  description: Set up the latest version of HAProxy in Ubuntu systems
+  license: MIT
+  min_ansible_version: 1.4
+  platforms:
+  - name: Ubuntu
+    versions:
+    - lucid
+    - precise
+    - trusty
+  categories:
+  - system
+  - web
+dependencies: []

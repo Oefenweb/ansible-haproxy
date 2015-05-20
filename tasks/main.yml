@@ -1,0 +1,23 @@
+# tasks file for haproxy
+---
+- name: add repository from PPA and install its signing key
+  apt_repository:
+    repo: 'ppa:haproxy-team/ppa'
+    update_cache: yes
+  tags: [configuration, haproxy, haproxy-add-repository]
+
+- name: install dependencies
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: haproxy_dependencies
+  when: haproxy_dependencies
+  tags: [configuration, haproxy, haproxy-dependencies]
+
+- name: install
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: haproxy_install
+  when: haproxy_install
+  tags: [configuration, haproxy, haproxy-install]
