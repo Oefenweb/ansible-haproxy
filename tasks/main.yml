@@ -2,7 +2,7 @@
 ---
 - name: add repository from PPA and install its signing key
   apt_repository:
-    repo: 'ppa:haproxy-team/ppa'
+    repo: 'ppa:vbernat/haproxy-1.5'
     update_cache: yes
   tags: [configuration, haproxy, haproxy-add-repository]
 
