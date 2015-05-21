@@ -1,35 +1,73 @@
+# {{ ansible_managed }}
+
 global
-	log /dev/log local0
-	log /dev/log local1 notice
-	chroot /var/lib/haproxy
-	stats socket {{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }} mode 660 level admin
-	stats timeout 30s
-	user haproxy
-	group haproxy
+{% if haproxy_global.log is defined %}
+{% for log in haproxy_global.log %}
+	log {{ log.address }} {{ log.facility }}{% if log.level is defined %} {{log.level }}{% endif %}{% if log.minlevel is defined %} {{ log.minlevel }}{% endif %}
+
+{% if log.format is defined %}
+    log-format {{ log.format }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if haproxy_global.chroot is defined and haproxy_global.chroot != false %}
+	chroot {{ haproxy_global.chroot }}
+{% endif %}
+{% if haproxy_global.stats is defined %}
+{% if haproxy_global.stats.socket is defined %}
+	stats socket {{ haproxy_global.stats.socket }}
+{% endif -%}
+{% if haproxy_global.stats.timeout is defined %}
+	stats timeout {{ haproxy_global.stats.timeout }}
+{% endif -%}
+{% endif %}
+{% if haproxy_global.user is defined %}
+	user {{ haproxy_global.user }}
+{% endif %}
+{% if haproxy_global.group is defined %}
+	group {{ haproxy_global.group }}
+{% endif %}
+{% if haproxy_global.daemon is defined and haproxy_global.daemon == true %}
 	daemon
+{% endif %}
 
 	# Default SSL material locations
-	ca-base /etc/ssl/certs
-	crt-base /etc/ssl/private
+{% if haproxy_global.ca_base is defined %}
+	ca-base {{ haproxy_global.ca_base }}
+{% endif %}
+{% if haproxy_global.crt_base is defined %}
+	crt-base {{ haproxy_global.crt_base }}
+{% endif %}
 
 	# Default ciphers to use on SSL-enabled listening sockets.
 	# For more information, see ciphers(1SSL). This list is from:
 	#  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
-	ssl-default-bind-ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
-	ssl-default-bind-options no-sslv3
+{% if haproxy_global.ssl_default_bind_ciphers is defined %}
+	ssl-default-bind-ciphers {{ haproxy_global.ssl_default_bind_ciphers }}
+{% endif %}
+{% if haproxy_global.ssl_default_bind_options is defined %}
+	ssl-default-bind-options {{ haproxy_global.ssl_default_bind_options }}
+{% endif %}
 
 defaults
-	log global
-	mode http
-	option httplog
-	option dontlognull
-	timeout connect 5000
-	timeout client 50000
-	timeout server 50000
-	errorfile 400 /etc/haproxy/errors/400.http
-	errorfile 403 /etc/haproxy/errors/403.http
-	errorfile 408 /etc/haproxy/errors/408.http
-	errorfile 500 /etc/haproxy/errors/500.http
-	errorfile 502 /etc/haproxy/errors/502.http
-	errorfile 503 /etc/haproxy/errors/503.http
-	errorfile 504 /etc/haproxy/errors/504.http
+{% if haproxy_defaults.log is defined %}
+	log {{ haproxy_defaults.log }}
+{% endif %}
+{% if haproxy_defaults.mode is defined %}
+	mode {{ haproxy_defaults.mode }}
+{% endif %}
+{% if haproxy_defaults.option is defined %}
+{% for option in haproxy_defaults.option %}
+	option {{ option }}
+{% endfor %}
+{% endif %}
+{% if haproxy_defaults.timeout is defined %}
+{% for key, value in haproxy_defaults.timeout.iteritems() %}
+	timeout {{ key }} {{ value }}
+{% endfor %}
+{% endif %}
+{% if haproxy_defaults.errorfile is defined %}
+{% for key, value in haproxy_defaults.errorfile.iteritems() %}
+	errorfile {{ key }} {{ value }}
+{% endfor %}
+{% endif %}

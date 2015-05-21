@@ -31,7 +31,7 @@ MIT
 
 #### Author Information
 
-Mischa ter Smitten
+Mischa ter Smitten (based on work of [FloeDesignTechnologies](https://github.com/FloeDesignTechnologies))
 
 #### Feedback, bug-reports, requests, ...
 
