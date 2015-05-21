@@ -3,3 +3,4 @@
 haproxy_ppa: 'ppa:vbernat/haproxy-1.5'
 haproxy_dependencies:
   - haproxy
+  - socat
