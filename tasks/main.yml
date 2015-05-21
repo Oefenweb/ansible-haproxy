@@ -29,6 +29,7 @@
     owner: root
     group: root
     mode: 0640
+    validate: 'haproxy -f %s -c'
   notify: restart haproxy
   tags: [configuration, haproxy, haproxy-configuration]
 
