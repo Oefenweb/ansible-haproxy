@@ -1,0 +1,47 @@
+{% if haproxy_global_log is defined %}
+{% for log in haproxy_global_log %}
+	log {{ log.address }} {{ log.facility }}{% if log.level is defined %} {{log.level }}{% endif %}{% if log.minlevel is defined %} {{ log.minlevel }}{% endif %}
+
+{% if log.format is defined %}
+    log-format {{ log.format }}
+{% endif %}
+{% endfor %}
+{% endif %}
+{% if haproxy_global_chroot is defined and haproxy_global_chroot != false %}
+	chroot {{ haproxy_global_chroot }}
+{% endif %}
+{% if haproxy_global_stats is defined %}
+{% if haproxy_global_stats.socket is defined %}
+	stats socket {{ haproxy_global_stats.socket }}
+{% endif -%}
+{% if haproxy_global_stats.timeout is defined %}
+	stats timeout {{ haproxy_global_stats.timeout }}
+{% endif -%}
+{% endif %}
+{% if haproxy_global_user is defined %}
+	user {{ haproxy_global_user }}
+{% endif %}
+{% if haproxy_global_group is defined %}
+	group {{ haproxy_global_group }}
+{% endif %}
+{% if haproxy_global_daemon is defined and haproxy_global_daemon == true %}
+	daemon
+{% endif %}
+
+	# Default SSL material locations
+{% if haproxy_global_ca_base is defined %}
+	ca-base {{ haproxy_global_ca_base }}
+{% endif %}
+{% if haproxy_global_crt_base is defined %}
+	crt-base {{ haproxy_global_crt_base }}
+{% endif %}
+
+	# Default ciphers to use on SSL-enabled listening sockets.
+	# For more information, see ciphers(1SSL). This list is from:
+	#  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
+{% if haproxy_global_ssl_default_bind_ciphers is defined %}
+	ssl-default-bind-ciphers {{ haproxy_global_ssl_default_bind_ciphers }}
+{% endif %}
+{% if haproxy_global_ssl_default_bind_options is defined %}
+	ssl-default-bind-options {{ haproxy_global_ssl_default_bind_options }}
+{% endif %}
