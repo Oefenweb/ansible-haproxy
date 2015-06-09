@@ -2,40 +2,50 @@
 ---
 haproxy_install: []
 
-haproxy_global:
-  log:
-    - address: /dev/log
-      facility: local0
-    - address: /dev/log
-      facility: local1
-      level: notice
-  chroot: /var/lib/haproxy
-  stats:
-    socket: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"
-    timeout: 30s
-  user: haproxy
-  group: haproxy
-  daemon: true
-  ca_base: /etc/ssl/certs
-  crt_base: /etc/ssl/private
-  ssl_default_bind_ciphers: 'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS'
-  ssl_default_bind_options: 'no-sslv3'
+# global section
+haproxy_global_log:
+  - address: /dev/log
+    facility: local0
+  - address: /dev/log
+    facility: local1
+    level: notice
+haproxy_global_chroot: /var/lib/haproxy
+haproxy_global_stats:
+  socket: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"
+  timeout: 30s
+haproxy_global_user: haproxy
+haproxy_global_group: haproxy
+haproxy_global_daemon: true
+haproxy_global_ca_base: /etc/ssl/certs
+haproxy_global_crt_base: /etc/ssl/private
+haproxy_global_ssl_default_bind_ciphers: 'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS'
+haproxy_global_ssl_default_bind_options: 'no-sslv3'
 
-haproxy_defaults:
-  log: global
-  mode: http
-  option:
-    - httplog
-    - dontlognull
-  timeout:
-    connect: 5000
-    client: 50000
-    server: 50000
-  errorfile:
-    400: /etc/haproxy/errors/400.http
-    403: /etc/haproxy/errors/403.http
-    408: /etc/haproxy/errors/408.http
-    500: /etc/haproxy/errors/500.http
-    502: /etc/haproxy/errors/502.http
-    503: /etc/haproxy/errors/503.http
-    504: /etc/haproxy/errors/504.http
+# defaults section
+haproxy_defaults_log: global
+haproxy_defaults_mode: http
+haproxy_defaults_option:
+  - httplog
+  - dontlognull
+haproxy_defaults_timeout:
+  - type: connect
+    timeout: 5000
+  - type: client
+    timeout: 50000
+  - type: server
+    timeout: 50000
+haproxy_defaults_errorfile:
+  - code: 400
+    file: /etc/haproxy/errors/400.http
+  - code: 403
+    file: /etc/haproxy/errors/403.http
+  - code: 408
+    file: /etc/haproxy/errors/408.http
+  - code: 500
+    file: /etc/haproxy/errors/500.http
+  - code: 502
+    file: /etc/haproxy/errors/502.http
+  - code: 503
+    file: /etc/haproxy/errors/503.http
+  - code: 504
+    file: /etc/haproxy/errors/504.http

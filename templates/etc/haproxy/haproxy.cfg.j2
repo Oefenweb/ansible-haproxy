@@ -1,8 +1,8 @@
 # {{ ansible_managed }}
 
 global
-{% if haproxy_global.log is defined %}
-{% for log in haproxy_global.log %}
+{% if haproxy_global_log is defined %}
+{% for log in haproxy_global_log %}
 	log {{ log.address }} {{ log.facility }}{% if log.level is defined %} {{log.level }}{% endif %}{% if log.minlevel is defined %} {{ log.minlevel }}{% endif %}
 
 {% if log.format is defined %}
@@ -10,64 +10,64 @@ global
 {% endif %}
 {% endfor %}
 {% endif %}
-{% if haproxy_global.chroot is defined and haproxy_global.chroot != false %}
-	chroot {{ haproxy_global.chroot }}
+{% if haproxy_global_chroot is defined and haproxy_global_chroot != false %}
+	chroot {{ haproxy_global_chroot }}
 {% endif %}
-{% if haproxy_global.stats is defined %}
-{% if haproxy_global.stats.socket is defined %}
-	stats socket {{ haproxy_global.stats.socket }}
+{% if haproxy_global_stats is defined %}
+{% if haproxy_global_stats.socket is defined %}
+	stats socket {{ haproxy_global_stats.socket }}
 {% endif -%}
-{% if haproxy_global.stats.timeout is defined %}
-	stats timeout {{ haproxy_global.stats.timeout }}
+{% if haproxy_global_stats.timeout is defined %}
+	stats timeout {{ haproxy_global_stats.timeout }}
 {% endif -%}
 {% endif %}
-{% if haproxy_global.user is defined %}
-	user {{ haproxy_global.user }}
+{% if haproxy_global_user is defined %}
+	user {{ haproxy_global_user }}
 {% endif %}
-{% if haproxy_global.group is defined %}
-	group {{ haproxy_global.group }}
+{% if haproxy_global_group is defined %}
+	group {{ haproxy_global_group }}
 {% endif %}
-{% if haproxy_global.daemon is defined and haproxy_global.daemon == true %}
+{% if haproxy_global_daemon is defined and haproxy_global_daemon == true %}
 	daemon
 {% endif %}
 
 	# Default SSL material locations
-{% if haproxy_global.ca_base is defined %}
-	ca-base {{ haproxy_global.ca_base }}
+{% if haproxy_global_ca_base is defined %}
+	ca-base {{ haproxy_global_ca_base }}
 {% endif %}
-{% if haproxy_global.crt_base is defined %}
-	crt-base {{ haproxy_global.crt_base }}
+{% if haproxy_global_crt_base is defined %}
+	crt-base {{ haproxy_global_crt_base }}
 {% endif %}
 
 	# Default ciphers to use on SSL-enabled listening sockets.
 	# For more information, see ciphers(1SSL). This list is from:
 	#  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
-{% if haproxy_global.ssl_default_bind_ciphers is defined %}
-	ssl-default-bind-ciphers {{ haproxy_global.ssl_default_bind_ciphers }}
+{% if haproxy_global_ssl_default_bind_ciphers is defined %}
+	ssl-default-bind-ciphers {{ haproxy_global_ssl_default_bind_ciphers }}
 {% endif %}
-{% if haproxy_global.ssl_default_bind_options is defined %}
-	ssl-default-bind-options {{ haproxy_global.ssl_default_bind_options }}
+{% if haproxy_global_ssl_default_bind_options is defined %}
+	ssl-default-bind-options {{ haproxy_global_ssl_default_bind_options }}
 {% endif %}
 
 defaults
-{% if haproxy_defaults.log is defined %}
-	log {{ haproxy_defaults.log }}
+{% if haproxy_defaults_log is defined %}
+	log {{ haproxy_defaults_log }}
 {% endif %}
-{% if haproxy_defaults.mode is defined %}
-	mode {{ haproxy_defaults.mode }}
+{% if haproxy_defaults_mode is defined %}
+	mode {{ haproxy_defaults_mode }}
 {% endif %}
-{% if haproxy_defaults.option is defined %}
-{% for option in haproxy_defaults.option %}
+{% if haproxy_defaults_option is defined %}
+{% for option in haproxy_defaults_option %}
 	option {{ option }}
 {% endfor %}
 {% endif %}
-{% if haproxy_defaults.timeout is defined %}
-{% for key, value in haproxy_defaults.timeout.iteritems() %}
-	timeout {{ key }} {{ value }}
+{% if haproxy_defaults_timeout is defined %}
+{% for timeout in haproxy_defaults_timeout %}
+	timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 {% endif %}
-{% if haproxy_defaults.errorfile is defined %}
-{% for key, value in haproxy_defaults.errorfile.iteritems() %}
-	errorfile {{ key }} {{ value }}
+{% if haproxy_defaults_errorfile is defined %}
+{% for errorfile in haproxy_defaults_errorfile %}
+	errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 {% endif %}
