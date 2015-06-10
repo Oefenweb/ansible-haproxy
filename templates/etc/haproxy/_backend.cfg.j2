@@ -1,0 +1,22 @@
+{% for backend in haproxy_backend %}
+backend {{ backend.name }}
+	mode {{ backend.mode }}
+
+	balance {{ backend.balance }}
+
+{% for option in backend.option %}
+	option {{ option }}
+{% endfor %}
+
+{% for http_request in backend.http_request %}
+	http-request {{ http_request }}
+{% endfor %}
+
+{% if backend.server is defined %}
+{% for server in backend.server %}
+	server {{ server.name }} {{ server.ip }}{% if server.port is defined %}:{{server.port }}{% endif %} {% if server.maxconn is defined %}maxconn {{server.maxconn }} {% endif %}{% if server.params is defined %}{% for param in server.params %}{{ param }} {% endfor %}{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% endfor %}
