@@ -22,6 +22,27 @@
   when: haproxy_install
   tags: [configuration, haproxy, haproxy-install]
 
+- name: create certificate files directories
+  file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: 0750
+  with_items: haproxy_ssl_map
+  tags: [configuration, haproxy, haproxy-configuration, haproxy-configuration-ssl]
+
+- name: copy certificate files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0640') }}"
+  with_items: haproxy_ssl_map
+  notify: restart haproxy
+  tags: [configuration, haproxy, haproxy-configuration, haproxy-configuration-ssl]
+
 - name: update configuration file
   template:
     src: etc/haproxy/haproxy.cfg.j2
