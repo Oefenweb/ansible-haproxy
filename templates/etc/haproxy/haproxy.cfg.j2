@@ -1,13 +1,13 @@
 # {{ ansible_managed }}
 
 global
-{% include '_global.cfg.j2' %}
+{% include 'global.cfg.j2' %}
 
 defaults
-{% include '_defaults.cfg.j2' %}
+{% include 'defaults.cfg.j2' %}
 
-{% include '_listen.cfg.j2' -%}
+{% include 'listen.cfg.j2' %}
 
-{% include '_frontend.cfg.j2' -%}
+{% include 'frontend.cfg.j2' %}
 
-{% include '_backend.cfg.j2' -%}
+{% include 'backend.cfg.j2' %}

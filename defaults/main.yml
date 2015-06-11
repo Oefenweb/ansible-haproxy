@@ -18,7 +18,7 @@ haproxy_global_group: haproxy
 haproxy_global_daemon: true
 haproxy_global_ca_base: /etc/ssl/certs
 haproxy_global_crt_base: /etc/ssl/private
-haproxy_global_ssl_default_bind_ciphers: 'ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS'
+haproxy_global_ssl_default_bind_ciphers: 'kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL'
 haproxy_global_ssl_default_bind_options: 'no-sslv3'
 
 # defaults section
@@ -49,3 +49,12 @@ haproxy_defaults_errorfile:
     file: /etc/haproxy/errors/503.http
   - code: 504
     file: /etc/haproxy/errors/504.http
+
+# listen section
+haproxy_listen: []
+
+# front-end section
+haproxy_frontend: []
+
+# back-end section
+haproxy_backend: []

@@ -8,7 +8,7 @@
 {% endfor %}
 {% endif %}
 
-{% if haproxy_global_chroot is defined and haproxy_global_chroot != false %}
+{% if haproxy_global_chroot is defined and haproxy_global_chroot | bool != false %}
   chroot {{ haproxy_global_chroot }}
 {% endif %}
 
@@ -29,7 +29,7 @@
   group {{ haproxy_global_group }}
 {% endif %}
 
-{% if haproxy_global_daemon is defined and haproxy_global_daemon == true %}
+{% if haproxy_global_daemon is defined and haproxy_global_daemon | bool == true %}
   daemon
 {% endif %}
 

@@ -1,0 +1,30 @@
+{% for listen in haproxy_listen %}
+listen {{ listen.name }}
+{% if listen.description is defined %}
+  description {{ listen.description }}
+{% endif %}
+
+  bind {{ listen.bind }}{% if listen.ssl is defined %} ssl{% for ssl in listen.ssl %}{% if ssl.crt is defined %} crt {{ ssl.crt }}{% endif %}{% endfor %}{% endif %}
+
+  mode {{ listen.mode }}
+
+{% if listen.stats is defined %}
+{% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
+  stats enable
+  stats uri /
+{% if listen.stats.hide_version is defined and listen.stats.hide_version | bool == true %}
+  stats hide-version
+{% endif %}
+{% if listen.stats.refresh is defined %}
+  stats refresh {{ listen.stats.refresh }}
+{% endif %}
+{% if listen.stats.auth is defined %}
+{% for auth in listen.stats.auth %}
+  stats auth {{ auth.user }}:{{ auth.passwd }}
+
+{% endfor %}
+{% endif %}
+{% endif %}
+{% endif %}
+
+{% endfor %}

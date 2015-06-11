@@ -1,5 +1,9 @@
 {% for backend in haproxy_backend %}
 backend {{ backend.name }}
+{% if backend.description is defined %}
+  description {{ backend.description }}
+{% endif %}
+
   mode {{ backend.mode }}
 
   balance {{ backend.balance }}
@@ -8,9 +12,12 @@ backend {{ backend.name }}
   option {{ option }}
 {% endfor %}
 
+{% if backend.http_request is defined %}
 {% for http_request in backend.http_request %}
-  http-request {{ http_request }}
+  http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
+
 {% endfor %}
+{% endif %}
 
 {% if backend.server is defined %}
 {% for server in backend.server %}
