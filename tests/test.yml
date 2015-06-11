@@ -4,3 +4,26 @@
   remote_user: root
   roles:
     - ansible-haproxy
+  vars:
+    # front-end section
+    haproxy_frontend:
+      - name: http
+        bind: '0.0.0.0:80'
+        mode: http
+        default_backend: webservers
+
+    # back-end section
+    haproxy_backend:
+      - name: webservers
+        mode: http
+        balance: roundrobin
+        option:
+          - forwardfor
+          - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
+        http_request:
+          - action: 'set-header'
+            param: 'X-Forwarded-Port %[dst_port]'
+          - action: 'add-header'
+            param: 'X-Forwarded-Proto https'
+            cond: 'if { ssl_fc }'
+        server: []
