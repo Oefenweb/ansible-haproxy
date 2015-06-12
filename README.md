@@ -57,13 +57,86 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 
 None
 
-#### Example
+#### SSL Termination (Multiple certificates, global monitoring, multiple web servers)
 
 ```yaml
 ---
 - hosts: all
   roles:
   - haproxy
+  vars:
+    haproxy_ssl_map:
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example0-com.pem
+        dest: /etc/ssl/private/star-example0-com.pem
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example1-com.pem
+        dest: /etc/ssl/private/star-example1-com.pem
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example2-com.pem
+        dest: /etc/ssl/private/star-example2-com.pem
+
+    haproxy_listen:
+      - name: stats
+        description: Global statistics
+        bind: '0.0.0.0:1936'
+        mode: http
+        stats:
+          enable: true
+          uri: /
+          hide_version: true
+          refresh: 5s
+          auth:
+            - user: admin
+              passwd: 'NqXgKWQ9f9Et'
+        ssl:
+          - crt: star-example0-com.pem
+
+    haproxy_frontend:
+      - name: http
+        description: Front-end for all HTTP traffic
+        bind: '0.0.0.0:80'
+        mode: http
+        default_backend: webservers
+      - name: https
+        description: Front-end for all HTTPS traffic
+        bind: '0.0.0.0:443'
+        ssl:
+          - crt: star-example1-com.pem
+          - crt: star-example2-com.pem
+        mode: http
+        default_backend: webservers
+        rspadd:
+          - string: 'Strict-Transport-Security:\ max-age=15768000'
+
+    haproxy_backend:
+      - name: webservers
+        description: Back-end with all (Apache) webservers
+        mode: http
+        balance: roundrobin
+        option:
+          - forwardfor
+          - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
+        http_request:
+          - action: 'set-header'
+            param: 'X-Forwarded-Port %[dst_port]'
+          - action: 'add-header'
+            param: 'X-Forwarded-Proto https'
+            cond: 'if { ssl_fc }'
+        server:
+          - name: web01
+            ip: 127.0.0.1
+            port: 8001
+            maxconn: 501
+            params:
+              - check
+          - name: web02
+            ip: 127.0.0.1
+            port: 8002
+            maxconn: 502
+            params:
+              - check
+          - name: web03
+            ip: 127.0.0.1
+            port: 8003
+            maxconn: 503
 ```
 
 #### License
