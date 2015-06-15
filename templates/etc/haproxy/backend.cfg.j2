@@ -8,9 +8,11 @@ backend {{ backend.name }}
 
   balance {{ backend.balance }}
 
+{% if backend.option is defined %}
 {% for option in backend.option %}
   option {{ option }}
 {% endfor %}
+{% endif %}
 
 {% if backend.http_request is defined %}
 {% for http_request in backend.http_request %}
@@ -21,7 +23,7 @@ backend {{ backend.name }}
 
 {% if backend.server is defined %}
 {% for server in backend.server %}
-  server {{ server.name }} {{ server.ip }}{% if server.port is defined %}:{{server.port }}{% endif %} {% if server.maxconn is defined %}maxconn {{server.maxconn }} {% endif %}{% if server.params is defined %}{% for param in server.params %}{{ param }} {% endfor %}{% endif %}
+  server {{ server.name }} {{ server.ip }}{% if server.port is defined %}:{{server.port }}{% endif %} {% if server.maxconn is defined %}maxconn {{server.maxconn }} {% endif %}{% if server.param is defined %}{% for param in server.param %}{{ param }} {% endfor %}{% endif %}
 
 {% endfor %}
 {% endif %}

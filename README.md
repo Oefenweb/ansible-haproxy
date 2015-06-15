@@ -162,18 +162,20 @@ None
             ip: 127.0.0.1
             port: 8001
             maxconn: 501
-            params:
+            param:
               - check
           - name: web02
             ip: 127.0.0.1
             port: 8002
             maxconn: 502
-            params:
+            param:
               - check
           - name: web03
             ip: 127.0.0.1
             port: 8003
             maxconn: 503
+            param:
+              - check
 ```
 
 #### License
