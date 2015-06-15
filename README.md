@@ -48,6 +48,20 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_ssl_map.{n}.mode`: The mode of the file, such as 0644 (optional, default `0640`)
 
 * `haproxy_listen`: [default: `[]`]: Listen declarations
+* `haproxy_listen.{n}.name`: [required]: The name of the section (e.g. `stats`)
+* `haproxy_listen.{n}.description`: [optional]: A description of the section (e.g. `Global statistics`)
+* `haproxy_listen.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:1936`)
+* `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_listen.{n}.stats`: [optional]: Stats declarations
+* `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
+* `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
+* `haproxy_listen.{n}.stats.hide_version`: [optional]: Hide version reporting
+* `haproxy_listen.{n}.stats.refresh`: [optional]: Defined the refresh delay, specified in seconds (e.g. `5s`)
+* `haproxy_listen.{n}.stats.auth`: [optional]: Auth declarations
+* `haproxy_listen.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
+* `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
+* `haproxy_listen.{n}.ssl`: [optional]: SSL declarations
+* `haproxy_listen.{n}.ssl.{n}.crt`: [required]: Designates a PEM file containing both the required certificates and any associated private keys (e.g. `star-example0-com.pem`)
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 
@@ -57,7 +71,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 
 None
 
-#### SSL Termination (Multiple certificates, global monitoring, multiple web servers)
+#### SSL Termination (Multiple certificates (SNI), global monitoring, multiple web servers)
 
 ```yaml
 ---
