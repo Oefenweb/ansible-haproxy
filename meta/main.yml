@@ -14,5 +14,7 @@ galaxy_info:
     - trusty
   categories:
   - system
+  - clustering
+  - networking
   - web
 dependencies: []
