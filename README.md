@@ -48,16 +48,53 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_ssl_map.{n}.mode`: The mode of the file, such as 0644 (optional, default `0640`)
 
 * `haproxy_listen`: [default: `[]`]: Listen declarations
+* `haproxy_listen.{n}.name`: [required]: The name of the section (e.g. `stats`)
+* `haproxy_listen.{n}.description`: [optional]: A description of the section (e.g. `Global statistics`)
+* `haproxy_listen.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:1936`)
+* `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_listen.{n}.stats`: [optional]: Stats declarations
+* `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
+* `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
+* `haproxy_listen.{n}.stats.hide_version`: [optional]: Hide version reporting
+* `haproxy_listen.{n}.stats.refresh`: [optional]: Defined the refresh delay, specified in seconds (e.g. `5s`)
+* `haproxy_listen.{n}.stats.auth`: [optional]: Auth declarations
+* `haproxy_listen.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
+* `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
+* `haproxy_listen.{n}.ssl`: [optional]: SSL declarations
+* `haproxy_listen.{n}.ssl.{n}.crt`: [required]: Designates a PEM file containing both the required certificates and any associated private keys (e.g. `star-example0-com.pem`)
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
+* `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
+* `haproxy_frontend.{n}.description`: [optional]: A description of the section (e.g. `Front-end for all HTTPS traffic`)
+* `haproxy_frontend.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:443`)
+* `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_frontend.{n}.default_backend`: [required]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
+* `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
+* `haproxy_frontend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
+* `haproxy_frontend.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
 
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
+* `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
+* `haproxy_backend.{n}.description`: [optional]: A description of the section (e.g. `Back-end with all (Apache) webservers`)
+* `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
+* `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
+* `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
+* `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
+* `haproxy_backend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
+* `haproxy_backend.{n}.http_request.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
+* `haproxy_backend.{n}.server`: [optional]: Server declarations
+* `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
+* `haproxy_backend.{n}.server.{n}.ip`: [required]: The IPv4 or IPv6 address of the server
+* `haproxy_backend.{n}.server.{n}.port`: [optional]: A port specification
+* `haproxy_backend.{n}.server.{n}.maxconn`: [optional]: The `"maxconn"` parameter specifies the maximal number of concurrent connections that will be sent to this server
+* `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 
 ## Dependencies
 
 None
 
-#### SSL Termination (Multiple certificates, global monitoring, multiple web servers)
+#### SSL Termination (Multiple certificates (SNI), global monitoring, multiple web servers)
 
 ```yaml
 ---
@@ -125,18 +162,20 @@ None
             ip: 127.0.0.1
             port: 8001
             maxconn: 501
-            params:
+            param:
               - check
           - name: web02
             ip: 127.0.0.1
             port: 8002
             maxconn: 502
-            params:
+            param:
               - check
           - name: web03
             ip: 127.0.0.1
             port: 8003
             maxconn: 503
+            param:
+              - check
 ```
 
 #### License
