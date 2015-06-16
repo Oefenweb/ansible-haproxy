@@ -1,0 +1,20 @@
+{% for frontend in haproxy_frontend %}
+frontend {{ frontend.name }}
+{% if frontend.description is defined %}
+  description {{ frontend.description }}
+{% endif %}
+
+  bind {{ frontend.bind }}{% if frontend.ssl is defined %} ssl{% for ssl in frontend.ssl %} crt {% endfor %}{% endif %}
+
+  mode {{ frontend.mode }}
+
+  default_backend {{ frontend.default_backend }}
+
+{% if frontend.rspadd is defined %}
+{% for rspadd in frontend.rspadd %}
+  rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
+
+{% endfor %}
+{% endif %}
+
+{% endfor %}

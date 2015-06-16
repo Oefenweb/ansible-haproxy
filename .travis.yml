@@ -1,0 +1,48 @@
+---
+language: python
+python: "2.7"
+
+env:
+  - ANSIBLE_VERSION=1.6
+  - ANSIBLE_VERSION=1.7
+  - ANSIBLE_VERSION=1.8
+
+before_install:
+  - sudo apt-get update -qq
+
+  # Remove haproxy
+  - sudo apt-get remove --purge haproxy
+
+install:
+  # Install Ansible.
+  - pip install ansible==$ANSIBLE_VERSION
+
+  # Add ansible.cfg to pick up roles path.
+  - printf "[defaults]\nroles_path = ../" > ansible.cfg
+
+script:
+  # Check the role/playbook's syntax.
+  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
+
+  # Run the role/playbook with ansible-playbook.
+  - ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo -vvvv
+
+  # Run the role/playbook again, checking to make sure it's idempotent.
+  - >
+    ansible-playbook -i tests/inventory tests/test.yml --connection=local --sudo
+    | grep -q 'changed=0.*failed=0'
+    && (echo 'Idempotence test: pass' && exit 0)
+    || (echo 'Idempotence test: fail' && exit 1)
+
+  # Test front-end
+  - >
+    wget http://localhost -O /dev/null -S --quiet 2>&1
+    | grep -q '503 Service Unavailable'
+    && (echo 'Availability test: pass' && exit 0)
+    || (echo 'Availability test: fail' && exit 1)
+
+notifications:
+  email: false
+  hipchat:
+    rooms:
+      secure: 5E26TUa3gV2/vSsuMtkAOtx7VsJf2XWEkfkhE8F1O2QvKrtRanVZZN9MJOba970GmZFQQne1so9HvXAeaPnD3LEcqy+SGAn6JvyH0mYy8i6a/gd9kxiOMHF3gTqCdDsu/SKPAB8N4J1eDvDo/6dfnVzifsZwvw92D9uOkEKi5cEiV8KhKAzK7tLQqAKESNt1BbnCAuTAz38WxJJVrMNPYlZ1gOqK9fIXfhRi0u+oo+21UqzOh6L65gAcD2PYvnt6Ak0KMgIo+iqui6xF7SG4IaMHk9G4FjY77cxxYy39HIAwNUArO0F1OO59b2oofdKX8w2X8TL+4t9zluKorgmvBGHtDcwxy9x2pjJqiTNpYSZyIRZMzM5ocA8y6JeGcl9VDTsO4hJWHqaB+WSulPYtGwZ1UMHPt0GmxdL3kf/ksmq6FJA4PGpV8YMHS65rMs9PibLeWnP7Ja4LQHlJ/eWUSQoCRECBrKxq4zgvTwEr9pxXeQXm85j29KO0c4UmJQhw1ISGuL6Z3VHOewCcdOvNzQmQn9y/rxVpmOWYlJpwPVAf3ht3D3C6t5aoViIwS508pnVzAycnpbxVPRpisQW/j/IC6PeChi3xv24n2pGJctoXtn/vWzt3VXEKKj9Y/Mr9hAEyNlNJfcaLhuicCcMa0d4j3ue8VRpjIjAnRJYBm28=

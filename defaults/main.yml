@@ -1,0 +1,63 @@
+# defaults file for haproxy
+---
+haproxy_install: []
+
+# global section
+haproxy_global_log:
+  - address: /dev/log
+    facility: local0
+  - address: /dev/log
+    facility: local1
+    level: notice
+haproxy_global_chroot: /var/lib/haproxy
+haproxy_global_stats:
+  socket: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"
+  timeout: 30s
+haproxy_global_user: haproxy
+haproxy_global_group: haproxy
+haproxy_global_daemon: true
+haproxy_global_ca_base: /etc/ssl/certs
+haproxy_global_crt_base: /etc/ssl/private
+haproxy_global_ssl_default_bind_ciphers: 'kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL'
+haproxy_global_ssl_default_bind_options: 'no-sslv3'
+
+# defaults section
+haproxy_defaults_log: global
+haproxy_defaults_mode: http
+haproxy_defaults_option:
+  - httplog
+  - dontlognull
+haproxy_defaults_timeout:
+  - type: connect
+    timeout: 5000
+  - type: client
+    timeout: 50000
+  - type: server
+    timeout: 50000
+haproxy_defaults_errorfile:
+  - code: 400
+    file: /etc/haproxy/errors/400.http
+  - code: 403
+    file: /etc/haproxy/errors/403.http
+  - code: 408
+    file: /etc/haproxy/errors/408.http
+  - code: 500
+    file: /etc/haproxy/errors/500.http
+  - code: 502
+    file: /etc/haproxy/errors/502.http
+  - code: 503
+    file: /etc/haproxy/errors/503.http
+  - code: 504
+    file: /etc/haproxy/errors/504.http
+
+# ssl (file) map
+haproxy_ssl_map: []
+
+# listen section
+haproxy_listen: []
+
+# front-end section
+haproxy_frontend: []
+
+# back-end section
+haproxy_backend: []
