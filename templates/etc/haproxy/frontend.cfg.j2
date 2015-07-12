@@ -4,7 +4,7 @@ frontend {{ frontend.name }}
   description {{ frontend.description }}
 {% endif %}
 
-  bind {{ frontend.bind }}{% if frontend.ssl is defined %} ssl{% for ssl in frontend.ssl %} crt {% endfor %}{% endif %}
+  bind {{ frontend.bind }}{% if frontend.ssl is defined %} ssl{% for ssl in frontend.ssl %} crt {{ ssl.crt }}{% endfor %}{% endif %}
 
   mode {{ frontend.mode }}
 
