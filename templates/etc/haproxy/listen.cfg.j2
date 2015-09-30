@@ -8,6 +8,18 @@ listen {{ listen.name }}
 
   mode {{ listen.mode }}
 
+{% if listen.option is defined %}
+{% for option in listen.option %}
+  option {{ option }}
+{% endfor %}
+{% endif %}
+
+{% if listen.no_option is defined %}
+{% for option in listen.no_option %}
+  no option {{ option }}
+{% endfor %}
+{% endif %}
+
 {% if listen.stats is defined %}
 {% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
   stats enable

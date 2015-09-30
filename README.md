@@ -52,6 +52,8 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.description`: [optional]: A description of the section (e.g. `Global statistics`)
 * `haproxy_listen.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:1936`)
 * `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_listen.{n}.option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
+* `haproxy_listen.{n}.no_option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
@@ -68,6 +70,8 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_frontend.{n}.description`: [optional]: A description of the section (e.g. `Front-end for all HTTPS traffic`)
 * `haproxy_frontend.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:443`)
 * `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
+* `haproxy_frontend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_frontend.{n}.default_backend`: [required]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_frontend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
@@ -79,6 +83,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
+* `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_backend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
@@ -176,6 +181,42 @@ None
             maxconn: 503
             param:
               - check
+```
+
+#### Memcached (TCP)
+
+```yaml
+---
+- hosts: all
+  roles:
+  - haproxy
+  vars:
+    haproxy_frontend:
+      - name: memcached
+        bind: '127.0.0.1:11211'
+        mode: tcp
+        option:
+          - dontlog-normal
+        default_backend: memcached-servers
+
+    haproxy_backend:
+      - name: memcached-servers
+        mode: tcp
+        option:
+          - dontlog-normal
+        balance: roundrobin
+        server:
+          - name: memcached-01
+            ip: 127.0.1.1
+            port: 11211
+            param:
+              - check
+          - name: memcached-02
+            ip: 127.0.2.1
+            port: 11211
+            param:
+              - check
+              - backup
 ```
 
 #### License

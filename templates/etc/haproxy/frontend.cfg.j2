@@ -8,6 +8,18 @@ frontend {{ frontend.name }}
 
   mode {{ frontend.mode }}
 
+{% if frontend.option is defined %}
+{% for option in frontend.option %}
+  option {{ option }}
+{% endfor %}
+{% endif %}
+
+{% if frontend.no_option is defined %}
+{% for option in frontend.no_option %}
+  no option {{ option }}
+{% endfor %}
+{% endif %}
+
   default_backend {{ frontend.default_backend }}
 
 {% if frontend.rspadd is defined %}
