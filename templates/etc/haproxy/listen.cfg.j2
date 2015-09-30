@@ -8,6 +8,10 @@ listen {{ listen.name }}
 
   mode {{ listen.mode }}
 
+{% if listen.balance is defined %}
+  balance {{ listen.balance }}
+{% endif %}
+
 {% if listen.option is defined %}
 {% for option in listen.option %}
   option {{ option }}
@@ -37,6 +41,13 @@ listen {{ listen.name }}
 {% endfor %}
 {% endif %}
 {% endif %}
+{% endif %}
+
+{% if listen.server is defined %}
+{% for server in listen.server %}
+  server {{ server.name }} {{ server.ip }}{% if server.port is defined %}:{{server.port }}{% endif %} {% if server.maxconn is defined %}maxconn {{server.maxconn }} {% endif %}{% if server.param is defined %}{% for param in server.param %}{{ param }} {% endfor %}{% endif %}
+
+{% endfor %}
 {% endif %}
 
 {% endfor %}

@@ -52,6 +52,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.description`: [optional]: A description of the section (e.g. `Global statistics`)
 * `haproxy_listen.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:1936`)
 * `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_listen.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_listen.{n}.option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
 * `haproxy_listen.{n}.no_option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
@@ -62,6 +63,12 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.stats.auth`: [optional]: Auth declarations
 * `haproxy_listen.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
 * `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
+* `haproxy_listen.{n}.server`: [optional]: Server declarations
+* `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
+* `haproxy_listen.{n}.server.{n}.ip`: [required]: The IPv4 or IPv6 address of the server
+* `haproxy_listen.{n}.server.{n}.port`: [optional]: A port specification
+* `haproxy_listen.{n}.server.{n}.maxconn`: [optional]: The `"maxconn"` parameter specifies the maximal number of concurrent connections that will be sent to this server
+* `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 * `haproxy_listen.{n}.ssl`: [optional]: SSL declarations
 * `haproxy_listen.{n}.ssl.{n}.crt`: [required]: Designates a PEM file containing both the required certificates and any associated private keys (e.g. `star-example0-com.pem`)
 
@@ -105,7 +112,7 @@ None
 ---
 - hosts: all
   roles:
-  - haproxy
+    - haproxy
   vars:
     haproxy_ssl_map:
       - src: ../../../files/haproxy/etc/haproxy/ssl/star-example0-com.pem
@@ -189,7 +196,7 @@ None
 ---
 - hosts: all
   roles:
-  - haproxy
+    - haproxy
   vars:
     haproxy_frontend:
       - name: memcached
@@ -201,6 +208,34 @@ None
 
     haproxy_backend:
       - name: memcached-servers
+        mode: tcp
+        option:
+          - dontlog-normal
+        balance: roundrobin
+        server:
+          - name: memcached-01
+            ip: 127.0.1.1
+            port: 11211
+            param:
+              - check
+          - name: memcached-02
+            ip: 127.0.2.1
+            port: 11211
+            param:
+              - check
+              - backup
+```
+
+```yaml
+---
+- hosts: all
+  roles:
+    - haproxy
+  vars:
+    haproxy_listen:
+      - name: memcached
+        description: Memcached servers
+        bind: '127.0.0.1:11211'
         mode: tcp
         option:
           - dontlog-normal
