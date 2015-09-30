@@ -3,7 +3,7 @@
 - hosts: localhost
   remote_user: root
   roles:
-    - ansible-haproxy
+    - ../../
   vars:
     # front-end section
     haproxy_frontend:

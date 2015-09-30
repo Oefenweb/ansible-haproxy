@@ -1,5 +1,5 @@
----
 # tasks file for haproxy
+---
 - name: add repository from PPA and install its signing key
   apt_repository:
     repo: "{{ haproxy_ppa }}"

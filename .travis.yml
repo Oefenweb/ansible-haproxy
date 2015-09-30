@@ -4,6 +4,8 @@ python: "2.7"
 
 env:
   - ANSIBLE_VERSION=latest
+  - ANSIBLE_VERSION=1.9.3
+  - ANSIBLE_VERSION=1.9.2
   - ANSIBLE_VERSION=1.9.1
   - ANSIBLE_VERSION=1.9.0.1
   - ANSIBLE_VERSION=1.8.4
@@ -39,9 +41,6 @@ before_install:
 install:
   # Install Ansible.
   - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible; else pip install ansible==$ANSIBLE_VERSION; fi
-
-  # Add ansible.cfg to pick up roles path.
-  - printf "[defaults]\nroles_path = ../" > ansible.cfg
 
 script:
   # Check the role/playbook's syntax.

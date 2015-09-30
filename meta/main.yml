@@ -7,14 +7,14 @@ galaxy_info:
   license: MIT
   min_ansible_version: 1.6
   platforms:
-  - name: Ubuntu
-    versions:
-    - lucid
-    - precise
-    - trusty
+    - name: Ubuntu
+      versions:
+        - lucid
+        - precise
+        - trusty
   categories:
-  - system
-  - clustering
-  - networking
-  - web
+    - system
+    - clustering
+    - networking
+    - web
 dependencies: []
