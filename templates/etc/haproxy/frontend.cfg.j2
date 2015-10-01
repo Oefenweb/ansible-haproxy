@@ -8,6 +8,10 @@ frontend {{ frontend.name }}
 
   mode {{ frontend.mode }}
 
+{% if frontend.maxconn is defined %}
+  maxconn {{ frontend.maxconn }}
+{% endif %}
+
 {% if frontend.option is defined %}
 {% for option in frontend.option %}
   option {{ option }}

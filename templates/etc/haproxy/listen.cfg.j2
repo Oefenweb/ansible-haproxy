@@ -12,6 +12,10 @@ listen {{ listen.name }}
   balance {{ listen.balance }}
 {% endif %}
 
+{% if listen.maxconn is defined %}
+  maxconn {{ listen.maxconn }}
+{% endif %}
+
 {% if listen.option is defined %}
 {% for option in listen.option %}
   option {{ option }}
