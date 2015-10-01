@@ -24,6 +24,12 @@ listen {{ listen.name }}
 {% endfor %}
 {% endif %}
 
+{% if listen.tcp_check is defined %}
+{% for tcp_check in listen.tcp_check %}
+  tcp-check {{ tcp_check }}
+{% endfor %}
+{% endif %}
+
 {% if listen.stats is defined %}
 {% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
   stats enable

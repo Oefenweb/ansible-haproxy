@@ -55,6 +55,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_listen.{n}.option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
 * `haproxy_listen.{n}.no_option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
+* `haproxy_listen.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
@@ -91,6 +92,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
+* `haproxy_backend.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_backend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
@@ -190,7 +192,7 @@ None
               - check
 ```
 
-#### Memcached (TCP)
+#### Memcached (frontend / backend)
 
 ```yaml
 ---
@@ -226,6 +228,9 @@ None
               - backup
 ```
 
+#### Redis (listen)
+
+
 ```yaml
 ---
 - hosts: all
@@ -233,22 +238,29 @@ None
     - haproxy
   vars:
     haproxy_listen:
-      - name: memcached
-        description: Memcached servers
-        bind: '127.0.0.1:11211'
+      - name: redis
+        description: Redis servers
+        bind: '127.0.0.1:6379'
         mode: tcp
         option:
           - dontlog-normal
+          - tcplog
+          - tcp-check
+        tcp_check:
+          - 'send PING\r\n'
+          - 'expect string +PONG'
+          - 'send QUIT\r\n'
+          - 'expect string +OK'
         balance: roundrobin
         server:
-          - name: memcached-01
+          - name: redis-01
             ip: 127.0.1.1
-            port: 11211
+            port: 6379
             param:
               - check
-          - name: memcached-02
+          - name: redis-02
             ip: 127.0.2.1
-            port: 11211
+            port: 6379
             param:
               - check
               - backup
