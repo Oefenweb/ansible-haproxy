@@ -8,6 +8,32 @@ listen {{ listen.name }}
 
   mode {{ listen.mode }}
 
+{% if listen.balance is defined %}
+  balance {{ listen.balance }}
+{% endif %}
+
+{% if listen.maxconn is defined %}
+  maxconn {{ listen.maxconn }}
+{% endif %}
+
+{% if listen.option is defined %}
+{% for option in listen.option %}
+  option {{ option }}
+{% endfor %}
+{% endif %}
+
+{% if listen.no_option is defined %}
+{% for option in listen.no_option %}
+  no option {{ option }}
+{% endfor %}
+{% endif %}
+
+{% if listen.tcp_check is defined %}
+{% for tcp_check in listen.tcp_check %}
+  tcp-check {{ tcp_check }}
+{% endfor %}
+{% endif %}
+
 {% if listen.stats is defined %}
 {% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
   stats enable
@@ -25,6 +51,13 @@ listen {{ listen.name }}
 {% endfor %}
 {% endif %}
 {% endif %}
+{% endif %}
+
+{% if listen.server is defined %}
+{% for server in listen.server %}
+  server {{ server.name }} {{ server.ip }}{% if server.port is defined %}:{{server.port }}{% endif %} {% if server.maxconn is defined %}maxconn {{server.maxconn }} {% endif %}{% if server.param is defined %}{% for param in server.param %}{{ param }} {% endfor %}{% endif %}
+
+{% endfor %}
 {% endif %}
 
 {% endfor %}

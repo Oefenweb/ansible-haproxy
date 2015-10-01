@@ -25,6 +25,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
 * `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
 * `haproxy_global_daemon`: [default: `true`]: Makes the process fork into background. This is the recommended mode of operation
+* `haproxy_global_maxconn`: [optional]: Sets the maximum per-process number of concurrent connections
 * `haproxy_global_ca_base`: [default: `/etc/ssl/certs`]: Assigns a default directory to fetch SSL CA certificates and CRLs from when a relative path is used with `"ca-file"` or `"crl-file"` directives
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
 * `haproxy_global_ssl_default_bind_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms (`"cipher suite"`) that are negotiated during the SSL/TLS handshake for all `"bind"` lines which do not explicitly define theirs
@@ -52,6 +53,11 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.description`: [optional]: A description of the section (e.g. `Global statistics`)
 * `haproxy_listen.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:1936`)
 * `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_listen.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
+* `haproxy_listen.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
+* `haproxy_listen.{n}.option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
+* `haproxy_listen.{n}.no_option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
+* `haproxy_listen.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
@@ -60,6 +66,12 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.stats.auth`: [optional]: Auth declarations
 * `haproxy_listen.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
 * `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
+* `haproxy_listen.{n}.server`: [optional]: Server declarations
+* `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
+* `haproxy_listen.{n}.server.{n}.ip`: [required]: The IPv4 or IPv6 address of the server
+* `haproxy_listen.{n}.server.{n}.port`: [optional]: A port specification
+* `haproxy_listen.{n}.server.{n}.maxconn`: [optional]: The `"maxconn"` parameter specifies the maximal number of concurrent connections that will be sent to this server
+* `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 * `haproxy_listen.{n}.ssl`: [optional]: SSL declarations
 * `haproxy_listen.{n}.ssl.{n}.crt`: [required]: Designates a PEM file containing both the required certificates and any associated private keys (e.g. `star-example0-com.pem`)
 
@@ -68,6 +80,9 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_frontend.{n}.description`: [optional]: A description of the section (e.g. `Front-end for all HTTPS traffic`)
 * `haproxy_frontend.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:443`)
 * `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
+* `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
+* `haproxy_frontend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_frontend.{n}.default_backend`: [required]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_frontend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
@@ -79,6 +94,8 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
+* `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
+* `haproxy_backend.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_backend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
@@ -100,7 +117,7 @@ None
 ---
 - hosts: all
   roles:
-  - haproxy
+    - haproxy
   vars:
     haproxy_ssl_map:
       - src: ../../../files/haproxy/etc/haproxy/ssl/star-example0-com.pem
@@ -176,6 +193,80 @@ None
             maxconn: 503
             param:
               - check
+```
+
+#### Memcached (frontend / backend)
+
+```yaml
+---
+- hosts: all
+  roles:
+    - haproxy
+  vars:
+    haproxy_frontend:
+      - name: memcached
+        bind: '127.0.0.1:11211'
+        mode: tcp
+        option:
+          - dontlog-normal
+        default_backend: memcached-servers
+
+    haproxy_backend:
+      - name: memcached-servers
+        mode: tcp
+        option:
+          - dontlog-normal
+        balance: roundrobin
+        server:
+          - name: memcached-01
+            ip: 127.0.1.1
+            port: 11211
+            param:
+              - check
+          - name: memcached-02
+            ip: 127.0.2.1
+            port: 11211
+            param:
+              - check
+              - backup
+```
+
+#### Redis (listen)
+
+
+```yaml
+---
+- hosts: all
+  roles:
+    - haproxy
+  vars:
+    haproxy_listen:
+      - name: redis
+        description: Redis servers
+        bind: '127.0.0.1:6379'
+        mode: tcp
+        option:
+          - dontlog-normal
+          - tcplog
+          - tcp-check
+        tcp_check:
+          - 'send PING\r\n'
+          - 'expect string +PONG'
+          - 'send QUIT\r\n'
+          - 'expect string +OK'
+        balance: roundrobin
+        server:
+          - name: redis-01
+            ip: 127.0.1.1
+            port: 6379
+            param:
+              - check
+          - name: redis-02
+            ip: 127.0.2.1
+            port: 6379
+            param:
+              - check
+              - backup
 ```
 
 #### License

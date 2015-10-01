@@ -33,6 +33,10 @@
   daemon
 {% endif %}
 
+{% if haproxy_global_maxconn is defined %}
+  maxconn {{ haproxy_global_maxconn }}
+{% endif %}
+
 {% if haproxy_global_ca_base != false %}
   # Default SSL material locations
   ca-base {{ haproxy_global_ca_base }}
