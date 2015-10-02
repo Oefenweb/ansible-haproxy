@@ -34,6 +34,12 @@ listen {{ listen.name }}
 {% endfor %}
 {% endif %}
 
+{% if listen.timeout is defined %}
+{% for timeout in listen.timeout %}
+  timeout {{ timeout.type }} {{ timeout.timeout }}
+{% endfor %}
+{% endif %}
+
 {% if listen.stats is defined %}
 {% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
   stats enable

@@ -24,6 +24,12 @@ frontend {{ frontend.name }}
 {% endfor %}
 {% endif %}
 
+{% if frontend.timeout is defined %}
+{% for timeout in frontend.timeout %}
+  timeout {{ timeout.type }} {{ timeout.timeout }}
+{% endfor %}
+{% endif %}
+
   default_backend {{ frontend.default_backend }}
 
 {% if frontend.rspadd is defined %}
