@@ -87,7 +87,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
 * `haproxy_frontend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_frontend.{n}.timeout`: [optional]: Timeout declarations
-* `haproxy_frontend.{n}.timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
+* `haproxy_frontend.{n}.timeout.type`: [required]: The type (e.g. `client`)
 * `haproxy_frontend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_frontend.{n}.default_backend`: [required]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
@@ -103,7 +103,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_backend.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_backend.{n}.timeout`: [optional]: Timeout declarations
-* `haproxy_backend.{n}.timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
+* `haproxy_backend.{n}.timeout.type`: [required]: The type (e.g. `server`)
 * `haproxy_backend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
