@@ -93,6 +93,10 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_frontend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
 * `haproxy_frontend.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_frontend.{n}.acls`: [optional]: List of ACLs to determine which backend to send.  Currently supports host based only
+* `haproxy_frontend.{n}.acls.{n}.name`: [required]: Name given to the ACL
+* `haproxy_frontend.{n}.acls.{n}.host`: [required]: Servername eg. something.example.com
+* `haproxy_frontend.{n}.acls.{n}.backend`: [required]: Name of the backend to send to
 
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)

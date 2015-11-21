@@ -30,6 +30,14 @@ frontend {{ frontend.name }}
 {% endfor %}
 {% endif %}
 
+{% if frontend.acls is defined %}
+{% for acl in frontend.acls %}
+  acl host_{{acl.name}} hdr(host) -i {{acl.host}}
+  use_backend {{acl.backend}} if host_{{acl.name}}
+{% endfor %}
+{% endif %}
+
+
   default_backend {{ frontend.default_backend }}
 
 {% if frontend.rspadd is defined %}
