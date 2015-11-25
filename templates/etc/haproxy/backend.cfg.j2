@@ -4,46 +4,38 @@ backend {{ backend.name }}
   description {{ backend.description }}
 {% endif %}
 
+{% if backend.bind_process is defined %}
+  bind-process {{ backend.bind_process | join(' ') }}
+{% endif %}
+
   mode {{ backend.mode }}
 
   balance {{ backend.balance }}
 
-{% if backend.option is defined %}
-{% for option in backend.option %}
+{% for option in backend.option | default([])%}
   option {{ option }}
 {% endfor %}
-{% endif %}
 
-{% if backend.no_option is defined %}
-{% for option in backend.no_option %}
+{% for option in backend.no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
-{% endif %}
 
-{% if backend.tcp_check is defined %}
-{% for tcp_check in backend.tcp_check %}
+{% for tcp_check in backend.tcp_check | default([]) %}
   tcp-check {{ tcp_check }}
 {% endfor %}
-{% endif %}
 
-{% if backend.timeout is defined %}
-{% for timeout in backend.timeout %}
+{% for timeout in backend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
-{% endif %}
 
-{% if backend.http_request is defined %}
-{% for http_request in backend.http_request %}
+{% for http_request in backend.http_request | default([]) %}
   http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
 
 {% endfor %}
-{% endif %}
 
-{% if backend.server is defined %}
-{% for server in backend.server %}
+{% for server in backend.server | default([]) %}
   server {{ server.name }} {{ server.ip }}{% if server.port is defined %}:{{server.port }}{% endif %} {% if server.maxconn is defined %}maxconn {{server.maxconn }} {% endif %}{% if server.param is defined %}{% for param in server.param %}{{ param }} {% endfor %}{% endif %}
 
 {% endfor %}
-{% endif %}
 
 {% endfor %}

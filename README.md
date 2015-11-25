@@ -21,6 +21,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_global_chroot`: [default: `/var/lib/haproxy`]: Changes current directory to `<jail dir>` and performs a `chroot()` there before dropping privileges
 * `haproxy_global_stats`: [default: See `defaults/main.yml`]: Stats declarations
 * `haproxy_global_stats.socket`:  [default: `"{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"`]: Binds a UNIX socket to `<path>` or a TCPv4/v6 address to `<address:port>`. Connections to this socket will return various statistics outputs and even allow some commands to be issued to change some runtime settings
+* `haproxy_global_stats.bind_process`:  [optional]: Limits the stats socket to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_global_stats.timeout`:  [default: `30s`]: The default timeout on the stats socket
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
 * `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
@@ -30,6 +31,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
 * `haproxy_global_ssl_default_bind_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms (`"cipher suite"`) that are negotiated during the SSL/TLS handshake for all `"bind"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_bind_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"bind"` lines
+* `haproxy_global_nbproc`: [default: `1`]: Number of processes to create when going daemon. This requires the `daemon` mode. By default, only one process is created, which is the recommended mode of operation
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
@@ -51,7 +53,10 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen`: [default: `[]`]: Listen declarations
 * `haproxy_listen.{n}.name`: [required]: The name of the section (e.g. `stats`)
 * `haproxy_listen.{n}.description`: [optional]: A description of the section (e.g. `Global statistics`)
-* `haproxy_listen.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:1936`)
+* `haproxy_listen.{n}.bind`: [required]: Bind declarations
+* `haproxy_listen.{n}.bind.{n}.listen`: [required]: Defines one or several listening addresses and/or ports (e.g. `0.0.0.0:1936`)
+* `haproxy_listen.{n}.bind.{n}.param`: [optional]: A list of parameters common to this bind declarations
+* `haproxy_listen.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_listen.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_listen.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
@@ -75,13 +80,17 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.server.{n}.port`: [optional]: A port specification
 * `haproxy_listen.{n}.server.{n}.maxconn`: [optional]: The `"maxconn"` parameter specifies the maximal number of concurrent connections that will be sent to this server
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
-* `haproxy_listen.{n}.ssl`: [optional]: SSL declarations
-* `haproxy_listen.{n}.ssl.{n}.crt`: [required]: Designates a PEM file containing both the required certificates and any associated private keys (e.g. `star-example0-com.pem`)
+* `haproxy_listen.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
+* `haproxy_listen.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
+* `haproxy_listen.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
 * `haproxy_frontend.{n}.description`: [optional]: A description of the section (e.g. `Front-end for all HTTPS traffic`)
-* `haproxy_frontend.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:443`)
+* `haproxy_frontend.{n}.bind`: [required]: Bind declarations
+* `haproxy_frontend.{n}.bind.{n}.listen`: [required]: Defines one or several listening addresses and/or ports (e.g. `0.0.0.0:443`)
+* `haproxy_frontend.{n}.bind.{n}.param`: [optional]: A list of parameters common to this bind declarations
+* `haproxy_frontend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
@@ -97,6 +106,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
 * `haproxy_backend.{n}.description`: [optional]: A description of the section (e.g. `Back-end with all (Apache) webservers`)
+* `haproxy_backend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
