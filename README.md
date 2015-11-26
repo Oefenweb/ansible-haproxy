@@ -278,7 +278,6 @@ None
               - check
           - name: redis-02
             listen: '127.0.2.1:6379'
-            port: 6379
             param:
               - check
               - backup
