@@ -76,9 +76,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
 * `haproxy_listen.{n}.server`: [optional]: Server declarations
 * `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
-* `haproxy_listen.{n}.server.{n}.ip`: [required]: The IPv4 or IPv6 address of the server
-* `haproxy_listen.{n}.server.{n}.port`: [optional]: A port specification
-* `haproxy_listen.{n}.server.{n}.maxconn`: [optional]: The `"maxconn"` parameter specifies the maximal number of concurrent connections that will be sent to this server
+* `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 * `haproxy_listen.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_listen.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
@@ -121,9 +119,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_backend.{n}.http_request.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
 * `haproxy_backend.{n}.server`: [optional]: Server declarations
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
-* `haproxy_backend.{n}.server.{n}.ip`: [required]: The IPv4 or IPv6 address of the server
-* `haproxy_backend.{n}.server.{n}.port`: [optional]: A port specification
-* `haproxy_backend.{n}.server.{n}.maxconn`: [optional]: The `"maxconn"` parameter specifies the maximal number of concurrent connections that will be sent to this server
+* `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 
 ## Dependencies
@@ -200,22 +196,19 @@ None
             cond: 'if { ssl_fc }'
         server:
           - name: web01
-            ip: 127.0.0.1
-            port: 8001
-            maxconn: 501
+            listen: '127.0.0.1:8001'
             param:
+              - 'maxconn 501'
               - check
           - name: web02
-            ip: 127.0.0.1
-            port: 8002
-            maxconn: 502
+            listen: '127.0.0.1:8002'
             param:
+              - 'maxconn 502'
               - check
           - name: web03
-            ip: 127.0.0.1
-            port: 8003
-            maxconn: 503
+            listen: '127.0.0.1:8003'
             param:
+              - 'maxconn 503'
               - check
 ```
 
@@ -244,20 +237,17 @@ None
         balance: roundrobin
         server:
           - name: memcached-01
-            ip: 127.0.1.1
-            port: 11211
+            listen: '127.0.1.1:11211'
             param:
               - check
           - name: memcached-02
-            ip: 127.0.2.1
-            port: 11211
+            listen: '127.0.2.1:11211'
             param:
               - check
               - backup
 ```
 
 #### Redis (listen)
-
 
 ```yaml
 ---
@@ -268,7 +258,8 @@ None
     haproxy_listen:
       - name: redis
         description: Redis servers
-        bind: '127.0.0.1:6379'
+        bind:
+          - listen: '127.0.0.1:6379'
         mode: tcp
         option:
           - dontlog-normal
@@ -282,12 +273,11 @@ None
         balance: roundrobin
         server:
           - name: redis-01
-            ip: 127.0.1.1
-            port: 6379
+            listen: '127.0.1.1:6379'
             param:
               - check
           - name: redis-02
-            ip: 127.0.2.1
+            listen: '127.0.2.1:6379'
             port: 6379
             param:
               - check
