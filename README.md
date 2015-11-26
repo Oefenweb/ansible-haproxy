@@ -149,7 +149,11 @@ None
     haproxy_listen:
       - name: stats
         description: Global statistics
-        bind: '0.0.0.0:1936'
+        bind:
+          - listen: '0.0.0.0:1936'
+            param:
+              - ssl
+              - 'crt star-example0-com.pem'
         mode: http
         stats:
           enable: true
@@ -159,21 +163,22 @@ None
           auth:
             - user: admin
               passwd: 'NqXgKWQ9f9Et'
-        ssl:
-          - crt: star-example0-com.pem
 
     haproxy_frontend:
       - name: http
         description: Front-end for all HTTP traffic
-        bind: '0.0.0.0:80'
+        bind:
+          - listen: '0.0.0.0:80'
         mode: http
         default_backend: webservers
       - name: https
         description: Front-end for all HTTPS traffic
-        bind: '0.0.0.0:443'
-        ssl:
-          - crt: star-example1-com.pem
-          - crt: star-example2-com.pem
+        bind: 
+          - listen: '0.0.0.0:443'
+            param:
+              - ssl
+              - 'crt star-example1-com.pem'
+              - 'crt star-example2-com.pem'
         mode: http
         default_backend: webservers
         rspadd:
@@ -224,7 +229,8 @@ None
   vars:
     haproxy_frontend:
       - name: memcached
-        bind: '127.0.0.1:11211'
+        bind:
+          - listen: '127.0.0.1:11211'
         mode: tcp
         option:
           - dontlog-normal
