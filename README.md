@@ -170,13 +170,13 @@ None
       - name: http
         description: Front-end for all HTTP traffic
         bind:
-          - listen: '0.0.0.0:80'
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:80"
         mode: http
         default_backend: webservers
       - name: https
         description: Front-end for all HTTPS traffic
         bind: 
-          - listen: '0.0.0.0:443'
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
             param:
               - ssl
               - 'crt star-example1-com.pem'
@@ -201,18 +201,18 @@ None
             param: 'X-Forwarded-Proto https'
             cond: 'if { ssl_fc }'
         server:
-          - name: web01
-            listen: '127.0.0.1:8001'
+          - name: web-01
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8001"
             param:
               - 'maxconn 501'
               - check
-          - name: web02
-            listen: '127.0.0.1:8002'
+          - name: web-02
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8002"
             param:
               - 'maxconn 502'
               - check
-          - name: web03
-            listen: '127.0.0.1:8003'
+          - name: web-03
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8003"
             param:
               - 'maxconn 503'
               - check
@@ -327,18 +327,18 @@ None
             param: 'X-Forwarded-Proto https'
             cond: 'if { ssl_fc }'
         server:
-          - name: web01
-            listen: '127.0.0.1:8001'
+          - name: web-01
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8001"
             param:
               - 'maxconn 501'
               - check
-          - name: web02
-            listen: '127.0.0.1:8002'
+          - name: web-02
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8002"
             param:
               - 'maxconn 502'
               - check
-          - name: web03
-            listen: '127.0.0.1:8003'
+          - name: web-03
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8003"
             param:
               - 'maxconn 503'
               - check
