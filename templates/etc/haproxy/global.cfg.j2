@@ -13,9 +13,10 @@
 {% endif %}
 
 {% if haproxy_global_stats != false %}
-{% if haproxy_global_stats.socket is defined %}
-  stats socket {{ haproxy_global_stats.socket }}
-{% endif -%}
+{% for socket in haproxy_global_stats.sockets | default([]) %}
+  stats socket {{ socket.listen }}{% for param in socket.param | default([]) %} {{ param }}{% endfor %}
+
+{% endfor %}
 {% if haproxy_global_stats.timeout is defined %}
   stats timeout {{ haproxy_global_stats.timeout }}
 {% endif -%}
@@ -55,4 +56,8 @@
 
 {% if haproxy_global_ssl_default_bind_options != false %}
   ssl-default-bind-options {{ haproxy_global_ssl_default_bind_options }}
+{% endif %}
+
+{% if haproxy_global_nbproc > 1 %}
+  nbproc {{ haproxy_global_nbproc }}
 {% endif %}

@@ -4,7 +4,14 @@ listen {{ listen.name }}
   description {{ listen.description }}
 {% endif %}
 
-  bind {{ listen.bind }}{% if listen.ssl is defined %} ssl{% for ssl in listen.ssl %} crt {{ ssl.crt }}{% endfor %}{% endif %}
+{% for bind in listen.bind %}
+  bind {{ bind.listen }}{% for param in bind.param | default([]) %} {{ param }}{% endfor %}
+
+{% endfor %}
+
+{% if listen.bind_process is defined %}
+  bind-process {{ listen.bind_process | join(' ') }}
+{% endif %}
 
   mode {{ listen.mode }}
 
@@ -16,29 +23,21 @@ listen {{ listen.name }}
   maxconn {{ listen.maxconn }}
 {% endif %}
 
-{% if listen.option is defined %}
-{% for option in listen.option %}
+{% for option in listen.option | default([]) %}
   option {{ option }}
 {% endfor %}
-{% endif %}
 
-{% if listen.no_option is defined %}
-{% for option in listen.no_option %}
+{% for option in listen.no_option | default([])  %}
   no option {{ option }}
 {% endfor %}
-{% endif %}
 
-{% if listen.tcp_check is defined %}
-{% for tcp_check in listen.tcp_check %}
+{% for tcp_check in listen.tcp_check | default([]) %}
   tcp-check {{ tcp_check }}
 {% endfor %}
-{% endif %}
 
-{% if listen.timeout is defined %}
-{% for timeout in listen.timeout %}
+{% for timeout in listen.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
-{% endif %}
 
 {% if listen.stats is defined %}
 {% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
@@ -50,20 +49,21 @@ listen {{ listen.name }}
 {% if listen.stats.refresh is defined %}
   stats refresh {{ listen.stats.refresh }}
 {% endif %}
-{% if listen.stats.auth is defined %}
-{% for auth in listen.stats.auth %}
+{% for auth in listen.stats.auth | default([]) %}
   stats auth {{ auth.user }}:{{ auth.passwd }}
 
 {% endfor %}
 {% endif %}
 {% endif %}
-{% endif %}
 
-{% if listen.server is defined %}
-{% for server in listen.server %}
-  server {{ server.name }} {{ server.ip }}{% if server.port is defined %}:{{server.port }}{% endif %} {% if server.maxconn is defined %}maxconn {{server.maxconn }} {% endif %}{% if server.param is defined %}{% for param in server.param %}{{ param }} {% endfor %}{% endif %}
+{% for server in listen.server | default([]) %}
+  server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
 {% endfor %}
-{% endif %}
+
+{% for rspadd in listen.rspadd | default([]) %}
+  rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
+
+{% endfor %}
 
 {% endfor %}

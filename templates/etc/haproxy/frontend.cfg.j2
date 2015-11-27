@@ -4,7 +4,14 @@ frontend {{ frontend.name }}
   description {{ frontend.description }}
 {% endif %}
 
-  bind {{ frontend.bind }}{% if frontend.ssl is defined %} ssl{% for ssl in frontend.ssl %} crt {{ ssl.crt }}{% endfor %}{% endif %}
+{% for bind in frontend.bind %}
+  bind {{ bind.listen }}{% for param in bind.param | default([]) %} {{ param }}{% endfor %}
+
+{% endfor %}
+
+{% if frontend.bind_process is defined %}
+  bind-process {{ frontend.bind_process | join(' ') }}
+{% endif %}
 
   mode {{ frontend.mode }}
 
@@ -12,31 +19,23 @@ frontend {{ frontend.name }}
   maxconn {{ frontend.maxconn }}
 {% endif %}
 
-{% if frontend.option is defined %}
-{% for option in frontend.option %}
+{% for option in frontend.option | default([]) %}
   option {{ option }}
 {% endfor %}
-{% endif %}
 
-{% if frontend.no_option is defined %}
-{% for option in frontend.no_option %}
+{% for option in frontend.no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
-{% endif %}
 
-{% if frontend.timeout is defined %}
-{% for timeout in frontend.timeout %}
+{% for timeout in frontend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
-{% endif %}
 
   default_backend {{ frontend.default_backend }}
 
-{% if frontend.rspadd is defined %}
-{% for rspadd in frontend.rspadd %}
+{% for rspadd in frontend.rspadd | default([]) %}
   rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
 
 {% endfor %}
-{% endif %}
 
 {% endfor %}

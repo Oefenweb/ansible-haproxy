@@ -20,8 +20,10 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_global_log.{n}.format`: [optional]: Specifies the log format string to use for traffic logs (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
 * `haproxy_global_chroot`: [default: `/var/lib/haproxy`]: Changes current directory to `<jail dir>` and performs a `chroot()` there before dropping privileges
 * `haproxy_global_stats`: [default: See `defaults/main.yml`]: Stats declarations
-* `haproxy_global_stats.socket`:  [default: `"{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"`]: Binds a UNIX socket to `<path>` or a TCPv4/v6 address to `<address:port>`. Connections to this socket will return various statistics outputs and even allow some commands to be issued to change some runtime settings
-* `haproxy_global_stats.timeout`:  [default: `30s`]: The default timeout on the stats socket
+* `haproxy_global_stats.sockets`:  [default: `[{listen: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"}]`]: Sockets declarations
+* `haproxy_global_stats.sockets.{n}.listen`:  [required]: Defines a listening address and/or ports (e.g. `/run/haproxy/admin.sock`)
+* `haproxy_global_stats.sockets.{n}.param`:  [optional]: A list of parameters common to this bind declarations (e.g. `['mode 660', 'level admin', 'process 1']`)
+* `haproxy_global_stats.timeout`:  [optional]: The default timeout on the stats socket
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
 * `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
 * `haproxy_global_daemon`: [default: `true`]: Makes the process fork into background. This is the recommended mode of operation
@@ -30,6 +32,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
 * `haproxy_global_ssl_default_bind_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms (`"cipher suite"`) that are negotiated during the SSL/TLS handshake for all `"bind"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_bind_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"bind"` lines
+* `haproxy_global_nbproc`: [default: `1`]: Number of processes to create when going daemon. This requires the `daemon` mode. By default, only one process is created, which is the recommended mode of operation
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
@@ -51,7 +54,10 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen`: [default: `[]`]: Listen declarations
 * `haproxy_listen.{n}.name`: [required]: The name of the section (e.g. `stats`)
 * `haproxy_listen.{n}.description`: [optional]: A description of the section (e.g. `Global statistics`)
-* `haproxy_listen.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:1936`)
+* `haproxy_listen.{n}.bind`: [required]: Bind declarations
+* `haproxy_listen.{n}.bind.{n}.listen`: [required]: Defines one or several listening addresses and/or ports (e.g. `0.0.0.0:1936`)
+* `haproxy_listen.{n}.bind.{n}.param`: [optional]: A list of parameters common to this bind declarations
+* `haproxy_listen.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_listen.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_listen.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
@@ -71,17 +77,19 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
 * `haproxy_listen.{n}.server`: [optional]: Server declarations
 * `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
-* `haproxy_listen.{n}.server.{n}.ip`: [required]: The IPv4 or IPv6 address of the server
-* `haproxy_listen.{n}.server.{n}.port`: [optional]: A port specification
-* `haproxy_listen.{n}.server.{n}.maxconn`: [optional]: The `"maxconn"` parameter specifies the maximal number of concurrent connections that will be sent to this server
+* `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
-* `haproxy_listen.{n}.ssl`: [optional]: SSL declarations
-* `haproxy_listen.{n}.ssl.{n}.crt`: [required]: Designates a PEM file containing both the required certificates and any associated private keys (e.g. `star-example0-com.pem`)
+* `haproxy_listen.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
+* `haproxy_listen.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
+* `haproxy_listen.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
 * `haproxy_frontend.{n}.description`: [optional]: A description of the section (e.g. `Front-end for all HTTPS traffic`)
-* `haproxy_frontend.{n}.bind`: [required]: Defines a listening address and/or port (e.g. `0.0.0.0:443`)
+* `haproxy_frontend.{n}.bind`: [required]: Bind declarations
+* `haproxy_frontend.{n}.bind.{n}.listen`: [required]: Defines one or several listening addresses and/or ports (e.g. `0.0.0.0:443`)
+* `haproxy_frontend.{n}.bind.{n}.param`: [optional]: A list of parameters common to this bind declarations
+* `haproxy_frontend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
@@ -97,6 +105,7 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
 * `haproxy_backend.{n}.description`: [optional]: A description of the section (e.g. `Back-end with all (Apache) webservers`)
+* `haproxy_backend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
@@ -111,16 +120,19 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_backend.{n}.http_request.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
 * `haproxy_backend.{n}.server`: [optional]: Server declarations
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
-* `haproxy_backend.{n}.server.{n}.ip`: [required]: The IPv4 or IPv6 address of the server
-* `haproxy_backend.{n}.server.{n}.port`: [optional]: A port specification
-* `haproxy_backend.{n}.server.{n}.maxconn`: [optional]: The `"maxconn"` parameter specifies the maximal number of concurrent connections that will be sent to this server
+* `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 
 ## Dependencies
 
 None
 
-#### SSL Termination (Multiple certificates (SNI), global monitoring, multiple web servers)
+#### SSL Termination 1
+
+* **Single core**
+* Multiple certificates (SNI)
+* Global monitoring
+* Multiple web servers
 
 ```yaml
 ---
@@ -139,7 +151,11 @@ None
     haproxy_listen:
       - name: stats
         description: Global statistics
-        bind: '0.0.0.0:1936'
+        bind:
+          - listen: '0.0.0.0:1936'
+            param:
+              - ssl
+              - 'crt star-example0-com.pem'
         mode: http
         stats:
           enable: true
@@ -149,21 +165,22 @@ None
           auth:
             - user: admin
               passwd: 'NqXgKWQ9f9Et'
-        ssl:
-          - crt: star-example0-com.pem
 
     haproxy_frontend:
       - name: http
         description: Front-end for all HTTP traffic
-        bind: '0.0.0.0:80'
+        bind:
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:80"
         mode: http
         default_backend: webservers
       - name: https
         description: Front-end for all HTTPS traffic
-        bind: '0.0.0.0:443'
-        ssl:
-          - crt: star-example1-com.pem
-          - crt: star-example2-com.pem
+        bind: 
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
+            param:
+              - ssl
+              - 'crt star-example1-com.pem'
+              - 'crt star-example2-com.pem'
         mode: http
         default_backend: webservers
         rspadd:
@@ -184,23 +201,146 @@ None
             param: 'X-Forwarded-Proto https'
             cond: 'if { ssl_fc }'
         server:
-          - name: web01
-            ip: 127.0.0.1
-            port: 8001
-            maxconn: 501
+          - name: web-01
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8001"
             param:
+              - 'maxconn 501'
               - check
-          - name: web02
-            ip: 127.0.0.1
-            port: 8002
-            maxconn: 502
+          - name: web-02
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8002"
             param:
+              - 'maxconn 502'
               - check
-          - name: web03
-            ip: 127.0.0.1
-            port: 8003
-            maxconn: 503
+          - name: web-03
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8003"
             param:
+              - 'maxconn 503'
+              - check
+```
+
+#### SSL Termination 2
+
+* **Multi core**
+  * [How Stack Exchange gets the most out of HAProxy](http://brokenhaze.com/blog/2014/03/25/how-stack-exchange-gets-the-most-out-of-haproxy/)
+  * [HAproxy: mapping process to CPU core for maximum performance](http://blog.onefellow.com/post/82478335338/haproxy-mapping-process-to-cpu-core-for-maximum)
+* Multiple certificates (SNI)
+* Global monitoring
+* Multiple web servers
+
+```yaml
+- hosts: all
+  roles:
+    - haproxy
+  vars:
+    haproxy_global_stats_sockets_default_param:
+      - 'mode 660'
+      - 'level admin'
+    haproxy_global_stats:
+      sockets:
+        - listen: /run/haproxy/admin-1.sock
+          param: "{{ haproxy_global_stats_sockets_default_param + ['process 1'] }}"
+        - listen: /run/haproxy/admin-2.sock
+          param: "{{ haproxy_global_stats_sockets_default_param + ['process 2'] }}"
+        - listen: /run/haproxy/admin-3.sock
+          param: "{{ haproxy_global_stats_sockets_default_param + ['process 3'] }}"
+        - listen: /run/haproxy/admin-4.sock
+          param: "{{ haproxy_global_stats_sockets_default_param + ['process 4'] }}"
+      timeout: 30s
+
+    haproxy_global_nbproc: 4
+
+    haproxy_ssl_map:
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example0-com.pem
+        dest: /etc/ssl/private/star-example0-com.pem
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example1-com.pem
+        dest: /etc/ssl/private/star-example1-com.pem
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example2-com.pem
+        dest: /etc/ssl/private/star-example2-com.pem
+
+    haproxy_listen:
+      - name: stats
+        description: Global statistics
+        bind:
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:1936"
+            param:
+              - ssl
+              - 'crt star-example0-com.pem'
+        bind_process:
+          - 1
+        mode: http
+        stats:
+          enable: true
+          uri: /
+          hide_version: true
+          refresh: 5s
+          auth:
+            - user: admin
+              passwd: 'NqXgKWQ9f9Et'
+      - name: ssl-proxy
+        description: Proxy for all HTTPS traffic
+        bind:
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
+            param:
+              - ssl
+              - 'crt star-example1-com.pem'
+              - 'crt star-example2-com.pem'
+        bind_process:
+          - 2
+          - 3
+          - 4
+        mode: http
+        server:
+          - name: "{{ inventory_hostname }}"
+            listen: "{{ ansible_lo['ipv4']['address'] }}:80"
+            param:
+              - send-proxy
+        rspadd:
+          - string: 'Strict-Transport-Security:\ max-age=15768000'
+
+    haproxy_frontend:
+      - name: http
+        description: Front-end for all HTTP traffic
+        bind:
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:80"
+          - listen: "{{ ansible_lo['ipv4']['address'] }}:80"
+            param:
+              - accept-proxy
+        bind_process:
+          - 1
+        mode: http
+        default_backend: webservers
+
+    haproxy_backend:
+      - name: webservers
+        description: Back-end with all (Apache) webservers
+        bind_process:
+          - 1
+        mode: http
+        balance: roundrobin
+        option:
+          - forwardfor
+          - 'httpchk HEAD / HTTP/1.1\r\nHost:\ localhost'
+        http_request:
+          - action: 'set-header'
+            param: 'X-Forwarded-Port %[dst_port]'
+          - action: 'add-header'
+            param: 'X-Forwarded-Proto https'
+            cond: 'if { ssl_fc }'
+        server:
+          - name: web-01
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8001"
+            param:
+              - 'maxconn 501'
+              - check
+          - name: web-02
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8002"
+            param:
+              - 'maxconn 502'
+              - check
+          - name: web-03
+            listen: "{{ ansible_lo['ipv4']['address'] }}:8003"
+            param:
+              - 'maxconn 503'
               - check
 ```
 
@@ -214,7 +354,8 @@ None
   vars:
     haproxy_frontend:
       - name: memcached
-        bind: '127.0.0.1:11211'
+        bind:
+          - listen: '127.0.0.1:11211'
         mode: tcp
         option:
           - dontlog-normal
@@ -228,20 +369,17 @@ None
         balance: roundrobin
         server:
           - name: memcached-01
-            ip: 127.0.1.1
-            port: 11211
+            listen: '127.0.1.1:11211'
             param:
               - check
           - name: memcached-02
-            ip: 127.0.2.1
-            port: 11211
+            listen: '127.0.2.1:11211'
             param:
               - check
               - backup
 ```
 
 #### Redis (listen)
-
 
 ```yaml
 ---
@@ -252,7 +390,8 @@ None
     haproxy_listen:
       - name: redis
         description: Redis servers
-        bind: '127.0.0.1:6379'
+        bind:
+          - listen: '127.0.0.1:6379'
         mode: tcp
         option:
           - dontlog-normal
@@ -266,13 +405,11 @@ None
         balance: roundrobin
         server:
           - name: redis-01
-            ip: 127.0.1.1
-            port: 6379
+            listen: '127.0.1.1:6379'
             param:
               - check
           - name: redis-02
-            ip: 127.0.2.1
-            port: 6379
+            listen: '127.0.2.1:6379'
             param:
               - check
               - backup

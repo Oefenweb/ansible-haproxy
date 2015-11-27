@@ -8,7 +8,8 @@
     # front-end section
     haproxy_frontend:
       - name: http
-        bind: '0.0.0.0:80'
+        bind:
+          - listen: '0.0.0.0:80'
         mode: http
         default_backend: webservers
 
