@@ -33,6 +33,9 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_global_ssl_default_bind_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms (`"cipher suite"`) that are negotiated during the SSL/TLS handshake for all `"bind"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_bind_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"bind"` lines
 * `haproxy_global_nbproc`: [default: `1`]: Number of processes to create when going daemon. This requires the `daemon` mode. By default, only one process is created, which is the recommended mode of operation
+* `haproxy_global_tune`: [default: `[]`]: (Performance) tuning declarations
+* `haproxy_global_tune.{n}.key`: [required]: Setting name (e.g. `ssl.cachesize`)
+* `haproxy_global_tune.{n}.value`: [required]: Setting value (e.g. `50000`)
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
