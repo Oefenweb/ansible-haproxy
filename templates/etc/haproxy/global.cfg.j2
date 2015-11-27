@@ -13,12 +13,10 @@
 {% endif %}
 
 {% if haproxy_global_stats != false %}
-{% if haproxy_global_stats.socket is defined %}
-  stats socket {{ haproxy_global_stats.socket }}
-{% endif -%}
-{% if haproxy_global_stats.bind_process is defined %}
-  stats bind-process {{ haproxy_global_stats.bind_process | join(' ') }}
-{% endif -%}
+{% for socket in haproxy_global_stats.sockets | default([]) %}
+  stats socket {{ socket.listen }}{% for param in socket.param | default([]) %} {{ param }}{% endfor %}
+
+{% endfor %}
 {% if haproxy_global_stats.timeout is defined %}
   stats timeout {{ haproxy_global_stats.timeout }}
 {% endif -%}

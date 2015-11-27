@@ -11,7 +11,8 @@ haproxy_global_log:
     level: notice
 haproxy_global_chroot: /var/lib/haproxy
 haproxy_global_stats:
-  socket: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"
+  sockets:
+    - listen: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"
   timeout: 30s
 haproxy_global_user: haproxy
 haproxy_global_group: haproxy

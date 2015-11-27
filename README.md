@@ -20,9 +20,10 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 * `haproxy_global_log.{n}.format`: [optional]: Specifies the log format string to use for traffic logs (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
 * `haproxy_global_chroot`: [default: `/var/lib/haproxy`]: Changes current directory to `<jail dir>` and performs a `chroot()` there before dropping privileges
 * `haproxy_global_stats`: [default: See `defaults/main.yml`]: Stats declarations
-* `haproxy_global_stats.socket`:  [default: `"{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"`]: Binds a UNIX socket to `<path>` or a TCPv4/v6 address to `<address:port>`. Connections to this socket will return various statistics outputs and even allow some commands to be issued to change some runtime settings
-* `haproxy_global_stats.bind_process`:  [optional]: Limits the stats socket to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
-* `haproxy_global_stats.timeout`:  [default: `30s`]: The default timeout on the stats socket
+* `haproxy_global_stats.sockets`:  [default: `[{listen: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"}]`]: Sockets declarations
+* `haproxy_global_stats.sockets.{n}.listen`:  [required]: Defines a listening address and/or ports (e.g. `/run/haproxy/admin.sock`)
+* `haproxy_global_stats.sockets.{n}.param`:  [optional]: A list of parameters common to this bind declarations (e.g. `['mode 660', 'level admin', 'process 1']`)
+* `haproxy_global_stats.timeout`:  [optional]: The default timeout on the stats socket
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
 * `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
 * `haproxy_global_daemon`: [default: `true`]: Makes the process fork into background. This is the recommended mode of operation
@@ -126,7 +127,12 @@ Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu system
 
 None
 
-#### SSL Termination (Multiple certificates (SNI), global monitoring, multiple web servers)
+#### SSL Termination 1
+
+* **Single core**
+* Multiple certificates (SNI)
+* Global monitoring
+* Multiple web servers
 
 ```yaml
 ---
@@ -188,6 +194,132 @@ None
         option:
           - forwardfor
           - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
+        http_request:
+          - action: 'set-header'
+            param: 'X-Forwarded-Port %[dst_port]'
+          - action: 'add-header'
+            param: 'X-Forwarded-Proto https'
+            cond: 'if { ssl_fc }'
+        server:
+          - name: web01
+            listen: '127.0.0.1:8001'
+            param:
+              - 'maxconn 501'
+              - check
+          - name: web02
+            listen: '127.0.0.1:8002'
+            param:
+              - 'maxconn 502'
+              - check
+          - name: web03
+            listen: '127.0.0.1:8003'
+            param:
+              - 'maxconn 503'
+              - check
+```
+
+#### SSL Termination 2
+
+* **Multi core**
+  * [How Stack Exchange gets the most out of HAProxy](http://brokenhaze.com/blog/2014/03/25/how-stack-exchange-gets-the-most-out-of-haproxy/)
+  * [HAproxy: mapping process to CPU core for maximum performance](http://blog.onefellow.com/post/82478335338/haproxy-mapping-process-to-cpu-core-for-maximum)
+* Multiple certificates (SNI)
+* Global monitoring
+* Multiple web servers
+
+```yaml
+- hosts: all
+  roles:
+    - haproxy
+  vars:
+    haproxy_global_stats_sockets_default_param:
+      - 'mode 660'
+      - 'level admin'
+    haproxy_global_stats:
+      sockets:
+        - listen: /run/haproxy/admin-1.sock
+          param: "{{ haproxy_global_stats_sockets_default_param + ['process 1'] }}"
+        - listen: /run/haproxy/admin-2.sock
+          param: "{{ haproxy_global_stats_sockets_default_param + ['process 2'] }}"
+        - listen: /run/haproxy/admin-3.sock
+          param: "{{ haproxy_global_stats_sockets_default_param + ['process 3'] }}"
+        - listen: /run/haproxy/admin-4.sock
+          param: "{{ haproxy_global_stats_sockets_default_param + ['process 4'] }}"
+      timeout: 30s
+
+    haproxy_global_nbproc: 4
+
+    haproxy_ssl_map:
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example0-com.pem
+        dest: /etc/ssl/private/star-example0-com.pem
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example1-com.pem
+        dest: /etc/ssl/private/star-example1-com.pem
+      - src: ../../../files/haproxy/etc/haproxy/ssl/star-example2-com.pem
+        dest: /etc/ssl/private/star-example2-com.pem
+
+    haproxy_listen:
+      - name: stats
+        description: Global statistics
+        bind:
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:1936"
+            param:
+              - ssl
+              - 'crt star-example0-com.pem'
+        bind_process:
+          - 1
+        mode: http
+        stats:
+          enable: true
+          uri: /
+          hide_version: true
+          refresh: 5s
+          auth:
+            - user: admin
+              passwd: 'NqXgKWQ9f9Et'
+      - name: ssl-proxy
+        description: Proxy for all HTTPS traffic
+        bind:
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
+            param:
+              - ssl
+              - 'crt star-example1-com.pem'
+              - 'crt star-example2-com.pem'
+        bind_process:
+          - 2
+          - 3
+          - 4
+        mode: http
+        server:
+          - name: "{{ inventory_hostname }}"
+            listen: "{{ ansible_lo['ipv4']['address'] }}:80"
+            param:
+              - send-proxy
+        rspadd:
+          - string: 'Strict-Transport-Security:\ max-age=15768000'
+
+    haproxy_frontend:
+      - name: http
+        description: Front-end for all HTTP traffic
+        bind:
+          - listen: "{{ ansible_eth0['ipv4']['address'] }}:80"
+          - listen: "{{ ansible_lo['ipv4']['address'] }}:80"
+            param:
+              - accept-proxy
+        bind_process:
+          - 1
+        mode: http
+        default_backend: webservers
+
+    haproxy_backend:
+      - name: webservers
+        description: Back-end with all (Apache) webservers
+        bind_process:
+          - 1
+        mode: http
+        balance: roundrobin
+        option:
+          - forwardfor
+          - 'httpchk HEAD / HTTP/1.1\r\nHost:\ localhost'
         http_request:
           - action: 'set-header'
             param: 'X-Forwarded-Port %[dst_port]'
