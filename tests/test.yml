@@ -1,7 +1,8 @@
 # test file for haproxy
 ---
-- hosts: localhost
-  remote_user: root
+- hosts: ubuntu
+  remote_user: vagrant
+  sudo: yes
   roles:
     - ../../
   vars:
@@ -12,10 +13,19 @@
           - listen: '0.0.0.0:80'
         mode: http
         default_backend: webservers
+        acls:
+          - { name: alt, host: alt.lvh.me, backend: alternative }
 
     # back-end section
     haproxy_backend:
       - name: webservers
+        mode: http
+        balance: roundrobin
+        option:
+          - forwardfor
+          - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
+        server: []
+      - name: alternative
         mode: http
         balance: roundrobin
         option:

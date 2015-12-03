@@ -1,0 +1,8 @@
+[ubuntu]
+ubuntu-1004 ansible_ssh_host=10.0.0.10
+ubuntu-1204 ansible_ssh_host=10.0.0.11
+ubuntu-1404 ansible_ssh_host=10.0.0.12
+
+[ubuntu:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key

@@ -31,6 +31,7 @@ boxes = [
 ]
 
 Vagrant.configure("2") do |config|
+  config.ssh.insert_key = false
   boxes.each do |box|
     config.vm.define box[:name] do |vms|
       vms.vm.box = box[:box]
