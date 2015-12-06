@@ -31,6 +31,11 @@ frontend {{ frontend.name }}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 
+{% if frontend.ssl_redirect is defined and frontend.ssl_redirect | bool == true %}
+  reqadd X-Forwarded-Proto:\ https
+  redirect scheme https code 301 if !{ ssl_fc }
+{% endif %}
+
   default_backend {{ frontend.default_backend }}
 
 {% for rspadd in frontend.rspadd | default([]) %}
