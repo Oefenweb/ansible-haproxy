@@ -1,7 +1,8 @@
 # test file for haproxy
 ---
 - hosts: localhost
-  remote_user: root
+  connection: local
+  sudo: true
   roles:
     - ../../
   vars:
