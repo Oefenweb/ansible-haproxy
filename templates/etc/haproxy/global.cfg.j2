@@ -58,9 +58,7 @@
   ssl-default-bind-options {{ haproxy_global_ssl_default_bind_options }}
 {% endif %}
 
-{% if haproxy_global_nbproc > 1 %}
   nbproc {{ haproxy_global_nbproc }}
-{% endif %}
 
 {% for tune in haproxy_global_tune | default([]) %}
   tune.{{ tune.key }} {{ tune.value }}
