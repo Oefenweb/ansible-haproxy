@@ -44,7 +44,7 @@ before_install:
   - sudo apt-get update -qq
 
   # Remove haproxy
-  - sudo apt-get remove --purge haproxy
+  - sudo apt-get remove --purge --yes haproxy
 
 install:
   # Install Ansible.
