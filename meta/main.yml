@@ -9,7 +9,6 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - lucid
         - precise
         - trusty
   galaxy_tags:

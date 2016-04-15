@@ -1,24 +1,42 @@
 # tasks file for haproxy
 ---
+- name: check version support
+  fail:
+    msg: "HAProxy version {{ haproxy_version }} is not supported"
+  when: haproxy_version not in haproxy_versions_supported
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-check-version-support
+
 - name: add repository from PPA and install its signing key
   apt_repository:
     repo: "{{ haproxy_ppa }}"
     update_cache: true
-  tags: [configuration, haproxy, haproxy-add-repository]
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-add-repository
 
 - name: install dependencies
   apt:
     name: "{{ item }}"
     state: latest
-  with_items: haproxy_dependencies
-  tags: [configuration, haproxy, haproxy-dependencies]
+  with_items: "{{ haproxy_dependencies }}"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-dependencies
 
 - name: install
   apt:
     name: "{{ item }}"
     state: latest
-  with_items: haproxy_install
-  tags: [configuration, haproxy, haproxy-install]
+  with_items: "{{ haproxy_install }}"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-install
 
 - name: create certificate files directories
   file:
@@ -27,8 +45,12 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
     mode: 0750
-  with_items: haproxy_ssl_map
-  tags: [configuration, haproxy, haproxy-configuration, haproxy-configuration-ssl]
+  with_items: "{{ haproxy_ssl_map }}"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-configuration
+    - haproxy-configuration-ssl
 
 - name: copy certificate files
   copy:
@@ -37,9 +59,13 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0640') }}"
-  with_items: haproxy_ssl_map
+  with_items: "{{ haproxy_ssl_map }}"
   notify: restart haproxy
-  tags: [configuration, haproxy, haproxy-configuration, haproxy-configuration-ssl]
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-configuration
+    - haproxy-configuration-ssl
 
 - name: update configuration file
   template:
@@ -50,11 +76,17 @@
     mode: 0640
     validate: 'haproxy -f %s -c'
   notify: restart haproxy
-  tags: [configuration, haproxy, haproxy-configuration]
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-configuration
 
 - name: start and enable service
   service:
     name: haproxy
     state: started
     enabled: true
-  tags: [configuration, haproxy, haproxy-start-enable-service]
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-start-enable-service

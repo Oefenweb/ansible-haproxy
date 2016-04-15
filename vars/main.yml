@@ -1,5 +1,9 @@
 # vars file for haproxy
 ---
-haproxy_ppa: 'ppa:vbernat/haproxy-1.5'
+haproxy_versions_supported:
+  - 1.5
+  - 1.6
+
+haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
 haproxy_dependencies:
   - haproxy
