@@ -1,5 +1,7 @@
 # defaults file for haproxy
 ---
+haproxy_version: 1.6
+
 haproxy_install: []
 
 # global section

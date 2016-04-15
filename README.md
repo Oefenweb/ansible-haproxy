@@ -2,13 +2,15 @@
 
 [![Build Status](https://travis-ci.org/Oefenweb/ansible-haproxy.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-haproxy) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-haproxy-blue.svg)](https://galaxy.ansible.com/list#/roles/3856)
 
-Set up the latest version of [HAProxy](http://www.haproxy.org/) in Ubuntu systems.
+Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu systems.
 
 #### Requirements
 
 * `python-apt`
 
 #### Variables
+
+* `haproxy_version`: [default: `1.6`]: Version to install (e.g. `1.5`, `1.6`)
 
 * `haproxy_install`: [default: `[]`]: Additional packages to install (e.g. `socat`)
 
