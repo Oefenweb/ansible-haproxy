@@ -90,5 +90,3 @@
     - configuration
     - haproxy
     - haproxy-start-enable-service
-
-- meta: flush_handlers
