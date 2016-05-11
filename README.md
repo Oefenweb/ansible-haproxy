@@ -87,6 +87,14 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_listen.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
 * `haproxy_listen.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_listen.{n}.http_request`: [optional]: Access control for Layer 7 requests
+* `haproxy_listen.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
+* `haproxy_listen.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
+* `haproxy_listen.{n}.http_request.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
+* `haproxy_listen.{n}.redirect`: [optional]: Redirect request according to conditional
+* `haproxy_listen.{n}.redirect.{n}.action`: [required]: Redirect action to take
+* `haproxy_listen.{n}.redirect.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
+
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
@@ -106,6 +114,14 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_frontend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`)
 * `haproxy_frontend.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_frontend.{n}.http_request`: [optional]: Access control for Layer 7 requests
+* `haproxy_frontend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
+* `haproxy_frontend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
+* `haproxy_frontend.{n}.http_request.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
+* `haproxy_frontend.{n}.redirect`: [optional]: Redirect request according to conditional
+* `haproxy_frontend.{n}.redirect.{n}.action`: [required]: Redirect action to take
+* `haproxy_frontend.{n}.redirect.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
+
 
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
@@ -180,7 +196,7 @@ None
         default_backend: webservers
       - name: https
         description: Front-end for all HTTPS traffic
-        bind: 
+        bind:
           - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
             param:
               - ssl
@@ -190,6 +206,12 @@ None
         default_backend: webservers
         rspadd:
           - string: 'Strict-Transport-Security:\ max-age=15768000'
+        http_request:
+          - action: 'set-header'
+            param: 'X-Forwarded-Port %[dst_port]'
+          - action: 'add-header'
+            param: 'X-Forwarded-Proto https'
+            cond: 'if { ssl_fc }'
 
     haproxy_backend:
       - name: webservers
@@ -231,6 +253,7 @@ None
 * Multiple certificates (SNI)
 * Global monitoring
 * Multiple web servers
+* Enforce https connections, while we listen on http we redirect all incoming connections on http to https
 
 ```yaml
 - hosts: all
@@ -310,6 +333,10 @@ None
           - listen: "{{ ansible_lo['ipv4']['address'] }}:80"
             param:
               - accept-proxy
+        redirect:
+          -
+           action: 'scheme https code 301'
+           cond: 'if !{ ssl_fc }'
         bind_process:
           - 1
         mode: http
