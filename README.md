@@ -191,6 +191,9 @@ None
         bind:
           - listen: "{{ ansible_eth0['ipv4']['address'] }}:80"
         mode: http
+        redirect:
+          string: 'scheme https code 301'
+          cond: 'if !{ ssl_fc }'
         default_backend: webservers
       - name: https
         description: Front-end for all HTTPS traffic
