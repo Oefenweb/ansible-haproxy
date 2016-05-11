@@ -330,7 +330,7 @@ None
             param: 'X-Forwarded-Port %[dst_port]'
           - action: 'add-header'
             param: 'X-Forwarded-Proto https'
-            cond: 'if { ssl_fc }'
+            cond: 'if { dst_port 443 }'
         server:
           - name: web-01
             listen: "{{ ansible_lo['ipv4']['address'] }}:8001"
