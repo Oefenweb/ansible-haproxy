@@ -42,7 +42,7 @@ frontend {{ frontend.name }}
 {% endfor %}
 
 {% for redirect in frontend.redirect | default([]) %}
-  redirect {{ redirect.action }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
+  redirect {{ redirect.string }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
 
 {% endfor %}
 
