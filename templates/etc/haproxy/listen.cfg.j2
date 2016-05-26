@@ -61,6 +61,11 @@ listen {{ listen.name }}
 
 {% endfor %}
 
+{% for http_response in listen.http_response | default([]) %}
+  http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
+
+{% endfor %}
+
 {% for rspadd in listen.rspadd | default([]) %}
   rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
 

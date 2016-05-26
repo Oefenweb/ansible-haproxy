@@ -33,6 +33,11 @@ backend {{ backend.name }}
 
 {% endfor %}
 
+{% for http_response in backend.http_response | default([]) %}
+  http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
+
+{% endfor %}
+
 {% for server in backend.server | default([]) %}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
