@@ -79,7 +79,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.http_response`: [optional]: Access control for Layer 7 responses
 * `haproxy_listen.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_listen.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
-* `haproxy_listen.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
+* `haproxy_listen.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
@@ -120,7 +120,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.http_response`: [optional]: Access control for Layer 7 responses
 * `haproxy_frontend.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_frontend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
-* `haproxy_frontend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
+* `haproxy_frontend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
 * `haproxy_frontend.{n}.default_backend`: [required]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_frontend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
@@ -148,7 +148,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.http_response`: [optional]: Access control for Layer 7 responses
 * `haproxy_backend.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_backend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
-* `haproxy_backend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs (e.g. `if { ssl_fc }`)
+* `haproxy_backend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
 * `haproxy_backend.{n}.server`: [optional]: Server declarations
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
