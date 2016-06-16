@@ -20,8 +20,8 @@
 
 - name: install dependencies
   apt:
-    name: "{{ item }}"
-    state: latest
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
   with_items: "{{ haproxy_dependencies }}"
   tags:
     - configuration

@@ -2,6 +2,9 @@
 ---
 haproxy_version: 1.6
 
+haproxy_dependencies:
+  - name: haproxy
+    state: latest
 haproxy_install: []
 
 # global section
