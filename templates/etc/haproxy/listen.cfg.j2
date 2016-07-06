@@ -39,6 +39,10 @@ listen {{ listen.name }}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 
+{% for capture in listen.capture | default([]) %}
+  capture {{ capture.type }} {{ capture.name }} len {{ capture.length }}
+{% endfor %}
+
 {% if listen.stats is defined %}
 {% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
   stats enable
