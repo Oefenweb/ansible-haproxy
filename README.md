@@ -72,6 +72,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_listen.{n}.timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
 * `haproxy_listen.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_listen.{n}.capture`: [optional]: Capture fields from request or response
+* `haproxy_listen.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
+* `haproxy_listen.{n}.capture.name`: [required]: Name of the header or cookie to capture
+* `haproxy_listen.{n}.capture.length`: [required]: Maximum number of characters to capture and report in the logs
 * `haproxy_listen.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_listen.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_listen.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
@@ -113,6 +117,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_frontend.{n}.timeout.type`: [required]: The type (e.g. `client`)
 * `haproxy_frontend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_frontend.{n}.capture`: [optional]: Capture fields from request or response
+* `haproxy_frontend.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
+* `haproxy_frontend.{n}.capture.name`: [required]: Name of the header or cookie to capture
+* `haproxy_frontend.{n}.capture.length`: [required]: Maximum number of characters to capture and report in the logs
 * `haproxy_frontend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_frontend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_frontend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
