@@ -218,7 +218,7 @@ None
         default_backend: webservers
       - name: https
         description: Front-end for all HTTPS traffic
-        bind:
+        bind: 
           - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
             param:
               - ssl
