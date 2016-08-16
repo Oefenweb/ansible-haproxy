@@ -55,6 +55,10 @@ frontend {{ frontend.name }}
 
 {% endfor %}
 
+{% if frontend.use_backend is defined %}
+  use_backend {{ frontend.use_backend }}
+{% endif %}
+
   default_backend {{ frontend.default_backend }}
 
 {% endfor %}
