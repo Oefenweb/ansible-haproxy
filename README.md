@@ -87,8 +87,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
-* `haproxy_listen.{n}.stats.hide_version`: [optional]: Hide version reporting
+* `haproxy_listen.{n}.stats.options`: [optional]: Array of boolean stats options [hide-version, show-node, show-desc, show-legends]
 * `haproxy_listen.{n}.stats.refresh`: [optional]: Defined the refresh delay, specified in seconds (e.g. `5s`)
+* `haproxy_listen.{n}.stats.admin`: [optional]: Define/Enable admin part of web interface with conditional attached.
 * `haproxy_listen.{n}.stats.auth`: [optional]: Auth declarations
 * `haproxy_listen.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
 * `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
@@ -200,7 +201,10 @@ None
         stats:
           enable: true
           uri: /
-          hide_version: true
+          options:
+            - hide-version
+            - show-node
+          admin: if LOCALHOST
           refresh: 5s
           auth:
             - user: admin
@@ -218,7 +222,7 @@ None
         default_backend: webservers
       - name: https
         description: Front-end for all HTTPS traffic
-        bind: 
+        bind:
           - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
             param:
               - ssl
@@ -314,8 +318,11 @@ None
         stats:
           enable: true
           uri: /
-          hide_version: true
+          options:
+            - hide-version
+            - show-desc
           refresh: 5s
+          admin: if TRUE
           auth:
             - user: admin
               passwd: 'NqXgKWQ9f9Et'
