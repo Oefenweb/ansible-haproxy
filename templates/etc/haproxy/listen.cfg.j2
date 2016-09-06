@@ -58,6 +58,7 @@ listen {{ listen.name }}
 {% endfor %}
 {% for auth in listen.stats.auth | default([]) %}
   stats auth {{ auth.user }}:{{ auth.passwd }}
+
 {% endfor %}
 {% endif %}
 {% endif %}

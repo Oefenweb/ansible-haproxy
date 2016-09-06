@@ -87,9 +87,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
-* `haproxy_listen.{n}.stats.options`: [optional]: Array of boolean stats options [hide-version, show-node, show-desc, show-legends]
+* `haproxy_listen.{n}.stats.options`: [optional]: List of boolean stats options (e.g. `hide-version`, `show-node`, `show-desc`, `show-legends`)
 * `haproxy_listen.{n}.stats.refresh`: [optional]: Defined the refresh delay, specified in seconds (e.g. `5s`)
-* `haproxy_listen.{n}.stats.admin`: [optional]: Define/Enable admin part of web interface with conditional attached.
+* `haproxy_listen.{n}.stats.admin`: [optional]: Define / enable admin part of web interface with conditional attached
 * `haproxy_listen.{n}.stats.auth`: [optional]: Auth declarations
 * `haproxy_listen.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
 * `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
