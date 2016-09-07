@@ -54,7 +54,7 @@ listen {{ listen.name }}
   stats admin {{ listen.stats.admin }}
 {% endif %}
 {% for opt in listen.stats.options | default([]) %}
-  stats  {{ opt }}
+  stats {{ opt }}
 {% endfor %}
 {% for auth in listen.stats.auth | default([]) %}
   stats auth {{ auth.user }}:{{ auth.passwd }}
