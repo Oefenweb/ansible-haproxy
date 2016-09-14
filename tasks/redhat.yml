@@ -1,0 +1,25 @@
+
+# leave setting up of repos to use to external play / environment setup
+
+- name: install dependencies
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ haproxy_dependencies }}"
+  tags:
+  - configuration
+  - haproxy
+  - haproxy-dependencies
+
+- name: install
+  yum:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ haproxy_install }}"
+  tags:
+  - configuration
+  - haproxy
+  - haproxy-install
+  notify:
+  - reload systemd
+

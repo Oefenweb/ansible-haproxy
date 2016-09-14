@@ -1,0 +1,31 @@
+
+
+
+- name: add repository from PPA and install its signing key
+  apt_repository:
+    repo: "{{ haproxy_ppa }}"
+    update_cache: true
+  tags:
+  - configuration
+  - haproxy
+  - haproxy-add-repository
+
+- name: install dependencies
+  apt:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ haproxy_dependencies }}"
+  tags:
+  - configuration
+  - haproxy
+  - haproxy-dependencies
+
+- name: install
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ haproxy_install }}"
+  tags:
+  - configuration
+  - haproxy
+  - haproxy-install
