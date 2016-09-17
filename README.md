@@ -103,6 +103,11 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.redirect`: [optional]: Return an HTTP redirection if/unless a condition is matched
 * `haproxy_listen.{n}.redirect.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_listen.{n}.redirect.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_frontend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluactions/conditionals
+* `haproxy_frontend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later.
+* `haproxy_frontend.{n}.rsprep`: [optional]: Response regexp edit definition
+* `haproxy_frontend.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
+* `haproxy_frontend.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
@@ -138,6 +143,12 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.redirect`: [optional]: Return an HTTP redirection if/unless a condition is matched
 * `haproxy_frontend.{n}.redirect.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_frontend.{n}.redirect.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_frontend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluactions/conditionals
+* `haproxy_frontend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later.
+* `haproxy_frontend.{n}.rsprep`: [optional]: Response regexp edit definition
+* `haproxy_frontend.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
+* `haproxy_frontend.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
+
 
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
@@ -232,6 +243,9 @@ None
         default_backend: webservers
         rspadd:
           - string: 'Strict-Transport-Security:\ max-age=15768000'
+        rsprep:
+          - string: '^Set-Cookie:\ (.*) Set-Cookie:\ \1;\ Secure'
+            cond: if { ssl_fc }
 
     haproxy_backend:
       - name: webservers
@@ -338,6 +352,8 @@ None
           - 2
           - 3
           - 4
+        acl:
+          - string: secure dst_port eq 443
         mode: http
         server:
           - name: "{{ inventory_hostname }}"
@@ -346,6 +362,9 @@ None
               - send-proxy
         rspadd:
           - string: 'Strict-Transport-Security:\ max-age=15768000'
+        rsprep:
+          - string: '^Set-Cookie:\ (.*) Set-Cookie:\ \1;\ Secure'
+            cond: if secure
 
     haproxy_frontend:
       - name: http

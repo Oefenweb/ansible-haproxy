@@ -39,6 +39,10 @@ listen {{ listen.name }}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 
+{% for acl in listen.acl | default([]) %}
+  acl {{ acl.string }}
+{% endfor %}
+
 {% for capture in listen.capture | default([]) %}
   capture {{ capture.type }} {{ capture.name }} len {{ capture.length }}
 {% endfor %}
@@ -53,12 +57,11 @@ listen {{ listen.name }}
 {% if listen.stats.admin is defined %}
   stats admin {{ listen.stats.admin }}
 {% endif %}
-{% for option in listen.stats.options | default([]) %}
-  stats {{ option }}
+{% for opt in listen.stats.options | default([]) %}
+  stats  {{ opt }}
 {% endfor %}
 {% for auth in listen.stats.auth | default([]) %}
   stats auth {{ auth.user }}:{{ auth.passwd }}
-
 {% endfor %}
 {% endif %}
 {% endif %}
@@ -75,6 +78,11 @@ listen {{ listen.name }}
 
 {% for rspadd in listen.rspadd | default([]) %}
   rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
+
+{% endfor %}
+
+{% for rsprep in listen.rsprep | default([]) %}
+  rsprep {{ rsprep.string }}{% if rsprep.cond is defined %} {{ rsprep.cond }}{% endif %}
 
 {% endfor %}
 
