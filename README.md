@@ -244,9 +244,6 @@ None
         default_backend: webservers
         rspadd:
           - string: 'Strict-Transport-Security:\ max-age=15768000'
-        rsprep:
-          - string: '^Set-Cookie:\ (.*) Set-Cookie:\ \1;\ Secure'
-            cond: if { ssl_fc }
 
     haproxy_backend:
       - name: webservers
