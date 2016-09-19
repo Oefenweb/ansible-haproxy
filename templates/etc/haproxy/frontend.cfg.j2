@@ -31,6 +31,10 @@ frontend {{ frontend.name }}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 
+{% for acl in frontend.acl | default([]) %}
+  acl {{ acl.string }}
+{% endfor %}
+
 {% for capture in frontend.capture | default([]) %}
   capture {{ capture.type }} {{ capture.name }} len {{ capture.length }}
 {% endfor %}
@@ -47,6 +51,11 @@ frontend {{ frontend.name }}
 
 {% for rspadd in frontend.rspadd | default([]) %}
   rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
+
+{% endfor %}
+
+{% for rsprep in frontend.rsprep | default([]) %}
+  rsprep {{ rsprep.string }}{% if rsprep.cond is defined %} {{ rsprep.cond }}{% endif %}
 
 {% endfor %}
 
