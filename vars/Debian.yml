@@ -1,0 +1,5 @@
+# debian specific defaults file for haproxy
+---
+haproxy_global_stats:
+  sockets:
+    - listen: "/run/haproxy/admin.sock"

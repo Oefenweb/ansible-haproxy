@@ -9,14 +9,20 @@
     - haproxy
     - haproxy-check-version-support
 
-- name: add repository from PPA and install its signing key
-  apt_repository:
-    repo: "{{ haproxy_ppa }}"
-    update_cache: true
-  tags:
-    - configuration
-    - haproxy
-    - haproxy-add-repository
+- name: debug
+  debug:
+    msg: "What kind of box are we on? => {{ ansible_os_family }}, {{ ansible_distribution }}"
+
+# include distribution or os family specific defaults and tasks
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "../vars/{{ ansible_distribution }}.yml"
+    - "../vars/{{ ansible_os_family }}.yml"
+
+- include: "{{ item }}"
+  with_first_found:
+   - "{{ ansible_distribution }}.yml"
+   - "{{ ansible_os_family }}.yml"
 
 - name: install dependencies
   apt:

@@ -3,7 +3,7 @@
 galaxy_info:
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
-  description: Set up the latest version of HAProxy in Ubuntu systems
+  description: Set up the latest version of HAProxy in Ubuntu or Debian systems
   license: MIT
   min_ansible_version: 1.6
   platforms:
@@ -12,6 +12,9 @@ galaxy_info:
         - precise
         - trusty
         - xenial
+    - name: Debian
+      versions:
+        - jessie
   galaxy_tags:
     - system
     - clustering

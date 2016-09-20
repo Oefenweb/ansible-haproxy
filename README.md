@@ -1,8 +1,12 @@
+# Attention
+
+This is a fork of [Oefenweb/ansible-haproxy](https://github.com/Oefenweb/ansible-haproxy) to add debian jessie support. Including some little refactorings to go towards polymorphism instead of conditionals
+
 ## haproxy
 
 [![Build Status](https://travis-ci.org/Oefenweb/ansible-haproxy.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-haproxy) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-haproxy-blue.svg)](https://galaxy.ansible.com/tersmitten/haproxy)
 
-Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu systems.
+Sets up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu or Debian systems.
 
 #### Requirements
 
