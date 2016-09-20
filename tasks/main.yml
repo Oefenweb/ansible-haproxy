@@ -12,17 +12,29 @@
 - name: debug
   debug:
     msg: "What kind of box are we on? => {{ ansible_os_family }}, {{ ansible_distribution }}"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-check-version-support
 
 # include distribution or os family specific defaults and tasks
 - include_vars: "{{ item }}"
   with_first_found:
     - "../vars/{{ ansible_distribution }}.yml"
     - "../vars/{{ ansible_os_family }}.yml"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-check-version-support
 
 - include: "{{ item }}"
   with_first_found:
    - "{{ ansible_distribution }}.yml"
    - "{{ ansible_os_family }}.yml"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-check-version-support
 
 - name: install dependencies
   apt:
