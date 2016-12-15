@@ -9,34 +9,13 @@
     - haproxy
     - haproxy-check-version-support
 
-- name: add repository from PPA and install its signing key
-  apt_repository:
-    repo: "{{ haproxy_ppa }}"
-    update_cache: true
-  tags:
-    - configuration
-    - haproxy
-    - haproxy-add-repository
+- name: run debian setup
+  include: debian.yml
+  when: ansible_os_family == "Debian"
 
-- name: install dependencies
-  apt:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
-  with_items: "{{ haproxy_dependencies }}"
-  tags:
-    - configuration
-    - haproxy
-    - haproxy-dependencies
-
-- name: install
-  apt:
-    name: "{{ item }}"
-    state: latest
-  with_items: "{{ haproxy_install }}"
-  tags:
-    - configuration
-    - haproxy
-    - haproxy-install
+- name: run redhat setup
+  include: redhat.yml
+  when: ansible_os_family == "RedHat"
 
 - name: create certificate files directories
   file:
