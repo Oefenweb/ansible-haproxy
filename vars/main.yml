@@ -3,5 +3,6 @@
 haproxy_versions_supported:
   - 1.5
   - 1.6
+  - 1.7
 
 haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
