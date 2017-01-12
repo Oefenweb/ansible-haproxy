@@ -1,13 +1,90 @@
 # tasks file for haproxy
 ---
-- name: configuration | update file
+
+- name: Get list of all configuration files in conf.d directory
+  find:
+    paths: "{{ haproxy_conf_dir }}"
+    patterns: '*.cfg'
+  register: haproxy_confd_files
+  tags:
+    - haproxy-configuration-update-file
+
+- debug: var=haproxy_confd_files
+
+- name: Deploy new /etc/default/haproxy with conf.d support
+  template:
+    src: etc/default/haproxy.j2
+    dest: /etc/default/haproxy
+    owner: root
+    group: root
+    mode: 0755
+  notify: restart haproxy
+  tags:
+    - haproxy-configuration-update-file
+
+- name: Create haproxy configuration dir
+  file:
+    state: directory
+    owner: root
+    group: root
+    recurse: yes
+    path: "{{ haproxy_conf_dir }}"
+  tags:
+    - haproxy-configuration-update-file
+
+- name: update frontend configuration files
+  template:
+    src: etc/haproxy/frontend.cfg.j2
+    dest: '{{ haproxy_conf_dir }}/frontend-{{ frontend.name }}.cfg'
+    owner: root
+    group: root
+    mode: 0640
+  notify: restart haproxy
+  with_items:
+    - '{{ haproxy_frontend }}'
+  loop_control:
+    loop_var: frontend
+  tags:
+    - haproxy-configuration-update-file
+
+- name: update backend configuration files
+  template:
+    src: etc/haproxy/backend.cfg.j2
+    dest: '{{ haproxy_conf_dir }}/backend-{{ backend.name }}.cfg'
+    owner: root
+    group: root
+    mode: 0640
+  notify: restart haproxy
+  with_items:
+    - '{{ haproxy_backend }}'
+  loop_control:
+    loop_var: backend
+  tags:
+    - haproxy-configuration-update-file
+
+- name: update listen configuration files
+  template:
+    src: etc/haproxy/listen.cfg.j2
+    dest: '{{ haproxy_conf_dir }}/listen-{{ listen.name }}.cfg'
+    owner: root
+    group: root
+    mode: 0640
+  notify: restart haproxy
+  with_items:
+    - '{{ haproxy_listen }}'
+  loop_control:
+    loop_var: listen
+  tags:
+    - haproxy-configuration-update-file
+
+- name: update configuration file
   template:
     src: "{{ haproxy_conf_template }}"
     dest: /etc/haproxy/haproxy.cfg
     owner: root
     group: root
     mode: 0640
-    validate: 'haproxy -f %s -c'
+    validate: 'haproxy -f %s -f {{ haproxy_conf_dir }} -c'
   notify: restart haproxy
   tags:
     - haproxy-configuration-update-file

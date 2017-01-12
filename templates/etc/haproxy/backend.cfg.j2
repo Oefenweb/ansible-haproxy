@@ -1,4 +1,3 @@
-{% for backend in haproxy_backend %}
 backend {{ backend.name }}
 {% if backend.description is defined %}
   description {{ backend.description }}
@@ -117,6 +116,4 @@ backend {{ backend.name }}
 
 {% for errorfile in backend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
-{% endfor %}
-
 {% endfor %}

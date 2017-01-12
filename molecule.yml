@@ -1,0 +1,16 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+docker:
+  containers:
+    - name: ansible-haproxy
+      image: ubuntu
+      image_version: latest
+      ansible_groups:
+        - group1
+verifier:
+  name: testinfra
+ansible:
+  playbook: tests/molecule.yml

@@ -8,6 +8,7 @@
 Icon?
 ehthumbs.db
 Thumbs.db
+__pycache__
 
 # IDE files #
 #################
@@ -29,3 +30,8 @@ ansible.cfg
 ###############
 !empty
 *.sw[po]
+
+# molecule tests #
+##################
+.molecule
+

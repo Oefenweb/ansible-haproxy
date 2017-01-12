@@ -1,4 +1,3 @@
-{% for frontend in haproxy_frontend %}
 frontend {{ frontend.name }}
 {% if frontend.description is defined %}
   description {{ frontend.description }}
@@ -121,6 +120,4 @@ frontend {{ frontend.name }}
 
 {% for errorfile in frontend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
-{% endfor %}
-
 {% endfor %}

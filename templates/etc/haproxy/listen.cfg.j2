@@ -1,4 +1,3 @@
-{% for listen in haproxy_listen %}
 listen {{ listen.name }}
 {% if listen.description is defined %}
   description {{ listen.description }}
@@ -149,6 +148,4 @@ listen {{ listen.name }}
 
 {% for errorfile in listen.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
-{% endfor %}
-
 {% endfor %}
