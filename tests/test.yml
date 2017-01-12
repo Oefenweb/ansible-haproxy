@@ -91,4 +91,4 @@
         - ca-certificates
         - net-tools
   roles:
-    - ../../
+    - role: ansible-haproxy

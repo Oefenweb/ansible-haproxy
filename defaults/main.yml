@@ -4,6 +4,8 @@ haproxy_version: 1.8
 
 haproxy_conf_dir: /etc/haproxy/conf.d
 
+haproxy_conf_dir: /etc/haproxy/conf.d
+
 haproxy_dependencies:
   - name: haproxy
     state: latest
