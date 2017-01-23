@@ -65,7 +65,13 @@ frontend {{ frontend.name }}
 {% endfor %}
 
 {% if frontend.use_backend is defined %}
+{% if frontend.use_backend is iterable %}
+{% for use_backend in frontend.use_backend | default([]) %}
+  use_backend {{ use_backend }}
+{% endfor %}
+{% else %}
   use_backend {{ frontend.use_backend }}
+{% endif %}
 {% endif %}
 
   default_backend {{ frontend.default_backend }}
