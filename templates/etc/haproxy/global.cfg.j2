@@ -74,3 +74,9 @@
 {% for tune in haproxy_global_tune | default([]) %}
   tune.{{ tune.key }} {{ tune.value }}
 {% endfor %}
+
+{% if haproxy_global_option != false %}
+{% for option in haproxy_global_option %}
+  {{ option }}
+{% endfor %}
+{% endif %}
