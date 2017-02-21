@@ -1,6 +1,16 @@
 # tasks file for haproxy
 ---
 
+- name: Configure haproxy to use conf.d directory for configuration
+  lineinfile:
+    path: /etc/default/haproxy
+    regexp: '^#EXTRAOPTS='
+    line: 'EXTRAOPTS="{{ haproxy_default_opts }}"'
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-configuration
+
 - name: Get list of all configuration files in conf.d directory
   find:
     paths: "{{ haproxy_conf_dir }}"

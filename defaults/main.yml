@@ -3,8 +3,7 @@
 haproxy_version: 1.8
 
 haproxy_conf_dir: /etc/haproxy/conf.d
-
-haproxy_conf_dir: /etc/haproxy/conf.d
+haproxy_default_opts: "-f {{ haproxy_conf_dir }}"
 
 haproxy_dependencies:
   - name: haproxy
