@@ -159,7 +159,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
-* `haproxy_backend.{n}.httpcheck`: [optional]: Options to set (e.g. `[httpcheck]`)
+* `haproxy_backend.{n}.http_check`: [optional]: Options to set (e.g. `[httpcheck]`)
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_backend.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_backend.{n}.timeout`: [optional]: Timeout declarations
