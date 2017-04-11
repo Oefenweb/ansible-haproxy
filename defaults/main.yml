@@ -7,6 +7,11 @@ haproxy_dependencies:
     state: latest
 haproxy_install: []
 
+# A list of groups that will be searched during dynamic backend discovery
+haproxy_backend_search: yes
+haproxy_backend_search_group: all
+haproxy_backend_search_var: haproxy_backend_member
+
 # global section
 haproxy_global_log:
   - address: /dev/log

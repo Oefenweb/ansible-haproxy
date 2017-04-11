@@ -60,4 +60,18 @@ backend {{ backend.name }}
 
 {% endfor %}
 
+{# Build a list of hosts to search for backends inside their hostvars
+   This can be done much more efficiently using map/extract once Ansible<2.2
+   support is dropped #}
+{% if haproxy_backend_search | bool %}
+{%   for host in groups[haproxy_backend_search_group] %}
+{%     if hostvars[host][haproxy_backend_search_var] is defined and
+          hostvars[host][haproxy_backend_search_var][backend.name] is defined %}
+{%       set _server = hostvars[host][haproxy_backend_search_var][backend.name] %}
+  server {{ _server.name }} {{ _server.listen }} {{ _server.param | default([]) | join(' ') }}
+
+{%     endif %}
+{%   endfor %}
+{% endif %}
+
 {% endfor %}
