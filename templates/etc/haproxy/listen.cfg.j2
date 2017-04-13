@@ -23,6 +23,10 @@ listen {{ listen.name }}
   maxconn {{ listen.maxconn }}
 {% endif %}
 
+{% if listen.source is defined %}
+  source {{ listen.source }}
+{% endif %}
+
 {% for option in listen.option | default([]) %}
   option {{ option }}
 {% endfor %}
