@@ -12,6 +12,10 @@ backend {{ backend.name }}
 
   balance {{ backend.balance }}
 
+{% if backend.source is defined %}
+  source {{ backend.source }}
+{% endif %}
+
 {% for option in backend.option | default([])%}
   option {{ option }}
 {% endfor %}
