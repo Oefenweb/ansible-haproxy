@@ -20,6 +20,9 @@ backend {{ backend.name }}
   option {{ option }}
 {% endfor %}
 
+{% if backend.http_check is defined %}
+  http-check {{ backend.http_check }}
+{% endif %}
 {% for option in backend.no_option | default([]) %}
   no option {{ option }}
 {% endfor %}

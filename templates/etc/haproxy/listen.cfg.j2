@@ -23,6 +23,10 @@ listen {{ listen.name }}
   maxconn {{ listen.maxconn }}
 {% endif %}
 
+{% if listen.http_check is defined %}
+  http-check {{ listen.http_check }}
+{% endif %}
+
 {% if listen.source is defined %}
   source {{ listen.source }}
 {% endif %}
