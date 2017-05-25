@@ -23,6 +23,14 @@ backend {{ backend.name }}
 {% if backend.http_check is defined %}
   http-check {{ backend.http_check }}
 {% endif %}
+
+{% if backend.stick is defined %}
+{% for st in backend.stick | default([])%}
+  stick-table {{ st.table }}
+  stick on {{ st.stick_on }}
+{% endfor %}
+{% endif %}
+
 {% for option in backend.no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
