@@ -169,6 +169,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_backend.{n}.timeout.type`: [required]: The type (e.g. `server`)
 * `haproxy_backend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_backend.{n}.cookie`: [optional]: Enable cookie-based persistence in a backend (e.g. `JSESSIONID prefix nocache`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_backend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
