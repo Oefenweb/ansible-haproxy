@@ -23,6 +23,11 @@ backend {{ backend.name }}
 {% if backend.http_check is defined %}
   http-check {{ backend.http_check }}
 {% endif %}
+
+{% if backend.cookie is defined %}
+  cookie {{ backend.cookie }}
+{% endif %}
+
 {% for option in backend.no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
