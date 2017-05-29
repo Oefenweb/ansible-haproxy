@@ -27,12 +27,10 @@ listen {{ listen.name }}
   http-check {{ listen.http_check }}
 {% endif %}
 
-{% if listen.stick is defined %}
-{% for st in listen.stick %}
-  stick-table {{ st.table }}
-  stick on {{ st.stick_on }}
+{% for stick in listen.stick | default([]) %}
+  stick-table {{ stick.table }}
+  stick on {{ stick.stick_on }}
 {% endfor %}
-{% endif %}
 
 {% if listen.source is defined %}
   source {{ listen.source }}

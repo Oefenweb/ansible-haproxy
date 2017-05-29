@@ -19,12 +19,10 @@ frontend {{ frontend.name }}
   maxconn {{ frontend.maxconn }}
 {% endif %}
 
-{% if frontend.stick is defined %}
-{% for st in frontend.stick %}
-  stick-table {{ st.table }}
-  stick on {{ st.stick_on }}
+{% for stick in frontend.stick | default([]) %}
+  stick-table {{ stick.table }}
+  stick on {{ stick.stick_on }}
 {% endfor %}
-{% endif %}
 
 {% for option in frontend.option | default([]) %}
   option {{ option }}
