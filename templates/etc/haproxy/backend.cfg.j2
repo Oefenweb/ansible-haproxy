@@ -24,6 +24,10 @@ backend {{ backend.name }}
   http-check {{ backend.http_check }}
 {% endif %}
 
+{% if backend.cookie is defined %}
+  cookie {{ backend.cookie }}
+{% endif %}
+
 {% if backend.stick is defined %}
 {% for st in backend.stick | default([])%}
   stick-table {{ st.table }}
