@@ -8,7 +8,7 @@
 {% endfor %}
 {% endif %}
 
-{% if haproxy_global_chroot | bool != false %}
+{% if haproxy_global_chroot.lower() != 'false' %}
   chroot {{ haproxy_global_chroot }}
 {% endif %}
 
