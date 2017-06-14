@@ -14,7 +14,6 @@ haproxy_global_log:
   - address: /dev/log
     facility: local1
     level: notice
-haproxy_global_chroot: /var/lib/haproxy
 haproxy_global_stats:
   sockets:
     - listen: /run/haproxy/admin.sock
