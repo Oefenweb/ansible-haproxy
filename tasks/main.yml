@@ -93,7 +93,7 @@
     - haproxy
     - haproxy-configuration
 
-- name: assemble haproxy
+- name: assemble haproxy configuration file
   assemble:
     ignore_hidden: true
     src: "{{ haproxy_cfg_path }}"
@@ -107,7 +107,7 @@
     - haproxy
     - haproxy-configuration
 
-- name: assemble haproxy (ansible_version < 2.0)
+- name: assemble haproxy configuration file (ansible < 2.0)
   assemble:
     src: "{{ haproxy_cfg_path }}"
     dest: "{{ haproxy_main_cfg }}"
