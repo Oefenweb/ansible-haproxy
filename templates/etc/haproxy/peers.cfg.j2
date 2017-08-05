@@ -1,0 +1,8 @@
+{% if haproxy_peers is defined %}
+{% for haproxy_peer in haproxy_peers %}
+peers {{ haproxy_peer.name }}
+{% for peer in haproxy_peer.peers %}
+  peer {{ peer.name }} {{ peer.peer }}
+{% endfor %}
+{% endfor %}
+{% endif %}
