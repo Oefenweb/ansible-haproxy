@@ -118,6 +118,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
 * `haproxy_listen.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
 
+* `haproxy_peers.name`: Peersect name (e.g. `cluster1`)
+* `haproxy_peers.{n}.name`: [required]: Name of the host (recommended to be hostname) 
+* `haproxy_peers.{n}.peer`: [required]: IP and port for peer to listen/connect to (e.g. `10.0.0.1:1024`)
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
 * `haproxy_frontend.{n}.description`: [optional]: A description of the section (e.g. `Front-end for all HTTPS traffic`)
