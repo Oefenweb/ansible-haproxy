@@ -69,6 +69,10 @@ frontend {{ frontend.name }}
 
 {% endfor %}
 
+{% for compression in frontend.compression | default([]) %}
+  compression {{ compression.name }} {{ compression.value }}
+{% endfor %}
+
 {% if frontend.use_backend is defined %}
 {% if frontend.use_backend is iterable and frontend.use_backend is not string %}
 {% for use_backend in frontend.use_backend | default([]) %}
