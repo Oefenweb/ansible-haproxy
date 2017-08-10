@@ -57,6 +57,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_errorfile`: [default: See `defaults/main.yml`]: Errorfile declarations
 * `haproxy_defaults_errorfile.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_defaults_errorfile.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
+* `haproxy_defaults_compression`: [optional]: Compression declarations
+* `haproxy_defaults_compression.{}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
+* `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
@@ -107,6 +110,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.stats.auth`: [optional]: Auth declarations
 * `haproxy_listen.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
 * `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
+* `haproxy_listen.{n}.compression`: [optional]: Compression declarations
+* `haproxy_listen.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
+* `haproxy_listen.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 * `haproxy_listen.{n}.server`: [optional]: Server declarations
 * `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
@@ -165,6 +171,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.rsprep`: [optional]: Response regexp edit definition
 * `haproxy_frontend.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
 * `haproxy_frontend.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_frontend.{n}.compression`: [optional]: Compression declarations
+* `haproxy_frontend.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
+* `haproxy_frontend.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
@@ -192,6 +201,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_backend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_backend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.compression`: [optional]: Compression declarations
+* `haproxy_backend.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
+* `haproxy_backend.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 * `haproxy_backend.{n}.server`: [optional]: Server declarations
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports

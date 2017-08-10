@@ -27,3 +27,7 @@
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 {% endif %}
+
+{% for compression in haproxy_defaults_compression | default([]) %}
+  compression {{ compression.name }} {{ compression.value }}
+{% endfor %}
