@@ -40,7 +40,12 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_tune`: [default: `[]`]: (Performance) tuning declarations
 * `haproxy_global_tune.{n}.key`: [required]: Setting name (e.g. `ssl.cachesize`)
 * `haproxy_global_tune.{n}.value`: [required]: Setting value (e.g. `50000`)
-* `haproxy_global_option:  [default: `[]`]: Options (global)
+* `haproxy_global_option: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
+* `haproxy_global_peers`: Peer list declarations
+* `haproxy_global_peers.{n}.name`: Peer list name (e.g. `mypeers`)
+* `haproxy_global_peers.{n}.peers`: Peer declarations
+* `haproxy_global_peers.{n}.peers.{n}.name`: [required]: Name of the host (recommended to be `hostname`) (e.g. `haproxy1`)
+* `haproxy_global_peers.{n}.peers.{n}.listen`: [required]: IP and port for peer to listen/connect to (e.g. `192.168.0.1:1024`)
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
