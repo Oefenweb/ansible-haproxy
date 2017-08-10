@@ -45,6 +45,26 @@ backend {{ backend.name }}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 
+{% if backend.stats is defined %}
+{% if backend.stats.enable is defined and backend.stats.enable | bool == true %}
+  stats enable
+  stats uri {{ backend.stats.uri | default('/') }}
+{% if backend.stats.refresh is defined %}
+  stats refresh {{ backend.stats.refresh }}
+{% endif %}
+{% if backend.stats.admin is defined %}
+  stats admin {{ backend.stats.admin }}
+{% endif %}
+{% for option in backend.stats.options | default([]) %}
+  stats {{ option }}
+{% endfor %}
+{% for auth in backend.stats.auth | default([]) %}
+  stats auth {{ auth.user }}:{{ auth.passwd }}
+
+{% endfor %}
+{% endif %}
+{% endif %}
+
 {% for http_request in backend.http_request | default([]) %}
   http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
 
