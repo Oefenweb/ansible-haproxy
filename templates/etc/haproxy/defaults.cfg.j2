@@ -28,8 +28,6 @@
 {% endfor %}
 {% endif %}
 
-{% if haproxy_defaults_compression != false %}
-{% for compression in haproxy_defaults_compression %}
+{% for compression in haproxy_defaults_compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
-{% endif %}
