@@ -75,8 +75,13 @@
   tune.{{ tune.key }} {{ tune.value }}
 {% endfor %}
 
-{% if haproxy_global_option != false %}
-{% for option in haproxy_global_option %}
+{% for option in haproxy_global_option | default([]) %}
   {{ option }}
 {% endfor %}
-{% endif %}
+
+{% for peers in haproxy_global_peers | default([]) %}
+peers {{ peers.name }}
+{% for peer in peers.peers | default([]) %}
+  peer {{ peer.name }} {{ peer.listen }}
+{% endfor %}
+{% endfor %}

@@ -1,6 +1,0 @@
-{% for haproxy_peer in haproxy_peers | default([]) %}
-peers {{ haproxy_peer.name }}
-{% for peer in haproxy_peer.peers | default([]) %}
-  peer {{ peer.name }} {{ peer.peer }}
-{% endfor %}
-{% endfor %}
