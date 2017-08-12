@@ -70,3 +70,36 @@ haproxy_frontend: []
 
 # back-end section
 haproxy_backend: []
+
+# Keys that are rendered as verbatim strings to the haproxy configuration.
+# A "key" is the dictionary key on the haproxy_{frontend,backend,listen} list,
+# and list_accepted is defaulted to "yes". When there is a list accepted, the
+# option can be provided as either a string or a list of strings to be
+# outputted multiple times to the configuration.
+haproxy_raw_keys:
+  - key: description
+    list_accepted: no
+  - key: mode
+    list_accepted: no
+  - key: maxconn
+    list_accepted: no
+  - key: balance
+    list_accepted: no
+  - key: source
+    list_accepted: no
+  - key: option
+  - key: no_option
+    config_key: 'no option'
+  - key: http_check
+    config_key: 'http-check'
+    list_accepted: no
+  - key: cookie
+    list_accepted: no
+  - key: tcp_check
+    config_key: 'tcp-check'
+  - key: acl
+  - key: reqrep
+  - key: reqirep
+  - key: use_backend
+  - key: default_backend
+    list_accepted: no

@@ -1,44 +1,27 @@
 {% for backend in haproxy_backend %}
 backend {{ backend.name }}
-{% if backend.description is defined %}
-  description {{ backend.description }}
-{% endif %}
+{% for item in haproxy_raw_keys %}
+{%   if backend[item['key']] is defined %}
+{%     if item['list_accepted'] | default('yes') | bool and
+          backend[item['key']] is iterable and
+          backend[item['key']] is not string %}
+{%       for option in backend[item['key']] %}
+  {{ item['config_key'] | default(item['key']) }} {{ option }}
+{%       endfor %}
+{%     else %}
+  {{ item['config_key'] | default(item['key']) }} {{ backend[item['key']] }}
+{%     endif %}
+{%   endif %}
+
+{% endfor %}
 
 {% if backend.bind_process is defined %}
   bind-process {{ backend.bind_process | join(' ') }}
 {% endif %}
 
-  mode {{ backend.mode }}
-
-  balance {{ backend.balance }}
-
-{% if backend.source is defined %}
-  source {{ backend.source }}
-{% endif %}
-
-{% for option in backend.option | default([])%}
-  option {{ option }}
-{% endfor %}
-
-{% if backend.http_check is defined %}
-  http-check {{ backend.http_check }}
-{% endif %}
-
-{% if backend.cookie is defined %}
-  cookie {{ backend.cookie }}
-{% endif %}
-
 {% for stick in backend.stick | default([]) %}
   stick-table {{ stick.table }}
   stick on {{ stick.stick_on }}
-{% endfor %}
-
-{% for option in backend.no_option | default([]) %}
-  no option {{ option }}
-{% endfor %}
-
-{% for tcp_check in backend.tcp_check | default([]) %}
-  tcp-check {{ tcp_check }}
 {% endfor %}
 
 {% for timeout in backend.timeout | default([]) %}

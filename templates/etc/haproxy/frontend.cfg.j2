@@ -1,8 +1,19 @@
 {% for frontend in haproxy_frontend %}
 frontend {{ frontend.name }}
-{% if frontend.description is defined %}
-  description {{ frontend.description }}
-{% endif %}
+{% for item in haproxy_raw_keys %}
+{%   if frontend[item['key']] is defined %}
+{%     if item['list_accepted'] | default('yes') | bool and
+          frontend[item['key']] is iterable and
+          frontend[item['key']] is not string %}
+{%       for option in frontend[item['key']] %}
+  {{ item['config_key'] | default(item['key']) }} {{ option }}
+{%       endfor %}
+{%     else %}
+  {{ item['config_key'] | default(item['key']) }} {{ frontend[item['key']] }}
+{%     endif %}
+{%   endif %}
+
+{% endfor %}
 
 {% for bind in frontend.bind %}
   bind {{ bind.listen }}{% for param in bind.param | default([]) %} {{ param }}{% endfor %}
@@ -13,31 +24,13 @@ frontend {{ frontend.name }}
   bind-process {{ frontend.bind_process | join(' ') }}
 {% endif %}
 
-  mode {{ frontend.mode }}
-
-{% if frontend.maxconn is defined %}
-  maxconn {{ frontend.maxconn }}
-{% endif %}
-
 {% for stick in frontend.stick | default([]) %}
   stick-table {{ stick.table }}
   stick on {{ stick.stick_on }}
 {% endfor %}
 
-{% for option in frontend.option | default([]) %}
-  option {{ option }}
-{% endfor %}
-
-{% for option in frontend.no_option | default([]) %}
-  no option {{ option }}
-{% endfor %}
-
 {% for timeout in frontend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
-{% endfor %}
-
-{% for acl in frontend.acl | default([]) %}
-  acl {{ acl.string }}
 {% endfor %}
 
 {% for capture in frontend.capture | default([]) %}
@@ -72,17 +65,4 @@ frontend {{ frontend.name }}
 {% for compression in frontend.compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
-
-{% if frontend.use_backend is defined %}
-{% if frontend.use_backend is iterable and frontend.use_backend is not string %}
-{% for use_backend in frontend.use_backend | default([]) %}
-  use_backend {{ use_backend }}
-{% endfor %}
-{% else %}
-  use_backend {{ frontend.use_backend }}
-{% endif %}
-{% endif %}
-
-  default_backend {{ frontend.default_backend }}
-
 {% endfor %}

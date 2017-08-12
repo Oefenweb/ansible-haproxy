@@ -1,8 +1,19 @@
 {% for listen in haproxy_listen %}
 listen {{ listen.name }}
-{% if listen.description is defined %}
-  description {{ listen.description }}
-{% endif %}
+{% for item in haproxy_raw_keys %}
+{%   if listen[item['key']] is defined %}
+{%     if item['list_accepted'] | default('yes') | bool and
+          listen[item['key']] is iterable and
+          listen[item['key']] is not string %}
+{%       for option in listen[item['key']] %}
+  {{ item['config_key'] | default(item['key']) }} {{ option }}
+{%       endfor %}
+{%     else %}
+  {{ item['config_key'] | default(item['key']) }} {{ listen[item['key']] }}
+{%     endif %}
+{%   endif %}
+
+{% endfor %}
 
 {% for bind in listen.bind %}
   bind {{ bind.listen }}{% for param in bind.param | default([]) %} {{ param }}{% endfor %}
@@ -13,47 +24,13 @@ listen {{ listen.name }}
   bind-process {{ listen.bind_process | join(' ') }}
 {% endif %}
 
-  mode {{ listen.mode }}
-
-{% if listen.balance is defined %}
-  balance {{ listen.balance }}
-{% endif %}
-
-{% if listen.maxconn is defined %}
-  maxconn {{ listen.maxconn }}
-{% endif %}
-
-{% if listen.http_check is defined %}
-  http-check {{ listen.http_check }}
-{% endif %}
-
 {% for stick in listen.stick | default([]) %}
   stick-table {{ stick.table }}
   stick on {{ stick.stick_on }}
 {% endfor %}
 
-{% if listen.source is defined %}
-  source {{ listen.source }}
-{% endif %}
-
-{% for option in listen.option | default([]) %}
-  option {{ option }}
-{% endfor %}
-
-{% for option in listen.no_option | default([])  %}
-  no option {{ option }}
-{% endfor %}
-
-{% for tcp_check in listen.tcp_check | default([]) %}
-  tcp-check {{ tcp_check }}
-{% endfor %}
-
 {% for timeout in listen.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
-{% endfor %}
-
-{% for acl in listen.acl | default([]) %}
-  acl {{ acl.string }}
 {% endfor %}
 
 {% for capture in listen.capture | default([]) %}
