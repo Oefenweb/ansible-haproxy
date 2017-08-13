@@ -59,6 +59,10 @@ backend {{ backend.name }}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
 
+{% for raw_line in backend.raw_line | default([]) %}
+  {{ raw_line.string }}
+{% endfor %}
+
 {% for server in backend.server | default([]) %}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
