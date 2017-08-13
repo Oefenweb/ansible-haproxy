@@ -1,0 +1,7 @@
+
+{% for list in user_list | default([]) %}
+userlist UsersFor_{{ list.realm }}
+{% for user in list.users | default([]) %}
+  user {{ user.name }} insecure-password {{ user.password }}
+{% endfor %}
+{% endfor %}
