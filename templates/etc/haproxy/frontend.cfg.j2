@@ -85,4 +85,8 @@ frontend {{ frontend.name }}
 
   default_backend {{ frontend.default_backend }}
 
+{% for raw_line in frontend.raw_line | default([]) %}
+  {{ raw_line.string }}
+{% endfor %}
+
 {% endfor %}
