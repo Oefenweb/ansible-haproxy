@@ -23,3 +23,17 @@
           - forwardfor
           - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
         server: []
+
+    haproxy_userlists:
+      - name: test_userlist
+        users:
+          - name: testuser1
+            # secrete
+            password: $6$gLMr0TwOYURPhpXh$onP.5aHZGPE3xufyF8U0/wEKHMz71ECFBx4.uiO7t2ypgyvXS6MNFKHTo16qLttYJYObb0WbXyDmoNRsO4jtq.
+            groups:
+              - test_grp1
+              - test_grp2
+          - name: testuser2
+            insecure_password: secrete
+            groups:
+              - test_grp2
