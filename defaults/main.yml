@@ -7,6 +7,12 @@ haproxy_dependencies:
     state: latest
 haproxy_install: []
 
+# Some haproxy features will not work well with reload and require a hard
+# restart instead. By default we will use the reloaded state and users can
+# change the handler to perform a hard-restart when configuration change
+# occurs by setting this to "restarted"
+haproxy_reload_mode: reloaded
+
 # global section
 haproxy_global_log:
   - address: /dev/log

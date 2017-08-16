@@ -60,7 +60,7 @@
     group: "{{ item.group | default('root') }}"
     mode: "{{ item.mode | default('0640') }}"
   with_items: "{{ haproxy_ssl_map }}"
-  notify: restart haproxy
+  notify: reload haproxy
   tags:
     - configuration
     - haproxy
@@ -75,7 +75,7 @@
     group: root
     mode: 0640
     validate: 'haproxy -f %s -c'
-  notify: restart haproxy
+  notify: reload haproxy
   tags:
     - configuration
     - haproxy

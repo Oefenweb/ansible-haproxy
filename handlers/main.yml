@@ -1,6 +1,6 @@
 # handlers file for haproxy
 ---
-- name: restart haproxy
+- name: reload haproxy
   service:
     name: haproxy
-    state: restarted
+    state: "{{ haproxy_reload_mode }}"
