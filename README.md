@@ -19,7 +19,6 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_log.{n}.facility`: [required]: Must be one of the 24 standard syslog facilities (e.g. `local0`, `local1`)
 * `haproxy_global_log.{n}.level`: [optional]: Can be specified to filter outgoing messages (e.g. `notice`)
 * `haproxy_global_log.{n}.minlevel`: [optional]: Can be specified to filter outgoing messages (e.g. `notice`)
-* `haproxy_global_log.{n}.format`: [optional]: Specifies the log format string to use for traffic logs (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
 * `haproxy_global_log.{n}.length`: [optional]: Can be specified to adjust message length in log (e.g. `2048`)
 * `haproxy_global_chroot`: [optional]: Changes current directory to `<jail dir>` and performs a `chroot()` there before dropping privileges
 * `haproxy_global_stats`: [default: See `defaults/main.yml`]: Stats declarations
