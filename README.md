@@ -41,7 +41,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_tune`: [default: `[]`]: (Performance) tuning declarations
 * `haproxy_global_tune.{n}.key`: [required]: Setting name (e.g. `ssl.cachesize`)
 * `haproxy_global_tune.{n}.value`: [required]: Setting value (e.g. `50000`)
-* `haproxy_global_option: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
+* `haproxy_global_option`: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
 * `haproxy_global_peers`: Peer list declarations
 * `haproxy_global_peers.{n}.name`: Peer list name (e.g. `mypeers`)
 * `haproxy_global_peers.{n}.peers`: Peer declarations
