@@ -19,6 +19,10 @@ listen {{ listen.name }}
   balance {{ listen.balance }}
 {% endif %}
 
+{% if listen.nolog is defined %}
+  no log
+{% endif %}
+
 {% if listen.maxconn is defined %}
   maxconn {{ listen.maxconn }}
 {% endif %}
