@@ -70,3 +70,6 @@ haproxy_frontend: []
 
 # back-end section
 haproxy_backend: []
+
+# user-lists to be used for HTTP basic auth
+haproxy_userlists: []
