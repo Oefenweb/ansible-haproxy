@@ -48,6 +48,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_peers.{n}.peers.{n}.listen`: [required]: IP and port for peer to listen/connect to (e.g. `192.168.0.1:1024`)
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
+* `haproxy_defaults_logformat`: [optional]: Allows you to customize the logs in http mode and tcp mode. It takes a string as argument.
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
 * `haproxy_defaults_source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_defaults_option`: [default: `[httplog, dontlognull]`]: Options (default)

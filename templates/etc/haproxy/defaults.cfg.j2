@@ -2,6 +2,10 @@
   log {{ haproxy_defaults_log }}
 {% endif %}
 
+{% if haproxy_defaults_logformat is defined %}
+  log-format {{ haproxy_defaults_logformat }}
+{% endif %}
+
 {% if haproxy_defaults_mode != false %}
   mode {{ haproxy_defaults_mode }}
 {% endif %}
