@@ -1,0 +1,105 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby ts=2 sw=2 tw=0 et :
+
+role = File.basename(File.expand_path(File.dirname(__FILE__)))
+
+ansible_versions = [
+  'latest',
+  '2.3.1.0',
+  '2.3.0.0',
+  '2.2.3.0',
+  '2.2.2.0',
+  '2.2.1.0',
+  '2.2.0.0',
+  '2.1.6',
+  '2.1.5',
+  '2.1.4',
+  '2.1.3',
+  '2.1.2',
+  '2.1.1.0',
+  '2.1.0.0',
+  '2.0.2.0',
+  '2.0.1.0',
+  '2.0.0.2',
+  '2.0.0.1',
+  '2.0.0.0',
+  '1.9.6',
+]
+
+os_versions = [
+  {
+    :name => "ubuntu-1204",
+    :box => "bento/ubuntu-12.04",
+  },
+  {
+    :name => "ubuntu-1404",
+    :box => "bento/ubuntu-14.04",
+  },
+  {
+    :name => "ubuntu-1604",
+    :box => "bento/ubuntu-16.04",
+  },
+]
+
+boxes = []
+
+ip = 5
+os_versions.each do |os|
+  ansible_versions.reverse.each do |v|
+    boxes << {
+        :name => "ansible-#{v}-#{os[:name]}",
+        :box => os[:box],
+        :ip => "10.0.0.#{ip}",
+        :ansible_version => v
+      }
+      ip += 1
+  end
+end
+
+Vagrant.configure("2") do |config|
+  boxes.each do |box|
+    config.vm.define box[:name] do |vms|
+      vms.vm.box = box[:box]
+
+      if Vagrant.has_plugin?("vagrant-cachier")
+        # Configure cached packages to be shared between instances of the same base box.
+        # More info on http://fgrehm.viewdocs.io/vagrant-cachier/usage
+        vms.cache.scope = :box
+      end
+
+      vms.vm.hostname = box[:name]
+
+      vms.vm.provider "virtualbox" do |v|
+        v.customize ["modifyvm", :id, "--cpuexecutioncap", "90"]
+        v.linked_clone = true
+        v.memory = 256
+        v.cpus = 2
+      end
+
+      vms.vm.network :private_network, ip: box[:ip]
+
+      vms.vm.provision "shell",
+        inline: "apt-get -qq -y install wget"
+
+      vms.vm.provision "ansible_local" do |ansible|
+        ansible.version = box[:ansible_version]
+        ansible.install_mode = "pip"
+        ansible.playbook = "tests/vagrant.yml"
+      end
+
+      # tests ported from travis
+      vms.vm.provision "shell",
+        inline: 'ansible-playbook -i /vagrant/tests/inventory /vagrant/tests/test.yml --syntax-check'
+
+      vms.vm.provision "shell",
+        inline: "ansible-playbook -i /vagrant/tests/inventory /vagrant/tests/test.yml -vvvv"
+
+      vms.vm.provision "shell",
+        inline: "ansible-playbook -i /vagrant/tests/inventory /vagrant/tests/test.yml | grep -q 'changed=0.*failed=0' && (echo 'Idempotence test: pass' && exit 0) || (echo 'Idempotence test: fail' && exit 1)"
+
+      vms.vm.provision "shell",
+        inline: "wget http://localhost -O /dev/null -S --quiet 2>&1 | grep -q '503 Service Unavailable' && (echo 'Availability test: pass' && exit 0) || (echo 'Availability test: fail' && exit 1)"
+
+    end
+  end
+end

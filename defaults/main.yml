@@ -70,3 +70,6 @@ haproxy_frontend: []
 
 # back-end section
 haproxy_backend: []
+
+# conf.d location
+haproxy_cfg_path: /etc/haproxy/conf.d
