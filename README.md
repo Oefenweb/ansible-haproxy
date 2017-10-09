@@ -219,6 +219,14 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 
+* `haproxy_userlists`: [default: `[]`]: Userlist declarations
+* `haproxy_userlists.{n}.name`: [required]: The name of the userlist
+* `haproxy_userlists.{n}.users`: [required] Userlist users declarations
+* `haproxy_userlists.{n}.users.{n}.name`: [required] The username of this user
+* `haproxy_userlists.{n}.users.{n}.password`: [optional] Password hash of this user. **One of `password` or `insecure_password` must be set**
+* `haproxy_userlists.{n}.users.{n}.insecure_password`: [optional] Plaintext password of this user. **One of `password` or `insecure_password` must be set**
+* `haproxy_userlists.{n}.users.{n}.groups`: [optional] List of groups to add the user to
+
 ## Dependencies
 
 None
