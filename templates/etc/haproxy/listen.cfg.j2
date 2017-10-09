@@ -44,6 +44,10 @@ listen {{ listen.name }}
   no option {{ option }}
 {% endfor %}
 
+{% if listen.no_log | default(false) == true %}
+  no log
+{% endif %}
+
 {% for tcp_check in listen.tcp_check | default([]) %}
   tcp-check {{ tcp_check }}
 {% endfor %}

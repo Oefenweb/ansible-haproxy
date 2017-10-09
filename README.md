@@ -40,7 +40,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_tune`: [default: `[]`]: (Performance) tuning declarations
 * `haproxy_global_tune.{n}.key`: [required]: Setting name (e.g. `ssl.cachesize`)
 * `haproxy_global_tune.{n}.value`: [required]: Setting value (e.g. `50000`)
-* `haproxy_global_option: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
+* `haproxy_global_option`: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
 * `haproxy_global_peers`: Peer list declarations
 * `haproxy_global_peers.{n}.name`: Peer list name (e.g. `mypeers`)
 * `haproxy_global_peers.{n}.peers`: Peer declarations
@@ -82,6 +82,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_listen.{n}.option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
 * `haproxy_listen.{n}.no_option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
+* `haproxy_listen.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
 * `haproxy_listen.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_listen.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
 * `haproxy_listen.{n}.stick`: [optional]: Stick declarations
@@ -144,6 +145,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
 * `haproxy_frontend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
+* `haproxy_frontend.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
 * `haproxy_frontend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_frontend.{n}.timeout.type`: [required]: The type (e.g. `client`)
 * `haproxy_frontend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
@@ -189,6 +191,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
 * `haproxy_backend.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
+* `haproxy_backend.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
 * `haproxy_backend.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_backend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_backend.{n}.timeout.type`: [required]: The type (e.g. `server`)
@@ -218,6 +221,14 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
+
+* `haproxy_userlists`: [default: `[]`]: Userlist declarations
+* `haproxy_userlists.{n}.name`: [required]: The name of the userlist
+* `haproxy_userlists.{n}.users`: [required] Userlist users declarations
+* `haproxy_userlists.{n}.users.{n}.name`: [required] The username of this user
+* `haproxy_userlists.{n}.users.{n}.password`: [optional] Password hash of this user. **One of `password` or `insecure_password` must be set**
+* `haproxy_userlists.{n}.users.{n}.insecure_password`: [optional] Plaintext password of this user. **One of `password` or `insecure_password` must be set**
+* `haproxy_userlists.{n}.users.{n}.groups`: [optional] List of groups to add the user to
 
 ## Dependencies
 
