@@ -1,6 +1,7 @@
 {% if haproxy_global_log != false %}
 {% for log in haproxy_global_log %}
   log {{ log.address }}{% if log.length is defined %} len {{log.length }}{% endif %} {{ log.facility }}{% if log.level is defined %} {{log.level }}{% endif %}{% if log.minlevel is defined %} {{ log.minlevel }}{% endif %}
+
 {% endfor %}
 {% endif %}
 
