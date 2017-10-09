@@ -41,7 +41,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_tune`: [default: `[]`]: (Performance) tuning declarations
 * `haproxy_global_tune.{n}.key`: [required]: Setting name (e.g. `ssl.cachesize`)
 * `haproxy_global_tune.{n}.value`: [required]: Setting value (e.g. `50000`)
-* `haproxy_global_option: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
+* `haproxy_global_option`: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
 * `haproxy_global_peers`: Peer list declarations
 * `haproxy_global_peers.{n}.name`: Peer list name (e.g. `mypeers`)
 * `haproxy_global_peers.{n}.peers`: Peer declarations
@@ -219,6 +219,14 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
+
+* `haproxy_userlists`: [default: `[]`]: Userlist declarations
+* `haproxy_userlists.{n}.name`: [required]: The name of the userlist
+* `haproxy_userlists.{n}.users`: [required] Userlist users declarations
+* `haproxy_userlists.{n}.users.{n}.name`: [required] The username of this user
+* `haproxy_userlists.{n}.users.{n}.password`: [optional] Password hash of this user. **One of `password` or `insecure_password` must be set**
+* `haproxy_userlists.{n}.users.{n}.insecure_password`: [optional] Plaintext password of this user. **One of `password` or `insecure_password` must be set**
+* `haproxy_userlists.{n}.users.{n}.groups`: [optional] List of groups to add the user to
 
 ## Dependencies
 
