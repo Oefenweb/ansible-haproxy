@@ -37,6 +37,10 @@ backend {{ backend.name }}
   no option {{ option }}
 {% endfor %}
 
+{% if backend.no_log | default(false) == true %}
+  no log
+{% endif %}
+
 {% for tcp_check in backend.tcp_check | default([]) %}
   tcp-check {{ tcp_check }}
 {% endfor %}
