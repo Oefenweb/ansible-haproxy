@@ -32,6 +32,10 @@ frontend {{ frontend.name }}
   no option {{ option }}
 {% endfor %}
 
+{% if frontend.no_log | default(false) == true %}
+  no log
+{% endif %}
+
 {% for timeout in frontend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
