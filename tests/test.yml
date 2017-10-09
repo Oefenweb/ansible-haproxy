@@ -24,6 +24,7 @@
           - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
         server: []
 
+    # user-lists section
     haproxy_userlists:
       - name: test_userlist
         users:

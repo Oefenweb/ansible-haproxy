@@ -1,7 +1,7 @@
-{% for ul in haproxy_userlists %}
+{% for userlist in haproxy_userlists %}
 {% set groups = [] %}
-userlist {{ ul.name }}
-{% for user in ul.users %}
+userlist {{ userlist.name }}
+{% for user in userlist.users %}
 {% if user['groups'] is defined %}
 {% set _ = groups.extend(user['groups']) %}
 {% set user_groups = ' groups ' ~ user['groups'] | join(',') %}
