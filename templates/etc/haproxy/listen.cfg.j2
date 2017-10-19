@@ -122,5 +122,6 @@ listen {{ listen.name }}
 {% for errorfile in listen.errorfile %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
+{% endif %}
 
 {% endfor %}

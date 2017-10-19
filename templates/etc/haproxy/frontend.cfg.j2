@@ -93,5 +93,6 @@ frontend {{ frontend.name }}
 {% for errorfile in frontend.errorfile %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
+{% endif %}
 
 {% endfor %}
