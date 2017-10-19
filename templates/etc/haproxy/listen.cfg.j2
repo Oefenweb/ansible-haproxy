@@ -118,14 +118,14 @@ listen {{ listen.name }}
 
 {% endfor %}
 
-{% if haproxy_defaults_redispatch is defined %} 
-{% if haproxy_defaults_redispatch.option == true %}
-{% if haproxy_defaults_redispatch.inter is defined %}
-  option redispatch {{haproxy_defaults_redispatch.inter}}
+{% if listen.redispatch is defined %} 
+{% if listen.redispatch.option == true %}
+{% if listen.redispatch.inter is defined %}
+  option redispatch {{listen.redispatch.inter}}
 {% else %}
   option redispatch    
 {% endif %}
-{% elif %}
+{% else %}
   no option redispatch
 {% endif %}
 {% endif %}

@@ -91,11 +91,11 @@ backend {{ backend.name }}
 {% if backend.redispatch is defined %} 
 {% if backend.redispatch.option == true %}
 {% if backend.redispatch.inter is defined %}
-option redispatch {{backend.redispatch.inter}}
+  option redispatch {{backend.redispatch.inter}}
 {% else %}
   option redispatch    
 {% endif %}
-{% elif %}
+{% else %}
   no option redispatch
 {% endif %}
 {% endif %}
