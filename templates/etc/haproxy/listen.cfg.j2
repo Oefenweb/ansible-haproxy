@@ -122,4 +122,15 @@ listen {{ listen.name }}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 
+{% if listen.redispatch is defined %} 
+{% if listen.redispatch.option == true %}
+{% if listen.redispatch.inter is defined %}
+  option redispatch {{listen.redispatch.inter}}
+{% else %}
+  option redispatch    
+{% endif %}
+{% else %}
+  no option redispatch
+{% endif %}
+
 {% endfor %}

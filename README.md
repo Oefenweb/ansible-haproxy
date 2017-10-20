@@ -61,6 +61,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_compression`: [optional]: Compression declarations
 * `haproxy_defaults_compression.{}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
+* `haproxy_defaults_redispatch`: [optional]: Declarations of redistribution in case of connection failure
+* `haproxy_defaults_redispatch.option`: [required]: Enable or disable session redistribution in case of connection failure
+* `haproxy_defaults_redispatch.inter`: [optional]: The optional integer value that controls how often redispatches occur when retrying connections.
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
@@ -130,6 +133,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.rsprep`: [optional]: Response regexp edit definition
 * `haproxy_listen.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
 * `haproxy_listen.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_listen.{n}.redispatch`: [optional]: Declarations of redistribution in case of connection failure
+* `haproxy_listen.{n}.redispatch.option`: [required]: Enable or disable session redistribution in case of connection failure
+* `haproxy_listen.{n}.redispatch.inter`: [optional]: The optional integer value that controls how often redispatches occur when retrying connections.
 * `haproxy_listen.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_listen.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_listen.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
@@ -226,6 +232,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
+* `haproxy_backend.{n}.redispatch`: [optional]: Declarations of redistribution in case of connection failure
+* `haproxy_backend.{n}.redispatch.option`: [required]: Enable or disable session redistribution in case of connection failure
+* `haproxy_backend.{n}.redispatch.inter`: [optional]: The optional integer value that controls how often redispatches occur when retrying connections.
 * `haproxy_backend.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_backend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)

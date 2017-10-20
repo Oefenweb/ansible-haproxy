@@ -35,3 +35,15 @@
 {% for compression in haproxy_defaults_compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
+
+{% if haproxy_defaults_redispatch is defined %} 
+{% if haproxy_defaults_redispatch.option == true %}
+{% if haproxy_defaults_redispatch.inter is defined %}
+  option redispatch {{haproxy_defaults_redispatch.inter}}
+{% else %}
+  option redispatch    
+{% endif %}
+{% else %}
+  no option redispatch
+{% endif %}
+{% endif %}

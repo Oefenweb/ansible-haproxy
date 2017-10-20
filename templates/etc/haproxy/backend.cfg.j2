@@ -92,4 +92,15 @@ backend {{ backend.name }}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 
+{% if backend.redispatch is defined %} 
+{% if backend.redispatch.option == true %}
+{% if backend.redispatch.inter is defined %}
+  option redispatch {{backend.redispatch.inter}}
+{% else %}
+  option redispatch    
+{% endif %}
+{% else %}
+  no option redispatch
+{% endif %}
+
 {% endfor %}
