@@ -21,7 +21,6 @@ frontend {{ frontend.name }}
 
 {% for stick in frontend.stick | default([]) %}
   stick-table {{ stick.table }}
-  stick on {{ stick.stick_on }}
 {% endfor %}
 
 {% for option in frontend.option | default([]) %}
