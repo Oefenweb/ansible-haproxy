@@ -88,4 +88,10 @@ backend {{ backend.name }}
 
 {% endfor %}
 
+{% if backend.errorfile is defined %}
+{% for errorfile in backend.errorfile %}
+  errorfile {{ errorfile.code }} {{ errorfile.file }}
+{% endfor %}
+{% endif %}
+
 {% endfor %}

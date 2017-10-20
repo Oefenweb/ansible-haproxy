@@ -88,4 +88,10 @@ frontend {{ frontend.name }}
 
   default_backend {{ frontend.default_backend }}
 
+{% if frontend.errorfile is defined %}
+{% for errorfile in frontend.errorfile %}
+  errorfile {{ errorfile.code }} {{ errorfile.file }}
+{% endfor %}
+{% endif %}
+
 {% endfor %}

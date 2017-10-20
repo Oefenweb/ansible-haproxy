@@ -118,4 +118,10 @@ listen {{ listen.name }}
 
 {% endfor %}
 
+{% if listen.errorfile is defined %}
+{% for errorfile in listen.errorfile %}
+  errorfile {{ errorfile.code }} {{ errorfile.file }}
+{% endfor %}
+{% endif %}
+
 {% endfor %}
