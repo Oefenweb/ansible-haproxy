@@ -88,6 +88,12 @@ backend {{ backend.name }}
 
 {% endfor %}
 
+{% if backend.errorfile is defined %}
+{% for errorfile in backend.errorfile %}
+  errorfile {{ errorfile.code }} {{ errorfile.file }}
+{% endfor %}
+{% endif %}
+
 {% if backend.redispatch is defined %} 
 {% if backend.redispatch.option == true %}
 {% if backend.redispatch.inter is defined %}
@@ -97,7 +103,6 @@ backend {{ backend.name }}
 {% endif %}
 {% else %}
   no option redispatch
-{% endif %}
 {% endif %}
 
 {% endfor %}

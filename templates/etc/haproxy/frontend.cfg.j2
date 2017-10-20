@@ -21,7 +21,6 @@ frontend {{ frontend.name }}
 
 {% for stick in frontend.stick | default([]) %}
   stick-table {{ stick.table }}
-  stick on {{ stick.stick_on }}
 {% endfor %}
 
 {% for option in frontend.option | default([]) %}
@@ -88,5 +87,11 @@ frontend {{ frontend.name }}
 {% endif %}
 
   default_backend {{ frontend.default_backend }}
+
+{% if frontend.errorfile is defined %}
+{% for errorfile in frontend.errorfile %}
+  errorfile {{ errorfile.code }} {{ errorfile.file }}
+{% endfor %}
+{% endif %}
 
 {% endfor %}

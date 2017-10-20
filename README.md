@@ -63,8 +63,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 * `haproxy_defaults_redispatch`: [optional]: Declarations of redistribution in case of connection failure
 * `haproxy_defaults_redispatch.option`: [required]: Enable or disable session redistribution in case of connection failure
-* `haproxy_defaults_redispatch.inter`: [optional]: The optional integer value that controls how often redispatches
-           occur when retrying connections.
+* `haproxy_defaults_redispatch.inter`: [optional]: The optional integer value that controls how often redispatches occur when retrying connections.
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
@@ -136,8 +135,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
 * `haproxy_listen.{n}.redispatch`: [optional]: Declarations of redistribution in case of connection failure
 * `haproxy_listen.{n}.redispatch.option`: [required]: Enable or disable session redistribution in case of connection failure
-* `haproxy_listen.{n}.redispatch.inter`: [optional]: The optional integer value that controls how often redispatches
-           occur when retrying connections.
+* `haproxy_listen.{n}.redispatch.inter`: [optional]: The optional integer value that controls how often redispatches occur when retrying connections.
+* `haproxy_listen.{n}.errorfile`: [optional]: Errorfile declarations
+* `haproxy_listen.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
+* `haproxy_listen.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
@@ -150,7 +151,6 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_frontend.{n}.stick`: [optional]: Stick declarations
 * `haproxy_frontend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
-* `haproxy_frontend.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
 * `haproxy_frontend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_frontend.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
@@ -185,6 +185,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.compression`: [optional]: Compression declarations
 * `haproxy_frontend.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_frontend.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
+* `haproxy_frontend.{n}.errorfile`: [optional]: Errorfile declarations
+* `haproxy_frontend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
+* `haproxy_frontend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
 
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
@@ -231,9 +234,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 * `haproxy_backend.{n}.redispatch`: [optional]: Declarations of redistribution in case of connection failure
 * `haproxy_backend.{n}.redispatch.option`: [required]: Enable or disable session redistribution in case of connection failure
-* `haproxy_backend.{n}.redispatch.inter`: [optional]: The optional integer value that controls how often redispatches
-           occur when retrying connections.
-
+* `haproxy_backend.{n}.redispatch.inter`: [optional]: The optional integer value that controls how often redispatches occur when retrying connections.
+* `haproxy_backend.{n}.errorfile`: [optional]: Errorfile declarations
+* `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
+* `haproxy_backend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
 
 * `haproxy_userlists`: [default: `[]`]: Userlist declarations
 * `haproxy_userlists.{n}.name`: [required]: The name of the userlist
