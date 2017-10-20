@@ -52,6 +52,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
 * `haproxy_defaults_source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_defaults_option`: [default: `[httplog, dontlognull]`]: Options (default)
+* `haproxy_defaults_no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
 * `haproxy_defaults_timeout`: [default: See `defaults/main.yml`]: Timeout declarations
 * `haproxy_defaults_timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
 * `haproxy_defaults_timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
@@ -186,6 +187,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
+* `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
 * `haproxy_backend.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
 * `haproxy_backend.{n}.stick`: [optional]: Stick declarations
 * `haproxy_backend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
