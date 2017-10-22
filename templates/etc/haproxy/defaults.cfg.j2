@@ -20,11 +20,9 @@
 {% endfor %}
 {% endif %}
 
-{% if haproxy_defaults_no_option is defined %}
-{% for option in haproxy_defaults_no_option %}
+{% for option in haproxy_defaults_no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
-{% endif %}
 
 {% if haproxy_defaults_timeout != false %}
 {% for timeout in haproxy_defaults_timeout %}
