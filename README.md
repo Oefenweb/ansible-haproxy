@@ -92,6 +92,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_listen.{n}.timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
 * `haproxy_listen.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_listen.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
+* `haproxy_listen.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_listen.{n}.capture`: [optional]: Capture fields from request or response
 * `haproxy_listen.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
 * `haproxy_listen.{n}.capture.name`: [required]: Name of the header or cookie to capture
@@ -126,8 +128,6 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.redirect`: [optional]: Return an HTTP redirection if/unless a condition is matched
 * `haproxy_listen.{n}.redirect.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_listen.{n}.redirect.{n}.cond`: [optional]: A condition to apply this rule
-* `haproxy_listen.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
-* `haproxy_listen.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_listen.{n}.rsprep`: [optional]: Response regexp edit definition
 * `haproxy_listen.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
 * `haproxy_listen.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
@@ -152,6 +152,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_frontend.{n}.timeout.type`: [required]: The type (e.g. `client`)
 * `haproxy_frontend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_frontend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
+* `haproxy_frontend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_frontend.{n}.capture`: [optional]: Capture fields from request or response
 * `haproxy_frontend.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
 * `haproxy_frontend.{n}.capture.name`: [required]: Name of the header or cookie to capture
@@ -172,8 +174,6 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.redirect`: [optional]: Return an HTTP redirection if/unless a condition is matched
 * `haproxy_frontend.{n}.redirect.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_frontend.{n}.redirect.{n}.cond`: [optional]: A condition to apply this rule
-* `haproxy_frontend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
-* `haproxy_frontend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_frontend.{n}.rsprep`: [optional]: Response regexp edit definition
 * `haproxy_frontend.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
 * `haproxy_frontend.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
@@ -203,6 +203,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_backend.{n}.timeout.type`: [required]: The type (e.g. `server`)
 * `haproxy_backend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_backend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
+* `haproxy_backend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_backend.{n}.cookie`: [optional]: Enable cookie-based persistence in a backend (e.g. `JSESSIONID prefix nocache`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)

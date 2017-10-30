@@ -53,6 +53,10 @@ backend {{ backend.name }}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 
+{% for acl in backend.acl | default([]) %}
+  acl {{ acl.string }}
+{% endfor %}
+
 {% if backend.stats is defined %}
 {% if backend.stats.enable is defined and backend.stats.enable | bool == true %}
   stats enable
