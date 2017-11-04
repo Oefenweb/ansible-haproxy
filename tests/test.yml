@@ -38,3 +38,20 @@
             insecure_password: secrete
             groups:
               - test_grp2
+
+    # ACL files
+    haproxy_acl_files:
+      - dest: /etc/haproxy/acl/ported-paths.list
+        content:
+          - |
+            ^/users/add_player$
+            ^/users/view.*$
+
+      - dest: /etc/haproxy/acl/api.map
+        content:
+          - |
+            v1.0 be_alpha
+            v1.1 be_bravo
+            v2.5 be_charlie
+            v2.2 be_alpha
+            v1.1 be_delta

@@ -242,6 +242,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_userlists.{n}.users.{n}.insecure_password`: [optional] Plaintext password of this user. **One of `password` or `insecure_password` must be set**
 * `haproxy_userlists.{n}.users.{n}.groups`: [optional] List of groups to add the user to
 
+* `haproxy_acl_files`: [default: `[]`]: ACL file declarations
+* `haproxy_acl_files.{n}.dest`: [required]: The remote path of the file (e.g. `/etc/haproxy/acl/api.map`)
+* `haproxy_acl_files.{n}.content`: [default: `[]`]: The content (lines) of the file (e.g. `['v1.0 be_alpha', 'v1.1 be_bravo']`)
+
 ## Dependencies
 
 None

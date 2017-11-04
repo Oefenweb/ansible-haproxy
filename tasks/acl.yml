@@ -1,0 +1,24 @@
+# tasks file for haproxy
+---
+- name: acl | create directories
+  file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: 0750
+  with_items: "{{ haproxy_acl_files }}"
+  tags:
+    - haproxy-acl-create-directories
+
+- name: acl | update files
+  template:
+    src: etc/haproxy/acl.j2
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0640') }}"
+  with_items: "{{ haproxy_acl_files }}"
+  notify: restart haproxy
+  tags:
+    - haproxy-acl-update-files
