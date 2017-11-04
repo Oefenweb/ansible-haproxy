@@ -74,8 +74,5 @@ haproxy_backend: []
 # user-lists section
 haproxy_userlists: []
 
-# ACL list files
-haproxy_acl_list_files: []
-
-# ACL list files
-haproxy_acl_map_files: []
+# ACL files
+haproxy_acl_files: []
