@@ -9,25 +9,25 @@
     - haproxy
     - haproxy-check-version-support
 
-- include: install.yml
+- import_tasks: install.yml
   tags:
     - configuration
     - haproxy
     - haproxy-install
 
-- include: certificates.yml
+- import_tasks: certificates.yml
   tags:
     - configuration
     - haproxy
     - haproxy-certificates
 
-- include: acl.yml
+- import_tasks: acl.yml
   tags:
     - configuration
     - haproxy
     - haproxy-acl
 
-- include: configuration.yml
+- import_tasks: configuration.yml
   tags:
     - configuration
     - haproxy
