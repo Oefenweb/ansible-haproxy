@@ -5,3 +5,5 @@
   become: true
   roles:
     - ../../
+  vars:
+    haproxy_version: 1.8
