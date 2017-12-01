@@ -70,9 +70,10 @@
   ssl-default-server-options {{ haproxy_global_ssl_default_server_options }}
 {% endif %}
 
-{% if haproxy_global_ssl_engine is defined %}
-  ssl-engine {{ haproxy_global_ssl_engine }}
-{% endif %}
+{% for ssl_engine in haproxy_global_ssl_engines | default([]) %}
+  ssl-engine {{ ssl_engine.name }}{% if ssl_engine.algos | default([]) | length %} algo {{ ssl_engine.algos | join(', ') }}{% endif %}
+{% endfor %}
+
 {% if haproxy_global_ssl_mode_async | default(false) | bool %}
   ssl-mode-async
 {% endif %}
