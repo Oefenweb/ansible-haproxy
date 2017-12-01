@@ -10,7 +10,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 
 #### Variables
 
-* `haproxy_version`: [default: `1.6`]: Version to install (e.g. `1.5`, `1.6`, `1.7`)
+* `haproxy_version`: [default: `1.6`]: Version to install (e.g. `1.5`, `1.6`, `1.7`, `1.8`)
 
 * `haproxy_install`: [default: `[]`]: Additional packages to install (e.g. `socat`)
 
@@ -29,6 +29,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
 * `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
 * `haproxy_global_daemon`: [default: `true`]: Makes the process fork into background. This is the recommended mode of operation
+* `haproxy_global_master_worker`: [optional, default: `false`]: Whether or not to use master/worker mode (`>= 1.8.0` only)
 * `haproxy_global_maxconn`: [optional]: Sets the maximum per-process number of concurrent connections
 * `haproxy_global_ca_base`: [default: `/etc/ssl/certs`]: Assigns a default directory to fetch SSL CA certificates and CRLs from when a relative path is used with `"ca-file"` or `"crl-file"` directives
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
@@ -36,7 +37,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_ssl_default_bind_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"bind"` lines
 * `haproxy_global_ssl_default_server_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms that are negotiated during the SSL/TLS handshake with the server, for all `"server"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_server_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"server"` lines
+* `haproxy_global_ssl_engine`: [optional]: Sets the OpenSSL engine to use (e.g. `rdrand`, `>= 1.8.0` only)
+* `haproxy_global_ssl_mode_async`: [optional: default `false`]: Enables asynchronous TLS I/O operations if asynchronous capable SSL engines are used (`>= 1.8.0` only)
 * `haproxy_global_nbproc`: [default: `1`]: Number of processes to create when going daemon. This requires the `daemon` mode. By default, only one process is created, which is the recommended mode of operation
+* `haproxy_global_nbthread`: [optional]: This setting is only available when support for threads was built in. It creates `<number>` threads for each created processes (`>= 1.8.0` only)
 * `haproxy_global_tune`: [default: `[]`]: (Performance) tuning declarations
 * `haproxy_global_tune.{n}.key`: [required]: Setting name (e.g. `ssl.cachesize`)
 * `haproxy_global_tune.{n}.value`: [required]: Setting value (e.g. `50000`)

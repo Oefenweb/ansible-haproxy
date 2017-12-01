@@ -31,6 +31,10 @@
   daemon
 {% endif %}
 
+{% if haproxy_global_master_worker | default(false) | bool %}
+  master-worker
+{% endif %}
+
 {% if haproxy_global_maxconn is defined %}
   maxconn {{ haproxy_global_maxconn }}
 {% endif %}
@@ -66,7 +70,18 @@
   ssl-default-server-options {{ haproxy_global_ssl_default_server_options }}
 {% endif %}
 
+{% if haproxy_global_ssl_engine is defined %}
+  ssl-engine {{ haproxy_global_ssl_engine }}
+{% endif %}
+{% if haproxy_global_ssl_mode_async | default(false) | bool %}
+  ssl-mode-async
+{% endif %}
+
   nbproc {{ haproxy_global_nbproc }}
+
+{% if haproxy_global_nbthread is defined %}
+  nbthread {{ haproxy_global_nbthread }}
+{% endif %}
 
 {% for tune in haproxy_global_tune | default([]) %}
   tune.{{ tune.key }} {{ tune.value }}
