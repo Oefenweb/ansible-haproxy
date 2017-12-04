@@ -27,6 +27,10 @@ frontend {{ frontend.name }}
   no option {{ option }}
 {% endfor %}
 
+{% if frontend.logformat is defined %}
+  log-format {{ frontend.logformat }}
+{% endif %}
+
 {% for timeout in frontend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
@@ -44,7 +48,10 @@ frontend {{ frontend.name }}
   http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
 
 {% endfor %}
+{% for tcp_request in frontend.tcp_request | default([]) %}
+  tcp-request {{ tcp_request.action }}{% if tcp_request.param is defined %} {{ tcp_request.param }}{% endif %}{% if tcp_request.cond is defined %} {{ tcp_request.cond }}{% endif %}
 
+{% endfor %}
 {% for rspadd in frontend.rspadd | default([]) %}
   rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
 
@@ -55,6 +62,8 @@ frontend {{ frontend.name }}
 
 {% endfor %}
 
+{% if frontend.default_backend is defined %}
   default_backend {{ frontend.default_backend }}
+{% endif %}
 
 {% endfor %}
