@@ -12,13 +12,38 @@ backend {{ backend.name }}
 
   balance {{ backend.balance }}
 
+{% if backend.source is defined %}
+  source {{ backend.source }}
+{% endif %}
+
 {% for option in backend.option | default([])%}
   option {{ option }}
+{% endfor %}
+
+{% for option in backend.no_option | default([])%}
+  no option {{ option }}
+{% endfor %}
+
+{% if backend.http_check is defined %}
+  http-check {{ backend.http_check }}
+{% endif %}
+
+{% if backend.cookie is defined %}
+  cookie {{ backend.cookie }}
+{% endif %}
+
+{% for stick in backend.stick | default([]) %}
+  stick-table {{ stick.table }}
+  stick on {{ stick.stick_on }}
 {% endfor %}
 
 {% for option in backend.no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
+
+{% if backend.no_log | default(false) == true %}
+  no log
+{% endif %}
 
 {% for tcp_check in backend.tcp_check | default([]) %}
   tcp-check {{ tcp_check }}
@@ -27,6 +52,30 @@ backend {{ backend.name }}
 {% for timeout in backend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
+
+{% for acl in backend.acl | default([]) %}
+  acl {{ acl.string }}
+{% endfor %}
+
+{% if backend.stats is defined %}
+{% if backend.stats.enable is defined and backend.stats.enable | bool == true %}
+  stats enable
+  stats uri {{ backend.stats.uri | default('/') }}
+{% if backend.stats.refresh is defined %}
+  stats refresh {{ backend.stats.refresh }}
+{% endif %}
+{% if backend.stats.admin is defined %}
+  stats admin {{ backend.stats.admin }}
+{% endif %}
+{% for option in backend.stats.options | default([]) %}
+  stats {{ option }}
+{% endfor %}
+{% for auth in backend.stats.auth | default([]) %}
+  stats auth {{ auth.user }}:{{ auth.passwd }}
+
+{% endfor %}
+{% endif %}
+{% endif %}
 
 {% for http_request in backend.http_request | default([]) %}
   http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
@@ -38,9 +87,17 @@ backend {{ backend.name }}
 
 {% endfor %}
 
+{% for compression in backend.compression | default([]) %}
+  compression {{ compression.name }} {{ compression.value }}
+{% endfor %}
+
 {% for server in backend.server | default([]) %}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
+{% endfor %}
+
+{% for errorfile in backend.errorfile | default([]) %}
+  errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 
 {% endfor %}

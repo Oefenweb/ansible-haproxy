@@ -1,0 +1,21 @@
+{% for userlist in haproxy_userlists %}
+{% set groups = [] %}
+userlist {{ userlist.name }}
+{% for user in userlist.users %}
+{% if user['groups'] is defined %}
+{% set _ = groups.extend(user['groups']) %}
+{% set user_groups = ' groups ' ~ user['groups'] | join(',') %}
+{% else %}
+{% set user_groups = '' %}
+{% endif %}
+{% if user['password'] is defined %}
+  user {{ user.name }} password {{ user.password }}{{ user_groups }}
+{% elif user['insecure_password'] is defined %}
+  user {{ user.name }} insecure-password {{ user.insecure_password }}{{ user_groups }}
+{% endif %}
+{% endfor %}
+{% for group in groups | unique %}
+  group {{ group }}
+{% endfor %}
+
+{% endfor %}

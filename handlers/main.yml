@@ -4,3 +4,4 @@
   service:
     name: haproxy
     state: restarted
+  when: service_default_state | default('started') == 'started'

@@ -1,0 +1,24 @@
+# tasks file for haproxy
+---
+- name: certificates | create directories
+  file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: 0750
+  with_items: "{{ haproxy_ssl_map }}"
+  tags:
+    - haproxy-certificates-create-directories
+
+- name: certificates | copy files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0640') }}"
+  with_items: "{{ haproxy_ssl_map }}"
+  notify: restart haproxy
+  tags:
+    - haproxy-certificates-copy-files

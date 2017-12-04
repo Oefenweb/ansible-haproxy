@@ -1,14 +1,11 @@
 {% if haproxy_global_log != false %}
 {% for log in haproxy_global_log %}
-  log {{ log.address }} {{ log.facility }}{% if log.level is defined %} {{log.level }}{% endif %}{% if log.minlevel is defined %} {{ log.minlevel }}{% endif %}
+  log {{ log.address }}{% if log.length is defined %} len {{log.length }}{% endif %} {{ log.facility }}{% if log.level is defined %} {{log.level }}{% endif %}{% if log.minlevel is defined %} {{ log.minlevel }}{% endif %}
 
-{% if log.format is defined %}
-    log-format {{ log.format }}
-{% endif %}
 {% endfor %}
 {% endif %}
 
-{% if haproxy_global_chroot | bool != false %}
+{% if haproxy_global_chroot is defined %}
   chroot {{ haproxy_global_chroot }}
 {% endif %}
 
@@ -32,6 +29,10 @@
 
 {% if haproxy_global_daemon | bool == true %}
   daemon
+{% endif %}
+
+{% if haproxy_global_master_worker | default(false) | bool %}
+  master-worker
 {% endif %}
 
 {% if haproxy_global_maxconn is defined %}
@@ -58,8 +59,42 @@
   ssl-default-bind-options {{ haproxy_global_ssl_default_bind_options }}
 {% endif %}
 
+{% if haproxy_global_ssl_default_server_ciphers != false %}
+  # Default ciphers to use on SSL-enabled listening sockets.
+  # For more information, see ciphers(1SSL). This list is from:
+  #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
+  ssl-default-server-ciphers {{ haproxy_global_ssl_default_server_ciphers }}
+{% endif %}
+
+{% if haproxy_global_ssl_default_server_options != false %}
+  ssl-default-server-options {{ haproxy_global_ssl_default_server_options }}
+{% endif %}
+
+{% for ssl_engine in haproxy_global_ssl_engines | default([]) %}
+  ssl-engine {{ ssl_engine.name }}{% if ssl_engine.algos | default([]) | length %} algo {{ ssl_engine.algos | join(', ') }}{% endif %}
+{% endfor %}
+
+{% if haproxy_global_ssl_mode_async | default(false) | bool %}
+  ssl-mode-async
+{% endif %}
+
   nbproc {{ haproxy_global_nbproc }}
+
+{% if haproxy_global_nbthread is defined %}
+  nbthread {{ haproxy_global_nbthread }}
+{% endif %}
 
 {% for tune in haproxy_global_tune | default([]) %}
   tune.{{ tune.key }} {{ tune.value }}
+{% endfor %}
+
+{% for option in haproxy_global_option | default([]) %}
+  {{ option }}
+{% endfor %}
+
+{% for peers in haproxy_global_peers | default([]) %}
+peers {{ peers.name }}
+{% for peer in peers.peers | default([]) %}
+  peer {{ peer.name }} {{ peer.listen }}
+{% endfor %}
 {% endfor %}

@@ -14,10 +14,9 @@ haproxy_global_log:
   - address: /dev/log
     facility: local1
     level: notice
-haproxy_global_chroot: /var/lib/haproxy
 haproxy_global_stats:
   sockets:
-    - listen: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"
+    - listen: /run/haproxy/admin.sock
   timeout: 30s
 haproxy_global_user: haproxy
 haproxy_global_group: haproxy
@@ -26,7 +25,10 @@ haproxy_global_ca_base: /etc/ssl/certs
 haproxy_global_crt_base: /etc/ssl/private
 haproxy_global_ssl_default_bind_ciphers: 'kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL'
 haproxy_global_ssl_default_bind_options: 'no-sslv3'
+haproxy_global_ssl_default_server_ciphers: 'kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL'
+haproxy_global_ssl_default_server_options: 'no-sslv3'
 haproxy_global_nbproc: 1
+haproxy_global_option: []
 
 # defaults section
 haproxy_defaults_log: global
@@ -68,3 +70,9 @@ haproxy_frontend: []
 
 # back-end section
 haproxy_backend: []
+
+# user-lists section
+haproxy_userlists: []
+
+# ACL files
+haproxy_acl_files: []

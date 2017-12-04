@@ -10,7 +10,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 
 #### Variables
 
-* `haproxy_version`: [default: `1.6`]: Version to install (e.g. `1.5`, `1.6`)
+* `haproxy_version`: [default: `1.6`]: Version to install (e.g. `1.5`, `1.6`, `1.7`, `1.8`)
 
 * `haproxy_install`: [default: `[]`]: Additional packages to install (e.g. `socat`)
 
@@ -19,35 +19,55 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_log.{n}.facility`: [required]: Must be one of the 24 standard syslog facilities (e.g. `local0`, `local1`)
 * `haproxy_global_log.{n}.level`: [optional]: Can be specified to filter outgoing messages (e.g. `notice`)
 * `haproxy_global_log.{n}.minlevel`: [optional]: Can be specified to filter outgoing messages (e.g. `notice`)
-* `haproxy_global_log.{n}.format`: [optional]: Specifies the log format string to use for traffic logs (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
-* `haproxy_global_chroot`: [default: `/var/lib/haproxy`]: Changes current directory to `<jail dir>` and performs a `chroot()` there before dropping privileges
+* `haproxy_global_log.{n}.length`: [optional]: Can be specified to adjust message length in log (e.g. `2048`)
+* `haproxy_global_chroot`: [optional]: Changes current directory to `<jail dir>` and performs a `chroot()` there before dropping privileges
 * `haproxy_global_stats`: [default: See `defaults/main.yml`]: Stats declarations
-* `haproxy_global_stats.sockets`:  [default: `[{listen: "{{ '/run/haproxy/admin.sock' if ansible_distribution_version | version_compare('12.04', '>=') else '/var/run/haproxy/admin.sock' }}"}]`]: Sockets declarations
+* `haproxy_global_stats.sockets`:  [default: `[{listen: /run/haproxy/admin.sock }}"}]`]: Sockets declarations
 * `haproxy_global_stats.sockets.{n}.listen`:  [required]: Defines a listening address and/or ports (e.g. `/run/haproxy/admin.sock`)
 * `haproxy_global_stats.sockets.{n}.param`:  [optional]: A list of parameters common to this bind declarations (e.g. `['mode 660', 'level admin', 'process 1']`)
 * `haproxy_global_stats.timeout`:  [optional]: The default timeout on the stats socket
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
 * `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
 * `haproxy_global_daemon`: [default: `true`]: Makes the process fork into background. This is the recommended mode of operation
+* `haproxy_global_master_worker`: [optional, default: `false`]: Whether or not to use master/worker mode (`>= 1.8.0` only)
 * `haproxy_global_maxconn`: [optional]: Sets the maximum per-process number of concurrent connections
 * `haproxy_global_ca_base`: [default: `/etc/ssl/certs`]: Assigns a default directory to fetch SSL CA certificates and CRLs from when a relative path is used with `"ca-file"` or `"crl-file"` directives
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
-* `haproxy_global_ssl_default_bind_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms (`"cipher suite"`) that are negotiated during the SSL/TLS handshake for all `"bind"` lines which do not explicitly define theirs
+* `haproxy_global_ssl_default_bind_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms ("cipher suite") that are negotiated during the SSL/TLS handshake for all `"bind"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_bind_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"bind"` lines
+* `haproxy_global_ssl_default_server_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms that are negotiated during the SSL/TLS handshake with the server, for all `"server"` lines which do not explicitly define theirs
+* `haproxy_global_ssl_default_server_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"server"` lines
+* `haproxy_global_ssl_engines`: [optional, default `[]`]: OpenSSL engine declarations (`>= 1.8.0` only)
+* `haproxy_global_ssl_engines.{n}.name`: [required]: Sets the OpenSSL engine to use (e.g. `rdrand`)
+* `haproxy_global_ssl_engines.{n}.algos`: [optional]: Sets the OpenSSL algorithms to use (e.g. `['RSA']`)
+* `haproxy_global_ssl_mode_async`: [optional: default `false`]: Enables asynchronous TLS I/O operations if asynchronous capable SSL engines are used (`>= 1.8.0` only)
 * `haproxy_global_nbproc`: [default: `1`]: Number of processes to create when going daemon. This requires the `daemon` mode. By default, only one process is created, which is the recommended mode of operation
+* `haproxy_global_nbthread`: [optional]: This setting is only available when support for threads was built in. It creates `<number>` threads for each created processes (`>= 1.8.0` only)
 * `haproxy_global_tune`: [default: `[]`]: (Performance) tuning declarations
 * `haproxy_global_tune.{n}.key`: [required]: Setting name (e.g. `ssl.cachesize`)
 * `haproxy_global_tune.{n}.value`: [required]: Setting value (e.g. `50000`)
+* `haproxy_global_option`: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
+* `haproxy_global_peers`: Peer list declarations
+* `haproxy_global_peers.{n}.name`: Peer list name (e.g. `mypeers`)
+* `haproxy_global_peers.{n}.peers`: Peer declarations
+* `haproxy_global_peers.{n}.peers.{n}.name`: [required]: Name of the host (recommended to be `hostname`) (e.g. `haproxy1`)
+* `haproxy_global_peers.{n}.peers.{n}.listen`: [required]: IP and port for peer to listen/connect to (e.g. `192.168.0.1:1024`)
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
+* `haproxy_defaults_logformat`: [optional]: Allows you to customize the logs in http mode and tcp mode (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
-* `haproxy_defaults_option:  [default: `[httplog, dontlognull]`]:
+* `haproxy_defaults_source`: [optional]: Set the source address or interface for connections from the proxy
+* `haproxy_defaults_option`: [default: `[httplog, dontlognull]`]: Options (default)
+* `haproxy_defaults_no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
 * `haproxy_defaults_timeout`: [default: See `defaults/main.yml`]: Timeout declarations
 * `haproxy_defaults_timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
 * `haproxy_defaults_timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_defaults_errorfile`: [default: See `defaults/main.yml`]: Errorfile declarations
 * `haproxy_defaults_errorfile.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_defaults_errorfile.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
+* `haproxy_defaults_compression`: [optional]: Compression declarations
+* `haproxy_defaults_compression.{}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
+* `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
@@ -66,12 +86,20 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_listen.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_listen.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
+* `haproxy_listen.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_listen.{n}.option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
 * `haproxy_listen.{n}.no_option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
+* `haproxy_listen.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
 * `haproxy_listen.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
+* `haproxy_listen.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
+* `haproxy_listen.{n}.stick`: [optional]: Stick declarations
+* `haproxy_listen.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
+* `haproxy_listen.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
 * `haproxy_listen.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_listen.{n}.timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
 * `haproxy_listen.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_listen.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
+* `haproxy_listen.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_listen.{n}.capture`: [optional]: Capture fields from request or response
 * `haproxy_listen.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
 * `haproxy_listen.{n}.capture.name`: [required]: Name of the header or cookie to capture
@@ -87,11 +115,15 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
-* `haproxy_listen.{n}.stats.hide_version`: [optional]: Hide version reporting
+* `haproxy_listen.{n}.stats.options`: [optional]: List of boolean stats options (e.g. `hide-version`, `show-node`, `show-desc`, `show-legends`)
 * `haproxy_listen.{n}.stats.refresh`: [optional]: Defined the refresh delay, specified in seconds (e.g. `5s`)
+* `haproxy_listen.{n}.stats.admin`: [optional]: Define / enable admin part of web interface with conditional attached
 * `haproxy_listen.{n}.stats.auth`: [optional]: Auth declarations
 * `haproxy_listen.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
 * `haproxy_listen.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
+* `haproxy_listen.{n}.compression`: [optional]: Compression declarations
+* `haproxy_listen.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
+* `haproxy_listen.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 * `haproxy_listen.{n}.server`: [optional]: Server declarations
 * `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
@@ -102,6 +134,12 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.redirect`: [optional]: Return an HTTP redirection if/unless a condition is matched
 * `haproxy_listen.{n}.redirect.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_listen.{n}.redirect.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_listen.{n}.rsprep`: [optional]: Response regexp edit definition
+* `haproxy_listen.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
+* `haproxy_listen.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_listen.{n}.errorfile`: [optional]: Errorfile declarations
+* `haproxy_listen.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
+* `haproxy_listen.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
@@ -113,11 +151,16 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_frontend.{n}.logformat`: [optional]: Specifies the log format string to use for traffic logs (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
+* `haproxy_frontend.{n}.stick`: [optional]: Stick declarations
+* `haproxy_frontend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
 * `haproxy_frontend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
+* `haproxy_frontend.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
 * `haproxy_frontend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_frontend.{n}.timeout.type`: [required]: The type (e.g. `client`)
 * `haproxy_frontend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_frontend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
+* `haproxy_frontend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_frontend.{n}.capture`: [optional]: Capture fields from request or response
 * `haproxy_frontend.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
 * `haproxy_frontend.{n}.capture.name`: [required]: Name of the header or cookie to capture
@@ -131,6 +174,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_frontend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
 * `haproxy_frontend.{n}.tcp_request`: [optional]: Perform an action on a new session depending on a layer 4-7 condition. (e.g. `content captureparam req.ssl_sni len 50`)
+* `haproxy_frontend.{n}.use_backend`: [optional]: Switch to a specific backend if/unless a Layer 7 condition is matched. (e.g. '%[req.hdr(host),lower,map_dom(/etc/haproxy/haproxy_backend.map,bk_default)]' or `['foo-backend if is_foo', 'bar-backend if is_bar']`)
 * `haproxy_frontend.{n}.default_backend`: [optional]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_frontend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
@@ -138,6 +182,15 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.redirect`: [optional]: Return an HTTP redirection if/unless a condition is matched
 * `haproxy_frontend.{n}.redirect.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_frontend.{n}.redirect.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_frontend.{n}.rsprep`: [optional]: Response regexp edit definition
+* `haproxy_frontend.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
+* `haproxy_frontend.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_frontend.{n}.compression`: [optional]: Compression declarations
+* `haproxy_frontend.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
+* `haproxy_frontend.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
+* `haproxy_frontend.{n}.errorfile`: [optional]: Errorfile declarations
+* `haproxy_frontend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
+* `haproxy_frontend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
 
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
@@ -145,12 +198,22 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
+* `haproxy_backend.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
+* `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
+* `haproxy_backend.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
+* `haproxy_backend.{n}.stick`: [optional]: Stick declarations
+* `haproxy_backend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
+* `haproxy_backend.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
+* `haproxy_backend.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
 * `haproxy_backend.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_backend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_backend.{n}.timeout.type`: [required]: The type (e.g. `server`)
 * `haproxy_backend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_backend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
+* `haproxy_backend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
+* `haproxy_backend.{n}.cookie`: [optional]: Enable cookie-based persistence in a backend (e.g. `JSESSIONID prefix nocache`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_backend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
@@ -159,10 +222,37 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_backend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_backend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.stats`: [optional]: Stats declarations
+* `haproxy_backend.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
+* `haproxy_backend.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
+* `haproxy_backend.{n}.stats.options`: [optional]: List of boolean stats options (e.g. `hide-version`, `show-node`, `show-desc`, `show-legends`)
+* `haproxy_backend.{n}.stats.refresh`: [optional]: Defined the refresh delay, specified in seconds (e.g. `5s`)
+* `haproxy_backend.{n}.stats.admin`: [optional]: Define / enable admin part of web interface with conditional attached
+* `haproxy_backend.{n}.stats.auth`: [optional]: Auth declarations
+* `haproxy_backend.{n}.stats.auth.{n}.user`: [required]: A user name to grant access to
+* `haproxy_backend.{n}.stats.auth.{n}.passwd`: [required]: The cleartext password associated to this user
+* `haproxy_backend.{n}.compression`: [optional]: Compression declarations
+* `haproxy_backend.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
+* `haproxy_backend.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 * `haproxy_backend.{n}.server`: [optional]: Server declarations
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
+* `haproxy_backend.{n}.errorfile`: [optional]: Errorfile declarations
+* `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
+* `haproxy_backend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
+
+* `haproxy_userlists`: [default: `[]`]: Userlist declarations
+* `haproxy_userlists.{n}.name`: [required]: The name of the userlist
+* `haproxy_userlists.{n}.users`: [required] Userlist users declarations
+* `haproxy_userlists.{n}.users.{n}.name`: [required] The username of this user
+* `haproxy_userlists.{n}.users.{n}.password`: [optional] Password hash of this user. **One of `password` or `insecure_password` must be set**
+* `haproxy_userlists.{n}.users.{n}.insecure_password`: [optional] Plaintext password of this user. **One of `password` or `insecure_password` must be set**
+* `haproxy_userlists.{n}.users.{n}.groups`: [optional] List of groups to add the user to
+
+* `haproxy_acl_files`: [default: `[]`]: ACL file declarations
+* `haproxy_acl_files.{n}.dest`: [required]: The remote path of the file (e.g. `/etc/haproxy/acl/api.map`)
+* `haproxy_acl_files.{n}.content`: [default: `[]`]: The content (lines) of the file (e.g. `['v1.0 be_alpha', 'v1.1 be_bravo']`)
 
 ## Dependencies
 
@@ -201,7 +291,10 @@ None
         stats:
           enable: true
           uri: /
-          hide_version: true
+          options:
+            - hide-version
+            - show-node
+          admin: if LOCALHOST
           refresh: 5s
           auth:
             - user: admin
@@ -219,7 +312,7 @@ None
         default_backend: webservers
       - name: https
         description: Front-end for all HTTPS traffic
-        bind: 
+        bind:
           - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
             param:
               - ssl
@@ -315,8 +408,11 @@ None
         stats:
           enable: true
           uri: /
-          hide_version: true
+          options:
+            - hide-version
+            - show-desc
           refresh: 5s
+          admin: if TRUE
           auth:
             - user: admin
               passwd: 'NqXgKWQ9f9Et'
@@ -332,6 +428,8 @@ None
           - 2
           - 3
           - 4
+        acl:
+          - string: secure dst_port eq 443
         mode: http
         server:
           - name: "{{ inventory_hostname }}"
@@ -340,6 +438,9 @@ None
               - send-proxy
         rspadd:
           - string: 'Strict-Transport-Security:\ max-age=15768000'
+        rsprep:
+          - string: '^Set-Cookie:\ (.*) Set-Cookie:\ \1;\ Secure'
+            cond: if secure
 
     haproxy_frontend:
       - name: http

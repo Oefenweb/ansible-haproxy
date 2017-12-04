@@ -23,6 +23,19 @@ listen {{ listen.name }}
   maxconn {{ listen.maxconn }}
 {% endif %}
 
+{% if listen.http_check is defined %}
+  http-check {{ listen.http_check }}
+{% endif %}
+
+{% for stick in listen.stick | default([]) %}
+  stick-table {{ stick.table }}
+  stick on {{ stick.stick_on }}
+{% endfor %}
+
+{% if listen.source is defined %}
+  source {{ listen.source }}
+{% endif %}
+
 {% for option in listen.option | default([]) %}
   option {{ option }}
 {% endfor %}
@@ -31,12 +44,20 @@ listen {{ listen.name }}
   no option {{ option }}
 {% endfor %}
 
+{% if listen.no_log | default(false) == true %}
+  no log
+{% endif %}
+
 {% for tcp_check in listen.tcp_check | default([]) %}
   tcp-check {{ tcp_check }}
 {% endfor %}
 
 {% for timeout in listen.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
+{% endfor %}
+
+{% for acl in listen.acl | default([]) %}
+  acl {{ acl.string }}
 {% endfor %}
 
 {% for capture in listen.capture | default([]) %}
@@ -47,12 +68,15 @@ listen {{ listen.name }}
 {% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
   stats enable
   stats uri {{ listen.stats.uri | default('/') }}
-{% if listen.stats.hide_version is defined and listen.stats.hide_version | bool == true %}
-  stats hide-version
-{% endif %}
 {% if listen.stats.refresh is defined %}
   stats refresh {{ listen.stats.refresh }}
 {% endif %}
+{% if listen.stats.admin is defined %}
+  stats admin {{ listen.stats.admin }}
+{% endif %}
+{% for option in listen.stats.options | default([]) %}
+  stats {{ option }}
+{% endfor %}
 {% for auth in listen.stats.auth | default([]) %}
   stats auth {{ auth.user }}:{{ auth.passwd }}
 
@@ -75,14 +99,27 @@ listen {{ listen.name }}
 
 {% endfor %}
 
+{% for rsprep in listen.rsprep | default([]) %}
+  rsprep {{ rsprep.string }}{% if rsprep.cond is defined %} {{ rsprep.cond }}{% endif %}
+
+{% endfor %}
+
 {% for redirect in listen.redirect | default([]) %}
   redirect {{ redirect.string }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
 
 {% endfor %}
 
+{% for compression in listen.compression | default([]) %}
+  compression {{ compression.name }} {{ compression.value }}
+{% endfor %}
+
 {% for server in listen.server | default([]) %}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
+{% endfor %}
+
+{% for errorfile in listen.errorfile | default([]) %}
+  errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 
 {% endfor %}

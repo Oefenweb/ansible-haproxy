@@ -19,6 +19,10 @@ frontend {{ frontend.name }}
   maxconn {{ frontend.maxconn }}
 {% endif %}
 
+{% for stick in frontend.stick | default([]) %}
+  stick-table {{ stick.table }}
+{% endfor %}
+
 {% for option in frontend.option | default([]) %}
   option {{ option }}
 {% endfor %}
@@ -27,12 +31,20 @@ frontend {{ frontend.name }}
   no option {{ option }}
 {% endfor %}
 
+
 {% if frontend.logformat is defined %}
   log-format {{ frontend.logformat }}
+{% endif %}
+{% if frontend.no_log | default(false) == true %}
+  no log
 {% endif %}
 
 {% for timeout in frontend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
+{% endfor %}
+
+{% for acl in frontend.acl | default([]) %}
+  acl {{ acl.string }}
 {% endfor %}
 
 {% for capture in frontend.capture | default([]) %}
@@ -57,13 +69,36 @@ frontend {{ frontend.name }}
 
 {% endfor %}
 
+{% for rsprep in frontend.rsprep | default([]) %}
+  rsprep {{ rsprep.string }}{% if rsprep.cond is defined %} {{ rsprep.cond }}{% endif %}
+
+{% endfor %}
+
 {% for redirect in frontend.redirect | default([]) %}
   redirect {{ redirect.string }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
 
 {% endfor %}
 
+{% for compression in frontend.compression | default([]) %}
+  compression {{ compression.name }} {{ compression.value }}
+{% endfor %}
+
+{% if frontend.use_backend is defined %}
+{% if frontend.use_backend is iterable and frontend.use_backend is not string %}
+{% for use_backend in frontend.use_backend | default([]) %}
+  use_backend {{ use_backend }}
+{% endfor %}
+{% else %}
+  use_backend {{ frontend.use_backend }}
+{% endif %}
+{% endif %}
+
 {% if frontend.default_backend is defined %}
   default_backend {{ frontend.default_backend }}
 {% endif %}
+
+{% for errorfile in frontend.errorfile | default([]) %}
+  errorfile {{ errorfile.code }} {{ errorfile.file }}
+{% endfor %}
 
 {% endfor %}

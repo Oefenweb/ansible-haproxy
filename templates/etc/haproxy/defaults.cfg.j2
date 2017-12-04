@@ -2,8 +2,16 @@
   log {{ haproxy_defaults_log }}
 {% endif %}
 
+{% if haproxy_defaults_logformat is defined %}
+  log-format {{ haproxy_defaults_logformat }}
+{% endif %}
+
 {% if haproxy_defaults_mode != false %}
   mode {{ haproxy_defaults_mode }}
+{% endif %}
+
+{% if haproxy_defaults_source is defined %}
+  source {{ haproxy_defaults_source }}
 {% endif %}
 
 {% if haproxy_defaults_option != false %}
@@ -11,6 +19,10 @@
   option {{ option }}
 {% endfor %}
 {% endif %}
+
+{% for option in haproxy_defaults_no_option | default([]) %}
+  no option {{ option }}
+{% endfor %}
 
 {% if haproxy_defaults_timeout != false %}
 {% for timeout in haproxy_defaults_timeout %}
@@ -23,3 +35,7 @@
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 {% endif %}
+
+{% for compression in haproxy_defaults_compression | default([]) %}
+  compression {{ compression.name }} {{ compression.value }}
+{% endfor %}
