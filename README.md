@@ -560,6 +560,16 @@ None
               - backup
 ```
 
+## Overriding configuration template
+
+If you can't customize via variables because an option isn't exposed, you can override the template used to generate the haproxy configuration file.
+
+```yaml
+haproxy_conf_template: "etc/haproxy/haproxy.cfg.j2"
+```
+
+You can either copy and modify the provided template, or extend it with [Jinja2 template inheritance](http://jinja.pocoo.org/docs/2.9/templates/#template-inheritance) and override the specific template block you need to change.
+
 #### License
 
 MIT
