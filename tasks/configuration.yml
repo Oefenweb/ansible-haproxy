@@ -2,7 +2,7 @@
 ---
 - name: configuration | update file
   template:
-    src: etc/haproxy/haproxy.cfg.j2
+    src: "{{ haproxy_conf_template }}"
     dest: /etc/haproxy/haproxy.cfg
     owner: root
     group: root
