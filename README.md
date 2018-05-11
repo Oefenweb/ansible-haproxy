@@ -202,6 +202,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
 * `haproxy_backend.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
+* `haproxy_backend.{n}.rspirep`: [optional]: Response regexp edit definition
+* `haproxy_backend.{n}.rspirep.{n}.string`: [required]: Regexp definition to be used on response (case insensitive)
+* `haproxy_backend.{n}.rspirep.{n}.cond`: [optional]: A condition to apply this rule
 * `haproxy_backend.{n}.stick`: [optional]: Stick declarations
 * `haproxy_backend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
 * `haproxy_backend.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
