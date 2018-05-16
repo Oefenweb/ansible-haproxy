@@ -137,6 +137,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.rsprep`: [optional]: Response regexp edit definition
 * `haproxy_listen.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
 * `haproxy_listen.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_listen.{n}.rspirep`: [optional]: Response regexp edit definition
+* `haproxy_listen.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line
+* `haproxy_listen.{n}.rspirep.{n}.string`: [required]: The complete line to be added
+* `haproxy_listen.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_listen.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_listen.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_listen.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
@@ -185,6 +189,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.rsprep`: [optional]: Response regexp edit definition
 * `haproxy_frontend.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
 * `haproxy_frontend.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
+* `haproxy_frontend.{n}.rspirep`: [optional]: Response regexp edit definition
+* `haproxy_frontend.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line
+* `haproxy_frontend.{n}.rspirep.{n}.string`: [required]: The complete line to be added
+* `haproxy_frontend.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_frontend.{n}.compression`: [optional]: Compression declarations
 * `haproxy_frontend.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_frontend.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
@@ -202,9 +210,6 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
 * `haproxy_backend.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
-* `haproxy_backend.{n}.rspirep`: [optional]: Response regexp edit definition
-* `haproxy_backend.{n}.rspirep.{n}.string`: [required]: Regexp definition to be used on response (case insensitive)
-* `haproxy_backend.{n}.rspirep.{n}.cond`: [optional]: A condition to apply this rule
 * `haproxy_backend.{n}.stick`: [optional]: Stick declarations
 * `haproxy_backend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
 * `haproxy_backend.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
@@ -216,6 +221,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_backend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
 * `haproxy_backend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
+* `haproxy_backend.{n}.rspirep`: [optional]: Response regexp edit definition
+* `haproxy_backend.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line
+* `haproxy_backend.{n}.rspirep.{n}.string`: [required]: The complete line to be added
+* `haproxy_backend.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_backend.{n}.cookie`: [optional]: Enable cookie-based persistence in a backend (e.g. `JSESSIONID prefix nocache`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)

@@ -28,3 +28,4 @@ ansible.cfg
 # Other files #
 ###############
 !empty
+*.sw[po]

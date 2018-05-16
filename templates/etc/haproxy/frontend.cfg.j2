@@ -76,6 +76,11 @@ frontend {{ frontend.name }}
 
 {% endfor %}
 
+{% for rspirep in frontend.rspirep | default([]) %}
+  rspirep {{ rspirep.search }} {{ rspirep.string }}{% if rspirep.cond is defined %} {{ rspirep.cond }}{% endif %}
+
+{% endfor %}
+
 {% for redirect in frontend.redirect | default([]) %}
   redirect {{ redirect.string }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
 
