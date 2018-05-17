@@ -57,6 +57,11 @@ backend {{ backend.name }}
   acl {{ acl.string }}
 {% endfor %}
 
+{% for rspirep in backend.rspirep | default([]) %}
+  rspirep {{ rspirep.search }} {{ rspirep.string }}{% if rspirep.cond is defined %} {{ rspirep.cond }}{% endif %}
+
+{% endfor %}
+
 {% if backend.stats is defined %}
 {% if backend.stats.enable is defined and backend.stats.enable | bool == true %}
   stats enable
