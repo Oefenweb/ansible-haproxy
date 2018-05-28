@@ -7,6 +7,8 @@ haproxy_dependencies:
     state: latest
 haproxy_install: []
 
+haproxy_restart_mode: restarted
+
 haproxy_conf_template: "etc/haproxy/haproxy.cfg.j2"
 
 # global section
