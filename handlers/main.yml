@@ -3,5 +3,5 @@
 - name: restart haproxy
   service:
     name: haproxy
-    state: "{{ haproxy_restart_mode }}"
+    state: "{{ haproxy_restart_handler_state }}"
   when: service_default_state | default('started') == 'started'
