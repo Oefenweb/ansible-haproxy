@@ -87,6 +87,16 @@ backend {{ backend.name }}
 
 {% endfor %}
 
+{% for tcp_request_inspect_delay in frontend.tcp_request_inspect_delay | default([]) %}
+  tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
+
+{% endfor %}
+
+{% for tcp_request_content in frontend.tcp_request_content | default([]) %}
+  tcp-request content {{ tcp_request_content.action }}{% if tcp_request_content.cond is defined %} {{ tcp_request_content.cond }}{% endif %}
+
+{% endfor %}
+
 {% for http_response in backend.http_response | default([]) %}
   http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
 

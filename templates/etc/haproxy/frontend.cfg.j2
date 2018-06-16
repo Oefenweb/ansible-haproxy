@@ -61,8 +61,23 @@ frontend {{ frontend.name }}
 
 {% endfor %}
 
-{% for tcp_request in frontend.tcp_request | default([]) %}
-  tcp-request {{ tcp_request.action }}{% if tcp_request.param is defined %} {{ tcp_request.param }}{% endif %}{% if tcp_request.cond is defined %} {{ tcp_request.cond }}{% endif %}
+{% for tcp_request_inspect_delay in frontend.tcp_request_inspect_delay | default([]) %}
+  tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
+
+{% endfor %}
+
+{% for tcp_request_connection in frontend.tcp_request_connection | default([]) %}
+  tcp-request connection {{ tcp_request_connection.action }}{% if tcp_request_connection.cond is defined %} {{ tcp_request_connection.cond }}{% endif %}
+
+{% endfor %}
+
+{% for tcp_request_content in frontend.tcp_request_content | default([]) %}
+  tcp-request content {{ tcp_request_content.action }}{% if tcp_request_content.cond is defined %} {{ tcp_request_content.cond }}{% endif %}
+
+{% endfor %}
+
+{% for tcp_request_session in frontend.tcp_request_session | default([]) %}
+  tcp-request session {{ tcp_request_session.action }}{% if tcp_request_session.cond is defined %} {{ tcp_request_session.cond }}{% endif %}
 
 {% endfor %}
 

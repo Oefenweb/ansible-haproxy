@@ -89,6 +89,26 @@ listen {{ listen.name }}
 
 {% endfor %}
 
+{% for tcp_request_inspect_delay in frontend.tcp_request_inspect_delay | default([]) %}
+  tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
+
+{% endfor %}
+
+{% for tcp_request_connection in frontend.tcp_request_connection | default([]) %}
+  tcp-request connection {{ tcp_request_connection.action }}{% if tcp_request_connection.cond is defined %} {{ tcp_request_connection.cond }}{% endif %}
+
+{% endfor %}
+
+{% for tcp_request_content in frontend.tcp_request_content | default([]) %}
+  tcp-request content {{ tcp_request_content.action }}{% if tcp_request_content.cond is defined %} {{ tcp_request_content.cond }}{% endif %}
+
+{% endfor %}
+
+{% for tcp_request_session in frontend.tcp_request_session | default([]) %}
+  tcp-request session {{ tcp_request_session.action }}{% if tcp_request_session.cond is defined %} {{ tcp_request_session.cond }}{% endif %}
+
+{% endfor %}
+
 {% for http_response in listen.http_response | default([]) %}
   http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
 
