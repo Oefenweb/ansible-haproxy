@@ -87,12 +87,12 @@ backend {{ backend.name }}
 
 {% endfor %}
 
-{% for tcp_request_inspect_delay in frontend.tcp_request_inspect_delay | default([]) %}
+{% for tcp_request_inspect_delay in backend.tcp_request_inspect_delay | default([]) %}
   tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
 
 {% endfor %}
 
-{% for tcp_request_content in frontend.tcp_request_content | default([]) %}
+{% for tcp_request_content in backend.tcp_request_content | default([]) %}
   tcp-request content {{ tcp_request_content.action }}{% if tcp_request_content.cond is defined %} {{ tcp_request_content.cond }}{% endif %}
 
 {% endfor %}
