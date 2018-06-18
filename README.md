@@ -112,6 +112,17 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_listen.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_listen.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_listen.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition.
+* `haproxy_listen.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule.
+* `haproxy_listen.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule.
+* `haproxy_listen.{n}.tcp_request_connection`: [optional]: Perform an action on an incoming connection depending on a layer 4 condition.
+* `haproxy_listen.{n}.tcp_request_connection.{n}.action`: [required]: The action for the `tcp-request connection` rule.
+* `haproxy_listen.{n}.tcp_request_connection.{n}.cond`: [optional]: A matching condition for the `tcp-request connection` rule.
+* `haproxy_listen.{n}.tcp_request_session`: [optional]: Perform an action on a validated session depending on a layer 5 condition.
+* `haproxy_listen.{n}.tcp_request_session.{n}.action`: [required]: The action for the `tcp-request session` rule.
+* `haproxy_listen.{n}.tcp_request_session.{n}.cond`: [optional]: A matching condition for the `tcp-request session` rule.
+* `haproxy_listen.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection.
+* `haproxy_listen.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule.
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
@@ -177,7 +188,17 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_frontend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_frontend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
-* `haproxy_frontend.{n}.tcp_request`: [optional]: Perform an action on a new session depending on a layer 4-7 condition. (e.g. `content captureparam req.ssl_sni len 50`)
+* `haproxy_frontend.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition.
+* `haproxy_frontend.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule.
+* `haproxy_frontend.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule.
+* `haproxy_frontend.{n}.tcp_request_connection`: [optional]: Perform an action on an incoming connection depending on a layer 4 condition.
+* `haproxy_frontend.{n}.tcp_request_connection.{n}.action`: [required]: The action for the `tcp-request connection` rule.
+* `haproxy_frontend.{n}.tcp_request_connection.{n}.cond`: [optional]: A matching condition for the `tcp-request connection` rule.
+* `haproxy_frontend.{n}.tcp_request_session`: [optional]: Perform an action on a validated session depending on a layer 5 condition.
+* `haproxy_frontend.{n}.tcp_request_session.{n}.action`: [required]: The action for the `tcp-request session` rule.
+* `haproxy_frontend.{n}.tcp_request_session.{n}.cond`: [optional]: A matching condition for the `tcp-request session` rule.
+* `haproxy_frontend.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection.
+* `haproxy_frontend.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule.
 * `haproxy_frontend.{n}.use_backend`: [optional]: Switch to a specific backend if/unless a Layer 7 condition is matched. (e.g. '%[req.hdr(host),lower,map_dom(/etc/haproxy/haproxy_backend.map,bk_default)]' or `['foo-backend if is_foo', 'bar-backend if is_bar']`)
 * `haproxy_frontend.{n}.default_backend`: [optional]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
@@ -234,6 +255,11 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_backend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_backend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition.
+* `haproxy_backend.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule.
+* `haproxy_backend.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule.
+* `haproxy_backend.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection.
+* `haproxy_backend.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule.
 * `haproxy_backend.{n}.stats`: [optional]: Stats declarations
 * `haproxy_backend.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_backend.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
