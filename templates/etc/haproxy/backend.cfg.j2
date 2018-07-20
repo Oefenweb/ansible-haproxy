@@ -106,10 +106,19 @@ backend {{ backend.name }}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
 
+{% if backend.server is defined %}
 {% for server in backend.server | default([]) %}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
 {% endfor %}
+{% endif %}
+
+{% if backend.server_template is defined %}
+{% for server in backend.server_template | default([]) %}
+  server-template {{ server.name }} {{ server.number }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
+
+{% endfor %}
+{% endif %}
 
 {% for errorfile in backend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
