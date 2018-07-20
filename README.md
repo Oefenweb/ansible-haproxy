@@ -68,6 +68,11 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_compression`: [optional]: Compression declarations
 * `haproxy_defaults_compression.{}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
+  
+* `haproxy_resolvers_label`: [default: `[]`]: The global name of your dns resolver
+* `haproxy_resolvers_list.{n}.name`: [required]: The name of the dns resolver
+* `haproxy_resolvers_list.{n}.listen`: [required]: The location of your dns resolver
+
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
@@ -139,6 +144,13 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
+
+* `haproxy_listen.{n}.server_template`: [optional]: Server template declarations
+* `haproxy_listen.{n}.server_template.{n}.name`: [required]: The internal name assigned to this server
+* `haproxy_listen.{n}.server_template.{n}.number`: [required]: The internal dns records number assigned to this server
+* `haproxy_listen.{n}.server_template.{n}.listen`: [required]: Defines a listening address and/or ports
+* `haproxy_listen.{n}.server_template.{n}.param`: [optional]: A list of parameters for this server
+
 * `haproxy_listen.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_listen.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_listen.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs

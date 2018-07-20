@@ -63,6 +63,12 @@ haproxy_defaults_errorfile:
   - code: 504
     file: /etc/haproxy/errors/504.http
 
+
+haproxy_resolvers_label: sddns
+haproxy_resolvers_list: []
+  # - name: dns1
+  #   listen: 127.0.0.1:5353
+
 # ssl (file) map
 haproxy_ssl_map: []
 
