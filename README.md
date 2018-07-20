@@ -144,7 +144,6 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
-
 * `haproxy_listen.{n}.server_template`: [optional]: Server template declarations
 * `haproxy_listen.{n}.server_template.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_listen.{n}.server_template.{n}.number`: [required]: The internal dns records number assigned to this server
@@ -403,6 +402,30 @@ None
             param:
               - 'maxconn 503'
               - check
+
+      - name: webservers-sdns
+        description: Back-end with all (Apache) webservers
+        mode: http
+        balance: roundrobin
+        option:
+          - forwardfor
+          - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
+        http_request:
+          - action: 'set-header'
+            param: 'X-Forwarded-Port %[dst_port]'
+          - action: 'add-header'
+            param: 'X-Forwarded-Proto https'
+            cond: 'if { ssl_fc }'
+        server_template:
+          - name: web
+          	number: 3
+            listen: "_http._tcp.web.skydns.local:80"
+            param:
+              - 'resolvers {{ haproxy_resolvers_label }}'
+              - 'maxconn 501'
+              - check
+
+
 ```
 
 #### SSL Termination 2
