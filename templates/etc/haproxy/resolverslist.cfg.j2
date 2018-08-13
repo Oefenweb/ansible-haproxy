@@ -1,0 +1,8 @@
+{% if haproxy_resolvers_label is defined %}
+resolvers {{ haproxy_resolvers_label }}
+{% if haproxy_resolverslist is defined %}
+{% for resolver in haproxy_resolverslist %}
+  nameserver {{ resolver.id }} {{ resolver.listen }} 
+{% endfor %}
+{% endif %}
+{% endif %}

@@ -115,7 +115,7 @@ backend {{ backend.name }}
 
 {% if backend.server_template is defined %}
 {% for server in backend.server_template | default([]) %}
-  server-template {{ server.name }} {{ server.number }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
+  server-template {{ server.prefix }} {{ server.num }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
 {% endfor %}
 {% endif %}

@@ -69,8 +69,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_compression.{}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
   
-* `haproxy_resolvers_label`: [default: `[]`]: The global name of your dns resolver
-* `haproxy_resolvers_list.{n}.name`: [required]: The name of the dns resolver
+* `haproxy_resolverslist`: [default: `[]`]: The global name of your dns resolver
+* `haproxy_resolvers_list.{n}.id`: [required]: The name of the dns resolver
 * `haproxy_resolvers_list.{n}.listen`: [required]: The location of your dns resolver
 
 
@@ -145,8 +145,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 * `haproxy_listen.{n}.server_template`: [optional]: Server template declarations
-* `haproxy_listen.{n}.server_template.{n}.name`: [required]: The internal name assigned to this server
-* `haproxy_listen.{n}.server_template.{n}.number`: [required]: The internal dns records number assigned to this server
+* `haproxy_listen.{n}.server_template.{n}.prefix`: [required]: The internal name assigned to this server
+* `haproxy_listen.{n}.server_template.{n}.num`: [required]: The internal dns records number assigned to this server
 * `haproxy_listen.{n}.server_template.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server_template.{n}.param`: [optional]: A list of parameters for this server
 
@@ -417,11 +417,11 @@ None
             param: 'X-Forwarded-Proto https'
             cond: 'if { ssl_fc }'
         server_template:
-          - name: web
-          	number: 3
+          - id: web
+          	num: 3
             listen: "_http._tcp.web.skydns.local:80"
             param:
-              - 'resolvers {{ haproxy_resolvers_label }}'
+              - 'resolvers {{ haproxy_resolverslist }}'
               - 'maxconn 501'
               - check
 
