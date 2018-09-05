@@ -3,67 +3,51 @@ listen {{ listen.name }}
 {% if listen.description is defined %}
   description {{ listen.description }}
 {% endif %}
-
 {% for bind in listen.bind %}
   bind {{ bind.listen }}{% for param in bind.param | default([]) %} {{ param }}{% endfor %}
 
 {% endfor %}
-
 {% if listen.bind_process is defined %}
   bind-process {{ listen.bind_process | join(' ') }}
 {% endif %}
-
   mode {{ listen.mode }}
-
 {% if listen.balance is defined %}
   balance {{ listen.balance }}
 {% endif %}
-
 {% if listen.maxconn is defined %}
   maxconn {{ listen.maxconn }}
 {% endif %}
-
 {% if listen.http_check is defined %}
   http-check {{ listen.http_check }}
 {% endif %}
-
 {% for stick in listen.stick | default([]) %}
   stick-table {{ stick.table }}
   stick on {{ stick.stick_on }}
 {% endfor %}
-
 {% if listen.source is defined %}
   source {{ listen.source }}
 {% endif %}
-
 {% for option in listen.option | default([]) %}
   option {{ option }}
 {% endfor %}
-
 {% for option in listen.no_option | default([])  %}
   no option {{ option }}
 {% endfor %}
-
 {% if listen.no_log | default(false) == true %}
   no log
 {% endif %}
-
 {% for tcp_check in listen.tcp_check | default([]) %}
   tcp-check {{ tcp_check }}
 {% endfor %}
-
 {% for timeout in listen.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
-
 {% for acl in listen.acl | default([]) %}
   acl {{ acl.string }}
 {% endfor %}
-
 {% for capture in listen.capture | default([]) %}
   capture {{ capture.type }} {{ capture.name }} len {{ capture.length }}
 {% endfor %}
-
 {% if listen.stats is defined %}
 {% if listen.stats.enable is defined and listen.stats.enable | bool == true %}
   stats enable
@@ -79,94 +63,79 @@ listen {{ listen.name }}
 {% endfor %}
 {% for auth in listen.stats.auth | default([]) %}
   stats auth {{ auth.user }}:{{ auth.passwd }}
-
 {% endfor %}
 {% endif %}
 {% endif %}
-
 {% for tcp_request_inspect_delay in listen.tcp_request_inspect_delay | default([]) %}
   tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
-
 {% endfor %}
-
 {% for tcp_request_connection in listen.tcp_request_connection | default([]) %}
   tcp-request connection {{ tcp_request_connection.action }}{% if tcp_request_connection.cond is defined %} {{ tcp_request_connection.cond }}{% endif %}
 
 {% endfor %}
-
 {% for tcp_request_content in listen.tcp_request_content | default([]) %}
   tcp-request content {{ tcp_request_content.action }}{% if tcp_request_content.cond is defined %} {{ tcp_request_content.cond }}{% endif %}
 
 {% endfor %}
-
 {% for tcp_request_session in listen.tcp_request_session | default([]) %}
   tcp-request session {{ tcp_request_session.action }}{% if tcp_request_session.cond is defined %} {{ tcp_request_session.cond }}{% endif %}
 
 {% endfor %}
-
 {% for http_request in listen.http_request | default([]) %}
   http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
 
 {% endfor %}
-
 {% for http_response in listen.http_response | default([]) %}
   http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
 
 {% endfor %}
-
 {% for action in ['reqadd', 'rspadd'] %}
 {% for params in listen[action] | default([]) %}
   {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
 {% endfor %}
 {% endfor %}
-
 {% for action in ['reqdel', 'reqidel', 'rspdel', 'rspidel'] %}
 {% for params in listen[action] | default([]) %}
   {{ action }} {{ params.search }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
 {% endfor %}
 {% endfor %}
-
 {% for action in ['reqrep', 'reqirep', 'rsprep', 'rspirep'] %}
 {% for params in listen[action] | default([]) %}
   {{ action }} {{ params.search }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
 {% endfor %}
 {% endfor %}
-
 {% for redirect in listen.redirect | default([]) %}
   redirect {{ redirect.string }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
 
 {% endfor %}
-
 {% for compression in listen.compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
-
 {% if listen.default_server_params | default([]) %}
   default-server {% for param in listen.default_server_params | default([]) %} {{ param }}{% endfor %}
-{% endif %}
 
+{% endif %}
 {% for server in listen.server | default([]) %}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
 {% endfor %}
 {% if listen.server_template is defined %}
   server-template {{ listen.server_template.name }} {{ listen.server_template.num}} {{ listen.server_template.fqdn }}{% if listen.server_template.port is defined %}:{{ listen.server_template.port }}{% endif %} {% for param in listen.server_template.param | default([]) %} {{ param }}{% endfor %}
-{% endif %}
 
+{% endif %}
 {% if listen.retry_on is defined %}
   retry-on {% for r in listen.retry_on %}{{ r }}{% endfor %}
-{% endif %}
 
+{% endif %}
 {% if listen.retries is defined %}
   retries {{ listen.retries }}
 {% endif %}
 {% for errorfile in listen.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
-
 {% for line in listen.raw_options | default([]) %}
   {{ line }}
 {% endfor %}

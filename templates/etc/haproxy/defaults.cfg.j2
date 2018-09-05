@@ -1,41 +1,33 @@
 {% if haproxy_defaults_log != false %}
   log {{ haproxy_defaults_log }}
 {% endif %}
-
 {% if haproxy_defaults_logformat is defined %}
   log-format {{ haproxy_defaults_logformat }}
 {% endif %}
-
 {% if haproxy_defaults_mode != false %}
   mode {{ haproxy_defaults_mode }}
 {% endif %}
-
 {% if haproxy_defaults_source is defined %}
   source {{ haproxy_defaults_source }}
 {% endif %}
-
 {% if haproxy_defaults_option != false %}
 {% for option in haproxy_defaults_option %}
   option {{ option }}
 {% endfor %}
 {% endif %}
-
 {% for option in haproxy_defaults_no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
-
 {% if haproxy_defaults_timeout != false %}
 {% for timeout in haproxy_defaults_timeout %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 {% endif %}
-
 {% if haproxy_defaults_errorfile != false %}
 {% for errorfile in haproxy_defaults_errorfile %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 {% endif %}
-
 {% for compression in haproxy_defaults_compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
