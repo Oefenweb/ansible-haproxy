@@ -8,7 +8,7 @@
 CONFIG="/etc/haproxy/haproxy.cfg"
 
 # Add extra flags here, see haproxy(1) for a few options
-{% if haproxy_version | version_compare('1.7', '>=') %}
+{% if haproxy_version is version_compare('1.7', '>=') %}
 EXTRAOPTS="-f {{ haproxy_conf_dir }}"
 {% else %}
 EXTRAOPTS="{% for config in haproxy_confd_files.files | default([]) %}{% if config['path'] is defined %} -f {{ config['path'] }}{% endif %}{% endfor %}"

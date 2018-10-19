@@ -11,14 +11,8 @@
   apt:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
-  with_items: "{{ haproxy_dependencies }}"
+  with_items:
+    - "{{ haproxy_dependencies }}"
+    - "{{ haproxy_install | default('latest') }}"
   tags:
-    - haproxy-install-dependencies
-
-- name: install | additional
-  apt:
-    name: "{{ item }}"
-    state: "{{ apt_install_state | default('latest') }}"
-  with_items: "{{ haproxy_install }}"
-  tags:
-    - haproxy-install-additional
+    - haproxy-install
