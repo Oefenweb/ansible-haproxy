@@ -394,6 +394,30 @@ None
             param:
               - 'maxconn 503'
               - check
+      #
+      # This will execute http checks against different port than server is pointing to.
+      - name: brokers
+        mode: tcp
+        balance: first
+        option:
+          - 'httpchk GET /'
+        default_server_params:
+          - port 8161
+          - inter 2s
+          - downinter 5s
+          - rise 3
+          - fall 2
+        server:
+          - name: mqtt-1
+            listen: "{{ ansible_lo['ipv4']['address'] }}:1883"
+            param:
+              - check
+
+          - name: mqtt-2
+            listen: "{{ ansible_lo['ipv4']['address'] }}:1883"
+            param:
+              - check
+              - backup
 ```
 
 #### SSL Termination 2
