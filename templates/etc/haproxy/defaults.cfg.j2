@@ -39,3 +39,7 @@
 {% for compression in haproxy_defaults_compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
+
+{% if haproxy_default_server_params is defined %}
+  default-server {% for param in haproxy_default_server_params | default([]) %} {{ param }}{% endfor %}
+{% endif %}
