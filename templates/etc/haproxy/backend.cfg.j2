@@ -106,7 +106,7 @@ backend {{ backend.name }}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
 
-{% if backend.default_server_params is defined %}
+{% if backend.default_server_params | default([]) %}
   default-server {% for param in backend.default_server_params | default([]) %} {{ param }}{% endfor %}
 {% endif %}
 

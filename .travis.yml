@@ -7,7 +7,9 @@ python: "2.7"
 
 env:
   - ANSIBLE_VERSION=latest
+  - ANSIBLE_VERSION=2.7.1
   - ANSIBLE_VERSION=2.7.0
+  - ANSIBLE_VERSION=2.6.6
   - ANSIBLE_VERSION=2.6.5
   - ANSIBLE_VERSION=2.6.4
   - ANSIBLE_VERSION=2.6.3
@@ -76,7 +78,7 @@ script:
     && (echo 'Availability test: pass' && exit 0)
     || (echo 'Availability test: fail' && exit 1)
 
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then ansible-lint tests/test.yml || true; fi
+  - if [ "$ANSIBLE_VERSION" = "latest" ]; then ansible-lint tests/test.yml; fi
 
 notifications:
   email: false

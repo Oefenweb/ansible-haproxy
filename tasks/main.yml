@@ -3,7 +3,7 @@
 - name: check version support
   fail:
     msg: "HAProxy version {{ haproxy_version }} is not supported"
-  when: haproxy_version not in haproxy_versions_supported
+  when: haproxy_version | string not in haproxy_versions_supported
   tags:
     - configuration
     - haproxy

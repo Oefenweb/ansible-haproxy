@@ -138,7 +138,7 @@ listen {{ listen.name }}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
 
-{% if listen.default_server_params is defined %}
+{% if listen.default_server_params | default([]) %}
   default-server {% for param in listen.default_server_params | default([]) %} {{ param }}{% endfor %}
 {% endif %}
 
