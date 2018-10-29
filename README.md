@@ -68,6 +68,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_compression`: [optional]: Compression declarations
 * `haproxy_defaults_compression.{}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
+* `haproxy_default_server_params`: [optional]: Default server backend parameters passed to each backend/listen server.
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
@@ -155,6 +156,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_listen.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_listen.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
+* `haproxy_listen.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular listen entry.
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
@@ -279,6 +281,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_backend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
+* `haproxy_backend.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular backend entry.
 
 * `haproxy_userlists`: [default: `[]`]: Userlist declarations
 * `haproxy_userlists.{n}.name`: [required]: The name of the userlist
@@ -391,6 +394,30 @@ None
             param:
               - 'maxconn 503'
               - check
+      #
+      # This will execute http checks against different port than server is pointing to.
+      - name: brokers
+        mode: tcp
+        balance: first
+        option:
+          - 'httpchk GET /'
+        default_server_params:
+          - port 8161
+          - inter 2s
+          - downinter 5s
+          - rise 3
+          - fall 2
+        server:
+          - name: mqtt-1
+            listen: "{{ ansible_lo['ipv4']['address'] }}:1883"
+            param:
+              - check
+
+          - name: mqtt-2
+            listen: "{{ ansible_lo['ipv4']['address'] }}:1883"
+            param:
+              - check
+              - backup
 ```
 
 #### SSL Termination 2
