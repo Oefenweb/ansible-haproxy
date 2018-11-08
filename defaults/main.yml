@@ -1,6 +1,6 @@
 # defaults file for haproxy
 ---
-haproxy_version: 1.6
+haproxy_version: 1.8
 
 haproxy_dependencies:
   - name: haproxy
