@@ -6,4 +6,4 @@
   roles:
     - ../../
   vars:
-    haproxy_version: "{{ (ansible_distribution_version is version_compare('18.04', '>=')) | ternary(1.7, 1.6) }}"
+    haproxy_version: "{{ (ansible_distribution_version is version_compare('18.04', '>=')) | ternary(1.8) }}"
