@@ -1,6 +1,7 @@
 # meta file for haproxy
 ---
 galaxy_info:
+  role_name: haproxy
   author: Mischa ter Smitten
   company: Oefenweb.nl B.V.
   description: Set up the latest version of HAProxy in Ubuntu systems
