@@ -140,19 +140,43 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
+* `haproxy_listen.{n}.reqadd`: [optional]: Adds headers at the end of the HTTP request
+* `haproxy_listen.{n}.reqadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.reqadd.{n}.cond`: [optional]: A matching condition built from ACLs
 * `haproxy_listen.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_listen.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_listen.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_listen.{n}.reqdel`: [optional]: Delete all headers matching a regular expression in an HTTP request
+* `haproxy_listen.{n}.reqdel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.reqdel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_listen.{n}.reqidel`: [optional]: Delete all headers matching a regular expression in an HTTP request (ignore case)
+* `haproxy_listen.{n}.reqidel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.reqidel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_listen.{n}.rspdel`: [optional]: Delete all headers matching a regular expression in an HTTP response
+* `haproxy_listen.{n}.rspdel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.rspdel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_listen.{n}.rspidel`: [optional]: Delete all headers matching a regular expression in an HTTP response (ignore case)
+* `haproxy_listen.{n}.rspidel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.rspidel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_listen.{n}.reqrep`: [optional]: Replace a regular expression with a string in an HTTP request line
+* `haproxy_listen.{n}.reqrep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.reqrep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.reqrep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_listen.{n}.reqirep`: [optional]: Replace a regular expression with a string in an HTTP request line (ignore case)
+* `haproxy_listen.{n}.reqirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.reqirep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.reqirep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_listen.{n}.rsprep`: [optional]: Replace a regular expression with a string in an HTTP response line
+* `haproxy_listen.{n}.rsprep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.rsprep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.rsprep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_listen.{n}.rspirep`: [optional]: Replace a regular expression with a string in an HTTP response line (ignore case)
+* `haproxy_listen.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.rspirep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_listen.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_listen.{n}.redirect`: [optional]: Return an HTTP redirection if/unless a condition is matched
 * `haproxy_listen.{n}.redirect.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_listen.{n}.redirect.{n}.cond`: [optional]: A condition to apply this rule
-* `haproxy_listen.{n}.rsprep`: [optional]: Response regexp edit definition
-* `haproxy_listen.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
-* `haproxy_listen.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
-* `haproxy_listen.{n}.rspirep`: [optional]: Response regexp edit definition
-* `haproxy_listen.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line
-* `haproxy_listen.{n}.rspirep.{n}.string`: [required]: The complete line to be added
-* `haproxy_listen.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_listen.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_listen.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_listen.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
@@ -203,19 +227,43 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule.
 * `haproxy_frontend.{n}.use_backend`: [optional]: Switch to a specific backend if/unless a Layer 7 condition is matched. (e.g. '%[req.hdr(host),lower,map_dom(/etc/haproxy/haproxy_backend.map,bk_default)]' or `['foo-backend if is_foo', 'bar-backend if is_bar']`)
 * `haproxy_frontend.{n}.default_backend`: [optional]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
+* `haproxy_frontend.{n}.reqadd`: [optional]: Adds headers at the end of the HTTP request
+* `haproxy_frontend.{n}.reqadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.reqadd.{n}.cond`: [optional]: A matching condition built from ACLs
 * `haproxy_frontend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
 * `haproxy_frontend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_frontend.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_frontend.{n}.reqdel`: [optional]: Delete all headers matching a regular expression in an HTTP request
+* `haproxy_frontend.{n}.reqdel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.reqdel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_frontend.{n}.reqidel`: [optional]: Delete all headers matching a regular expression in an HTTP request (ignore case)
+* `haproxy_frontend.{n}.reqidel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.reqidel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_frontend.{n}.rspdel`: [optional]: Delete all headers matching a regular expression in an HTTP response
+* `haproxy_frontend.{n}.rspdel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.rspdel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_frontend.{n}.rspidel`: [optional]: Delete all headers matching a regular expression in an HTTP response (ignore case)
+* `haproxy_frontend.{n}.rspidel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.rspidel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_frontend.{n}.reqrep`: [optional]: Replace a regular expression with a string in an HTTP request line
+* `haproxy_frontend.{n}.reqrep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.reqrep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.reqrep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_frontend.{n}.reqirep`: [optional]: Replace a regular expression with a string in an HTTP request line (ignore case)
+* `haproxy_frontend.{n}.reqirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.reqirep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.reqirep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_frontend.{n}.rsprep`: [optional]: Replace a regular expression with a string in an HTTP response line
+* `haproxy_frontend.{n}.rsprep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.rsprep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.rsprep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_frontend.{n}.rspirep`: [optional]: Replace a regular expression with a string in an HTTP response line (ignore case)
+* `haproxy_frontend.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.rspirep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_frontend.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_frontend.{n}.redirect`: [optional]: Return an HTTP redirection if/unless a condition is matched
 * `haproxy_frontend.{n}.redirect.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_frontend.{n}.redirect.{n}.cond`: [optional]: A condition to apply this rule
-* `haproxy_frontend.{n}.rsprep`: [optional]: Response regexp edit definition
-* `haproxy_frontend.{n}.rsprep.{n}.string`: [required]: Regexp definition to be used on response
-* `haproxy_frontend.{n}.rsprep.{n}.cond`: [optional]: A condition to apply this rule
-* `haproxy_frontend.{n}.rspirep`: [optional]: Response regexp edit definition
-* `haproxy_frontend.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line
-* `haproxy_frontend.{n}.rspirep.{n}.string`: [required]: The complete line to be added
-* `haproxy_frontend.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_frontend.{n}.compression`: [optional]: Compression declarations
 * `haproxy_frontend.{n}.compression.{n}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_frontend.{n}.compression.{n}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
@@ -244,9 +292,39 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_backend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
 * `haproxy_backend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
-* `haproxy_backend.{n}.rspirep`: [optional]: Response regexp edit definition
-* `haproxy_backend.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line
-* `haproxy_backend.{n}.rspirep.{n}.string`: [required]: The complete line to be added
+* `haproxy_backend.{n}.reqadd`: [optional]: Adds headers at the end of the HTTP request
+* `haproxy_backend.{n}.reqadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.reqadd.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.rspadd`: [optional]: Adds headers at the end of the HTTP response
+* `haproxy_backend.{n}.rspadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.rspadd.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.reqdel`: [optional]: Delete all headers matching a regular expression in an HTTP request
+* `haproxy_backend.{n}.reqdel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.reqdel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.reqidel`: [optional]: Delete all headers matching a regular expression in an HTTP request (ignore case)
+* `haproxy_backend.{n}.reqidel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.reqidel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.rspdel`: [optional]: Delete all headers matching a regular expression in an HTTP response
+* `haproxy_backend.{n}.rspdel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.rspdel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.rspidel`: [optional]: Delete all headers matching a regular expression in an HTTP response (ignore case)
+* `haproxy_backend.{n}.rspidel.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.rspidel.{n}.cond`: [optional]: A matching condition built from ACLs
+* `haproxy_backend.{n}.reqrep`: [optional]: Replace a regular expression with a string in an HTTP request line
+* `haproxy_backend.{n}.reqrep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.reqrep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.reqrep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_backend.{n}.reqirep`: [optional]: Replace a regular expression with a string in an HTTP request line (ignore case)
+* `haproxy_backend.{n}.reqirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the request line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.reqirep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.reqirep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_backend.{n}.rsprep`: [optional]: Replace a regular expression with a string in an HTTP response line
+* `haproxy_backend.{n}.rsprep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.rsprep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.rsprep.{n}.cond`: [optional]: Matching condition built from ACLs
+* `haproxy_backend.{n}.rspirep`: [optional]: Replace a regular expression with a string in an HTTP response line (ignore case)
+* `haproxy_backend.{n}.rspirep.{n}.search`: [required]: The regular expression applied to HTTP headers and to the response line. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
+* `haproxy_backend.{n}.rspirep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_backend.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_backend.{n}.cookie`: [optional]: Enable cookie-based persistence in a backend (e.g. `JSESSIONID prefix nocache`)
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests

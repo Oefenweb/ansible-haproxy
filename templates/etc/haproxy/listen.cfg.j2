@@ -114,19 +114,25 @@ listen {{ listen.name }}
 
 {% endfor %}
 
-{% for rspadd in listen.rspadd | default([]) %}
-  rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
+{% for action in ['reqadd', 'rspadd'] %}
+{% for params in listen[action] | default([]) %}
+  {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
 {% endfor %}
-
-{% for rsprep in listen.rsprep | default([]) %}
-  rsprep {{ rsprep.string }}{% if rsprep.cond is defined %} {{ rsprep.cond }}{% endif %}
-
 {% endfor %}
 
-{% for rspirep in listen.rspirep | default([]) %}
-  rspirep {{ rspirep.search }} {{ rspirep.string }}{% if rspirep.cond is defined %} {{ rspirep.cond }}{% endif %}
+{% for action in ['reqdel', 'reqidel', 'rspdel', 'rspidel'] %}
+{% for params in listen[action] | default([]) %}
+  {{ action }} {{ params.search }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
+{% endfor %}
+{% endfor %}
+
+{% for action in ['reqrep', 'reqirep', 'rsprep', 'rspirep'] %}
+{% for params in listen[action] | default([]) %}
+  {{ action }} {{ params.search }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
+
+{% endfor %}
 {% endfor %}
 
 {% for redirect in listen.redirect | default([]) %}
