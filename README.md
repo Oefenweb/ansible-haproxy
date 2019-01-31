@@ -52,6 +52,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_peers.{n}.peers`: Peer declarations
 * `haproxy_global_peers.{n}.peers.{n}.name`: [required]: Name of the host (recommended to be `hostname`) (e.g. `haproxy1`)
 * `haproxy_global_peers.{n}.peers.{n}.listen`: [required]: IP and port for peer to listen/connect to (e.g. `192.168.0.1:1024`)
+* `haproxy_global_raw_options`: [default: []]: additional arbitrary lines to insert in the global section
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
 * `haproxy_defaults_logformat`: [optional]: Allows you to customize the logs in http mode and tcp mode (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
@@ -69,6 +70,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_compression.{}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
 * `haproxy_default_server_params`: [optional]: Default server backend parameters passed to each backend/listen server.
+* `haproxy_default_raw_options`: [default: []]: additional arbitrary lines to insert in the default section
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
@@ -181,6 +183,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_listen.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
 * `haproxy_listen.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular listen entry.
+* `haproxy_listen.{n}.raw_options`: [default: []]: additional arbitrary lines to insert in the section
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
@@ -270,6 +273,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_frontend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_frontend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
+* `haproxy_frontend.{n}.raw_options`: [default: []]: additional arbitrary lines to insert in the section
 
 * `haproxy_backend`: [default: `[]`]: Back-end declarations
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
@@ -360,6 +364,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_backend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
 * `haproxy_backend.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular backend entry.
+* `haproxy_backend.{n}.raw_options`: [default: []]: additional arbitrary lines to insert in the section
 
 * `haproxy_userlists`: [default: `[]`]: Userlist declarations
 * `haproxy_userlists.{n}.name`: [required]: The name of the userlist
