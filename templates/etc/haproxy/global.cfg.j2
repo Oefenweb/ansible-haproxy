@@ -98,3 +98,6 @@ peers {{ peers.name }}
   peer {{ peer.name }} {{ peer.listen }}
 {% endfor %}
 {% endfor %}
+{% for line in haproxy_global_raw_options | default([]) %}
+  {{ line }}
+{% endfor %}

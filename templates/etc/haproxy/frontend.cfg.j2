@@ -130,3 +130,6 @@ frontend {{ frontend.name }}
 {% endfor %}
 
 {% endfor %}
+{% for line in frontend.raw_options | default([]) %}
+  {{ line }}
+{% endfor %}

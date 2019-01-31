@@ -136,3 +136,6 @@ backend {{ backend.name }}
 {% endfor %}
 
 {% endfor %}
+{% for line in backend.raw_options | default([]) %}
+  {{ line }}
+{% endfor %}

@@ -158,3 +158,6 @@ listen {{ listen.name }}
 {% endfor %}
 
 {% endfor %}
+{% for line in listen.raw_options | default([]) %}
+  {{ line }}
+{% endfor %}
