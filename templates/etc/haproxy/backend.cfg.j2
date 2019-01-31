@@ -134,8 +134,7 @@ backend {{ backend.name }}
 {% for errorfile in backend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
-
-{% endfor %}
 {% for line in backend.raw_options | default([]) %}
   {{ line }}
+{% endfor %}
 {% endfor %}
