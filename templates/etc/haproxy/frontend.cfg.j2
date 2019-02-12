@@ -129,4 +129,7 @@ frontend {{ frontend.name }}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 
+{% for line in frontend.raw_options | default([]) %}
+  {{ line }}
+{% endfor %}
 {% endfor %}
