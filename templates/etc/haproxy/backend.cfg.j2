@@ -105,6 +105,13 @@ backend {{ backend.name }}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
 {% endfor %}
+{% for server_dynamic in backend.server_dynamic | default([]) %}
+{% for server_name in groups[server_dynamic.group] %}
+{% set server = hostvars[server_name] %}
+  server {{ server.inventory_hostname }} {% if server.ansible_host is defined %}{{ server.ansible_host }}{% else %}{{ server_name }}{% endif %}{% if server_dynamic.listen_port is defined %}:{{ server_dynamic.listen_port }}{% endif %}{% for param in server_dynamic.param | default([]) %} {{ param }}{% endfor %}
+
+{% endfor %}
+{% endfor %}
 {% for errorfile in backend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
