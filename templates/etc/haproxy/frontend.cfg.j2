@@ -61,17 +61,23 @@ frontend {{ frontend.name }}
   tcp-request session {{ tcp_request_session.action }}{% if tcp_request_session.cond is defined %} {{ tcp_request_session.cond }}{% endif %}
 
 {% endfor %}
-{% for rspadd in frontend.rspadd | default([]) %}
-  rspadd {{ rspadd.string }}{% if rspadd.cond is defined %} {{ rspadd.cond }}{% endif %}
+{% for action in ['reqadd', 'rspadd'] %}
+{% for params in frontend[action] | default([]) %}
+  {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
 {% endfor %}
-{% for rsprep in frontend.rsprep | default([]) %}
-  rsprep {{ rsprep.string }}{% if rsprep.cond is defined %} {{ rsprep.cond }}{% endif %}
+{% endfor %}
+{% for action in ['reqdel', 'reqidel', 'rspdel', 'rspidel'] %}
+{% for params in frontend[action] | default([]) %}
+  {{ action }} {{ params.search }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
 {% endfor %}
-{% for rspirep in frontend.rspirep | default([]) %}
-  rspirep {{ rspirep.search }} {{ rspirep.string }}{% if rspirep.cond is defined %} {{ rspirep.cond }}{% endif %}
+{% endfor %}
+{% for action in ['reqrep', 'reqirep', 'rsprep', 'rspirep'] %}
+{% for params in frontend[action] | default([]) %}
+  {{ action }} {{ params.search }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
+{% endfor %}
 {% endfor %}
 {% for redirect in frontend.redirect | default([]) %}
   redirect {{ redirect.string }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
@@ -96,4 +102,7 @@ frontend {{ frontend.name }}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 
+{% for line in frontend.raw_options | default([]) %}
+  {{ line }}
+{% endfor %}
 {% endfor %}

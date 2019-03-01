@@ -1,6 +1,6 @@
 # defaults file for haproxy
 ---
-haproxy_version: 1.6
+haproxy_version: 1.8
 
 haproxy_dependencies:
   - name: haproxy
@@ -40,6 +40,7 @@ haproxy_defaults_mode: http
 haproxy_defaults_option:
   - httplog
   - dontlognull
+haproxy_default_server_params: []
 haproxy_defaults_timeout:
   - type: connect
     timeout: 5000

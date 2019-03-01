@@ -6,6 +6,15 @@
   roles:
     - ../../
   vars:
+    # global parameters
+    haproxy_global_raw_options:
+      - cpu-map 1/all 0-3
+      - server-state-file /tmp/haproxy.state
+
+    # default section
+    haproxy_default_raw_options:
+      - load-server-state-from-file global
+
     # front-end section
     haproxy_frontend:
       - name: http
@@ -13,6 +22,11 @@
           - listen: '0.0.0.0:80'
         mode: http
         default_backend: webservers
+        reqrep:
+          - search: "^Host:\\ (.*)"
+            string: "Host:\\ foo.com"
+        raw_options:
+          - rspideny ^Content-type:\\.*/ms-word
 
     # back-end section
     haproxy_backend:
@@ -23,6 +37,8 @@
           - forwardfor
           - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
         server: []
+        raw_options:
+          - rspdeny ^Content-type:\\.*/ms-word
 
     # user-lists section
     haproxy_userlists:

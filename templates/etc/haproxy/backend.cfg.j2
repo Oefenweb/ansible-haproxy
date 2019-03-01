@@ -23,6 +23,9 @@ backend {{ backend.name }}
 {% if backend.cookie is defined %}
   cookie {{ backend.cookie }}
 {% endif %}
+{% for acl in backend.acl | default([]) %}
+  acl {{ acl.string }}
+{% endfor %}
 {% for stick in backend.stick | default([]) %}
   stick-table {{ stick.table }}
   stick on {{ stick.stick_on }}
@@ -39,12 +42,23 @@ backend {{ backend.name }}
 {% for timeout in backend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
-{% for acl in backend.acl | default([]) %}
-  acl {{ acl.string }}
-{% endfor %}
-{% for rspirep in backend.rspirep | default([]) %}
-  rspirep {{ rspirep.search }} {{ rspirep.string }}{% if rspirep.cond is defined %} {{ rspirep.cond }}{% endif %}
+{% for action in ['reqadd', 'rspadd'] %}
+{% for params in backend[action] | default([]) %}
+  {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
 
+{% endfor %}
+{% endfor %}
+{% for action in ['reqdel', 'reqidel', 'rspdel', 'rspidel'] %}
+{% for params in backend[action] | default([]) %}
+  {{ action }} {{ params.search }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
+
+{% endfor %}
+{% endfor %}
+{% for action in ['reqrep', 'reqirep', 'rsprep', 'rspirep'] %}
+{% for params in backend[action] | default([]) %}
+  {{ action }} {{ params.search }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
+
+{% endfor %}
 {% endfor %}
 {% if backend.stats is defined %}
 {% if backend.stats.enable is defined and backend.stats.enable | bool == true %}
@@ -81,7 +95,12 @@ backend {{ backend.name }}
 {% endfor %}
 {% for compression in backend.compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
+
 {% endfor %}
+{% if backend.default_server_params | default([]) %}
+  default-server {% for param in backend.default_server_params | default([]) %} {{ param }}{% endfor %}
+
+{% endif %}
 {% for server in backend.server | default([]) %}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
@@ -90,4 +109,7 @@ backend {{ backend.name }}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
 
+{% for line in backend.raw_options | default([]) %}
+  {{ line }}
+{% endfor %}
 {% endfor %}

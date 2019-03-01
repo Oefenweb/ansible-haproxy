@@ -31,3 +31,11 @@
 {% for compression in haproxy_defaults_compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
+
+{% if haproxy_default_server_params | default([]) %}
+  default-server {% for param in haproxy_default_server_params | default([]) %} {{ param }}{% endfor %}
+{% endif %}
+
+{% for line in haproxy_default_raw_options | default([]) %}
+  {{ line }}
+{% endfor %}
