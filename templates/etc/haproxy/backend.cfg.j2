@@ -32,6 +32,10 @@ backend {{ backend.name }}
   cookie {{ backend.cookie }}
 {% endif %}
 
+{% for acl in backend.acl | default([]) %}
+  acl {{ acl.string }}
+{% endfor %}
+
 {% for stick in backend.stick | default([]) %}
   stick-table {{ stick.table }}
   stick on {{ stick.stick_on }}
@@ -51,10 +55,6 @@ backend {{ backend.name }}
 
 {% for timeout in backend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
-{% endfor %}
-
-{% for acl in backend.acl | default([]) %}
-  acl {{ acl.string }}
 {% endfor %}
 
 {% for action in ['reqadd', 'rspadd'] %}
