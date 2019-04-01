@@ -1,0 +1,13 @@
+# vars file for haproxy
+---
+haproxy_error_files_dir: "/etc/haproxy/errors"
+haproxy_install:
+  - name: haproxy
+    state: latest
+
+haproxy_versions_supported:
+  - 1.5
+  - 1.6
+  - 1.7
+
+haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"

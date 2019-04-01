@@ -1,0 +1,10 @@
+---
+- name: add repository from PPA and install its signing key
+  apt_repository:
+    repo: "{{ haproxy_ppa }}"
+    update_cache: true
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-add-repository
+

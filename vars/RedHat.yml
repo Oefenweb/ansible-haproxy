@@ -1,0 +1,12 @@
+---
+haproxy_error_files_dir: "/usr/share/haproxy"
+haproxy_install:
+  - name: "haproxy{{ haproxy_version | replace('.', '') }}u"
+    state: latest
+
+haproxy_versions_supported:
+  - 1.6
+  - 1.7
+  - 1.8
+
+haproxy_yum_repository: "centos-release-scl"
