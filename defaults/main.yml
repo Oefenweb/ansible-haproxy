@@ -2,6 +2,8 @@
 ---
 haproxy_version: 1.8
 
+haproxy_repo_managed: false
+
 haproxy_dependencies:
   - name: haproxy
     state: latest
