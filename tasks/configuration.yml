@@ -8,7 +8,7 @@
     group: root
     mode: 0640
     validate: 'haproxy -f %s -c'
-  when: inventory_hostname not in groups.k8scluster
+  when: inventory_hostname not in groups.k8scluster | default([])
   notify: restart haproxy
   tags:
     - haproxy-configuration-update-file
@@ -21,7 +21,7 @@
     group: root
     mode: 0640
     validate: 'haproxy -f %s -c'
-  when: inventory_hostname in groups.k8smasters
+  when: inventory_hostname in groups.k8smasters | default([])
   notify: restart haproxy
   tags:
     - haproxy-configuration-update-fil
