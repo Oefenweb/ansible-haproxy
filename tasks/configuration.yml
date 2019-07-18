@@ -8,20 +8,6 @@
     group: root
     mode: 0640
     validate: 'haproxy -f %s -c'
-  when: inventory_hostname not in groups.k8scluster | default([])
   notify: restart haproxy
   tags:
     - haproxy-configuration-update-file
-
-- name: configuration | update file
-  template:
-    src: etc/kubernetes/haproxy.cfg.j2
-    dest: /etc/haproxy/haproxy.cfg
-    owner: root
-    group: root
-    mode: 0640
-    validate: 'haproxy -f %s -c'
-  when: inventory_hostname in groups.k8smasters | default([])
-  notify: restart haproxy
-  tags:
-    - haproxy-configuration-update-fil
