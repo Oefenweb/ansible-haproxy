@@ -72,7 +72,7 @@ backend k8s-backend
     mode tcp
     balance roundrobin
 {% for apinodes in groups['k8smasters'] %}
-  server {{ hostvars[apinodes].inventory_hostname }} {{ hostvars[apinodes].ansible_default_ipv4.address }}: check
+  server {{ hostvars[apinodes].inventory_hostname }} {{ hostvars[apinodes].ansible_default_ipv4.address }}:31505 check
 {% endfor %}
     timeout connect        10s
     timeout server          1m
