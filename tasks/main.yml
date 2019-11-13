@@ -42,3 +42,5 @@
     - configuration
     - haproxy
     - haproxy-start-enable-service
+
+- debug: var=haproxy_conf_template
