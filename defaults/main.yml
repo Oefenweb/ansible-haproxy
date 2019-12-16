@@ -11,10 +11,14 @@ haproxy_global_log:
   - address: /dev/log
     facility: local1
     level: notice
+
 haproxy_global_stats:
   sockets:
     - listen: /run/haproxy/admin.sock
   timeout: 30s
+
+haproxy_restart_handler_state: restarted
+
 haproxy_global_user: haproxy
 haproxy_global_group: haproxy
 haproxy_global_daemon: true
