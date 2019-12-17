@@ -1,6 +1,7 @@
 ---
+haproxy_config_dir: "/etc/opt/rh/rh-haproxy{{ haproxy_version | replace('.', '') }}/haproxy"
 haproxy_service_name: "rh-haproxy{{ haproxy_version | replace('.', '') }}-haproxy"
-haproxy_error_files_dir: "/usr/share/haproxy"
+haproxy_error_files_dir: "/opt/rh/rh-haproxy{{ haproxy_version | replace('.', '') }}/root/usr/share/haproxy"
 haproxy_install:
   - name: "rh-haproxy{{ haproxy_version | replace('.', '') }}"
     state: latest
@@ -12,3 +13,4 @@ haproxy_versions_supported:
   - 1.8
 
 haproxy_yum_redhat_repository: 'rhel-server-rhscl-7-rpms'
+haproxy_socket_dir: "/opt/rh/rh-haproxy{{ haproxy_version | replace('.', '') }}/root/run/"

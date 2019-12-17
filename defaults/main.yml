@@ -15,7 +15,7 @@ haproxy_global_log:
 
 haproxy_global_stats:
   sockets:
-    - listen: /run/haproxy/admin.sock
+    - listen: "{{ haproxy_socket_dir }}/admin.sock"
   timeout: 30s
 
 haproxy_restart_handler_state: restarted
@@ -60,6 +60,9 @@ haproxy_defaults_errorfile:
     file: "{{ haproxy_error_files_dir }}/503.http"
   - code: 504
     file: "{{ haproxy_error_files_dir }}/504.http"
+
+# lists of users
+haproxy_userlists: []
 
 # ssl (file) map
 haproxy_ssl_map: []
