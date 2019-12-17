@@ -1,33 +1,82 @@
 # tasks file for haproxy
 ---
+- name: include vars based on OS
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution_release }}.yml"
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+
 - name: check version support
   fail:
     msg: "HAProxy version {{ haproxy_version }} is not supported"
-  when: haproxy_version | string not in haproxy_versions_supported
+  when: haproxy_version not in haproxy_versions_supported
   tags:
     - configuration
     - haproxy
     - haproxy-check-version-support
 
-- include: install.yml
+- name: Include installation on OS family
+  include: "install.{{ ansible_os_family | lower }}.yml"
+
+- name: install dependencies
+  package:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ haproxy_dependencies }}"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-dependencies
+
+- name: install
+  package:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ haproxy_install }}"
   tags:
     - configuration
     - haproxy
     - haproxy-install
 
-- include: certificates.yml
+- name: create certificate files directories
+  file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: 0750
+  with_items: "{{ haproxy_ssl_map }}"
   tags:
     - configuration
     - haproxy
-    - haproxy-certificates
+    - haproxy-configuration
+    - haproxy-configuration-ssl
 
-- include: acl.yml
+- name: copy certificate files
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+    mode: "{{ item.mode | default('0640') }}"
+  with_items: "{{ haproxy_ssl_map }}"
+  notify: restart haproxy
   tags:
     - configuration
     - haproxy
-    - haproxy-acl
+    - haproxy-configuration
+    - haproxy-configuration-ssl
 
-- include: configuration.yml
+- name: update configuration file
+  template:
+    src: etc/haproxy/haproxy.cfg.j2
+    dest: /etc/haproxy/haproxy.cfg
+    owner: root
+    group: root
+    mode: 0640
+    validate: 'haproxy -f %s -c'
+  notify: restart haproxy
   tags:
     - configuration
     - haproxy
@@ -36,8 +85,8 @@
 - name: start and enable service
   service:
     name: haproxy
-    state: "{{ service_default_state | default('started') }}"
-    enabled: "{{ service_default_enabled | default(true) | bool }}"
+    state: started
+    enabled: true
   tags:
     - configuration
     - haproxy

@@ -1,15 +1,8 @@
 # defaults file for haproxy
 ---
-haproxy_version: 1.8
+haproxy_version: 1.6
 
-haproxy_dependencies:
-  - name: haproxy
-    state: latest
-haproxy_install: []
-
-haproxy_restart_handler_state: restarted
-
-haproxy_conf_template: "etc/haproxy/haproxy.cfg.j2"
+haproxy_dependencies: []
 
 # global section
 haproxy_global_log:
@@ -18,10 +11,14 @@ haproxy_global_log:
   - address: /dev/log
     facility: local1
     level: notice
+
 haproxy_global_stats:
   sockets:
     - listen: /run/haproxy/admin.sock
   timeout: 30s
+
+haproxy_restart_handler_state: restarted
+
 haproxy_global_user: haproxy
 haproxy_global_group: haproxy
 haproxy_global_daemon: true
@@ -40,7 +37,6 @@ haproxy_defaults_mode: http
 haproxy_defaults_option:
   - httplog
   - dontlognull
-haproxy_default_server_params: []
 haproxy_defaults_timeout:
   - type: connect
     timeout: 5000
@@ -50,19 +46,19 @@ haproxy_defaults_timeout:
     timeout: 50000
 haproxy_defaults_errorfile:
   - code: 400
-    file: /etc/haproxy/errors/400.http
+    file: "{{ haproxy_error_files_dir }}/400.http"
   - code: 403
-    file: /etc/haproxy/errors/403.http
+    file: "{{ haproxy_error_files_dir }}/403.http"
   - code: 408
-    file: /etc/haproxy/errors/408.http
+    file: "{{ haproxy_error_files_dir }}/408.http"
   - code: 500
-    file: /etc/haproxy/errors/500.http
+    file: "{{ haproxy_error_files_dir }}/500.http"
   - code: 502
-    file: /etc/haproxy/errors/502.http
+    file: "{{ haproxy_error_files_dir }}/502.http"
   - code: 503
-    file: /etc/haproxy/errors/503.http
+    file: "{{ haproxy_error_files_dir }}/503.http"
   - code: 504
-    file: /etc/haproxy/errors/504.http
+    file: "{{ haproxy_error_files_dir }}/504.http"
 
 # ssl (file) map
 haproxy_ssl_map: []
@@ -75,9 +71,3 @@ haproxy_frontend: []
 
 # back-end section
 haproxy_backend: []
-
-# user-lists section
-haproxy_userlists: []
-
-# ACL files
-haproxy_acl_files: []
