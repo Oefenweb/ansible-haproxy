@@ -38,3 +38,5 @@
     - haproxy-install
   when: ansible_distribution == "RedHat"
 
+- name: enable service
+  command: "scl enable rh-haproxy{{ haproxy_version | replace('.', '') }} bash"
