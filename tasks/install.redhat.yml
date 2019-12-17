@@ -2,7 +2,7 @@
 - name: add repository from yum
   yum:
     name: "{{ haproxy_yum_repository }}"
-    state: latest
+    state: present
   tags:
     - configuration
     - haproxy
