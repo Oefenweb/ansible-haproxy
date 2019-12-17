@@ -1,6 +1,7 @@
 # defaults file for haproxy
 ---
-haproxy_version: 1.6
+haproxy_version: 1.8
+haproxy_config_dir: /etc/haproxy
 
 haproxy_dependencies: []
 

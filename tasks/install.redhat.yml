@@ -1,10 +1,40 @@
 ---
-- name: add repository from yum
+- name: install SCL repository
   yum:
-    name: "{{ haproxy_yum_repository }}"
+    name: "centos-release-scl"
     state: present
+  when: ansible_distribution == "CentOS"
+
+- name: install dependencies
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ haproxy_dependencies }}"
   tags:
     - configuration
     - haproxy
-    - haproxy-add-repository
+    - haproxy-dependencies
+
+- name: install
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  with_items: "{{ haproxy_install }}"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-install
+  when: ansible_distribution == "CentOS"
+
+- name: install
+  yum:
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+    enablerepo: "{{ item.enablerepo }}"
+  with_items: "{{ haproxy_install }}"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-install
+  when: ansible_distribution == "RedHat"
 
