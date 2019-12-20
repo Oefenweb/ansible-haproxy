@@ -11,3 +11,4 @@ haproxy_versions_supported:
   - 1.7
   - 1.8
 haproxy_socket_dir: "/opt/rh/rh-haproxy{{ haproxy_version | replace('.', '') }}/root/run/"
+haproxy_bin_path: "/opt/rh/rh-haproxy{{ haproxy_version | replace('.', '') }}/root/usr/sbin/haproxy"

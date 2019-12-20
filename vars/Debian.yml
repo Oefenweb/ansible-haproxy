@@ -13,3 +13,4 @@ haproxy_versions_supported:
 
 haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
 haproxy_socket_dir: /run/haproxy
+haproxy_bin_path: /usr/sbin/haproxy

@@ -14,3 +14,4 @@ haproxy_versions_supported:
 
 haproxy_yum_redhat_repository: 'rhel-server-rhscl-7-rpms'
 haproxy_socket_dir: "/opt/rh/rh-haproxy{{ haproxy_version | replace('.', '') }}/root/run/"
+haproxy_bin_path: "/opt/rh/rh-haproxy{{ haproxy_version | replace('.', '') }}/root/usr/sbin/haproxy"
