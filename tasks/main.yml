@@ -55,7 +55,7 @@
     owner: root
     group: root
     mode: 0640
-    validate: 'haproxy -f %s -c'
+    validate: '{{ haproxy_bin_path }} -f %s -c'
   notify: restart haproxy
   tags:
     - configuration
