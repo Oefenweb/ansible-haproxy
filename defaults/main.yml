@@ -49,7 +49,7 @@ haproxy_defaults_timeout:
   - type: server
     timeout: 50000
   - type: tunnel
-    timeout: 3600000
+    timeout: "1h"
 haproxy_defaults_errorfile:
   - code: 400
     file: /etc/haproxy/errors/400.http
