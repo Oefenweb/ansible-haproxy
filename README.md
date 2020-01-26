@@ -62,7 +62,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_option`: [default: `[httplog, dontlognull]`]: Options (default)
 * `haproxy_defaults_no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
 * `haproxy_defaults_timeout`: [default: See `defaults/main.yml`]: Timeout declarations
-* `haproxy_defaults_timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
+* `haproxy_defaults_timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`, `tunnel`)
 * `haproxy_defaults_timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_defaults_errorfile`: [default: See `defaults/main.yml`]: Errorfile declarations
 * `haproxy_defaults_errorfile.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
