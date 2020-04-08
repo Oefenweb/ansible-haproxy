@@ -12,7 +12,7 @@
     - haproxy
     - haproxy-check-version-support
 
-- include: install.yml
+- include: install/main.yml
   tags:
     - configuration
     - haproxy

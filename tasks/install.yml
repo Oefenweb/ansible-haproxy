@@ -1,4 +1,0 @@
-# tasks file for haproxy
----
-- include: install/main.yml
-
