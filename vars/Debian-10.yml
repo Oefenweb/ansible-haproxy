@@ -1,8 +1,12 @@
 ---
-haproxy_version: 2.0
-haproxy_repo: buster-backports
+haproxy_version: 1.8
+haproxy_add_repo: buster-backports
+# buster repo contains haproxy 1.8
+# buster-backports repo contains haproxy 2.0
+haproxy_install_repo: buster
+#haproxy_install_repo: buster-backports
 haproxy_dependencies:
   - name: haproxy
-    default_release: "{{ haproxy_repo }}"
+    default_release: "{{ haproxy_install_repo }}"
     state: latest
 haproxy_install: []

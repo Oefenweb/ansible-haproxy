@@ -1,8 +1,9 @@
 ---
 haproxy_version: 1.8
-haproxy_repo: stretch-backports
+haproxy_add_repo: stretch-backports
+haproxy_install_repo: stretch-backports
 haproxy_dependencies:
   - name: haproxy
-    default_release: "{{ haproxy_repo }}"
+    default_release: "{{ haproxy_install_repo }}"
     state: latest
 haproxy_install: []

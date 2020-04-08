@@ -2,12 +2,13 @@
 ---
 - name: install | add repository from backport and install its signing key
   apt_repository:
-    repo: "deb http://deb.debian.org/debian {{ haproxy_repo }} main"
+    repo: "deb http://deb.debian.org/debian {{ haproxy_add_repo }} main"
     state: present
     update_cache: yes
   tags:
     - haproxy-install-add-repository
 
+# Debian backport repos have a lower priority than default which requires a specific release to be specified
 - name: install | dependencies
   apt:
     name: "{{ item.name }}"
