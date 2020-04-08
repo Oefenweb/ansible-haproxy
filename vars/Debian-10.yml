@@ -1,4 +1,5 @@
 ---
+haproxy_version: 2.0
 haproxy_repo: buster-backports
 haproxy_dependencies:
   - name: haproxy

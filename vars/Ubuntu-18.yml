@@ -1,4 +1,5 @@
 ---
+haproxy_version: 1.8
 haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
 haproxy_dependencies:
   - name: haproxy
