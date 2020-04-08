@@ -4,3 +4,4 @@ haproxy_dependencies:
   - name: haproxy
     default_release: "{{ haproxy_repo }}"
     state: latest
+haproxy_install: []
