@@ -1,0 +1,6 @@
+---
+haproxy_repo: stretch-backports
+haproxy_dependencies:
+  - name: haproxy
+    default_release: "{{ haproxy_repo }}"
+    state: latest

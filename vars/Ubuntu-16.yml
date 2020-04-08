@@ -1,0 +1,6 @@
+---
+haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
+haproxy_dependencies:
+  - name: haproxy
+    state: latest
+haproxy_install: []

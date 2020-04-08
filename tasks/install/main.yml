@@ -1,0 +1,4 @@
+---
+
+- include: "install/{{ ansible_facts['distribution'] }}.yml"
+

@@ -9,4 +9,3 @@ haproxy_versions_supported:
   - '2.0'
   - '2.1'
 
-haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"

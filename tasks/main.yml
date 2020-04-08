@@ -1,5 +1,8 @@
 # tasks file for haproxy
 ---
+- name: Include distribution vars
+  include: "{{ ansible_facts['distribution'] }}-{{ ansible_facts['distribution_major_version'] }}.yml"
+
 - name: check version support
   fail:
     msg: "HAProxy version {{ haproxy_version }} is not supported"

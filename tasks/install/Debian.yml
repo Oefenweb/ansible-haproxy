@@ -1,0 +1,26 @@
+# tasks file for haproxy
+---
+- name: install | add repository from backport and install its signing key
+  apt_repository:
+    repo: "deb http://deb.debian.org/debian {{ haproxy_repo }} main"
+    state: present
+    update_cache: yes
+  tags:
+    - haproxy-install-add-repository
+
+- name: install | dependencies
+  apt:
+    name: "{{ item.name }}"
+    default_release: "{{ item.default_release }}"
+    state: "{{ item.state }}"
+  with_items: "{{ haproxy_dependencies }}"
+  tags:
+    - haproxy-install-dependencies
+
+- name: install | additional
+  apt:
+    name: "{{ item }}"
+    state: "{{ apt_install_state | default('latest') }}"
+  with_items: "{{ haproxy_install }}"
+  tags:
+    - haproxy-install-additional
