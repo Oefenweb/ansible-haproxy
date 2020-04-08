@@ -1,5 +1,11 @@
 # defaults file for haproxy
 ---
+#Moved these variables to distribution specific var include
+#haproxy_version
+
+#haproxy_dependencies:
+#haproxy_install: []
+
 haproxy_restart_handler_state: restarted
 
 haproxy_conf_template: "etc/haproxy/haproxy.cfg.j2"
