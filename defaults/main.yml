@@ -81,5 +81,8 @@ haproxy_backend: []
 # user-lists section
 haproxy_userlists: []
 
+# resolvers section:
+haproxy_resolvers: []
+
 # ACL files
 haproxy_acl_files: []
