@@ -28,8 +28,10 @@ haproxy_global_daemon: true
 haproxy_global_ca_base: /etc/ssl/certs
 haproxy_global_crt_base: /etc/ssl/private
 haproxy_global_ssl_default_bind_ciphers: 'kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL'
+haproxy_global_ssl_default_bind_ciphersuites: ''
 haproxy_global_ssl_default_bind_options: 'no-sslv3'
 haproxy_global_ssl_default_server_ciphers: 'kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL'
+haproxy_global_ssl_default_server_ciphersuites: ''
 haproxy_global_ssl_default_server_options: 'no-sslv3'
 haproxy_global_nbproc: 1
 haproxy_global_option: []

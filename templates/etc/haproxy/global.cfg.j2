@@ -55,6 +55,10 @@
   ssl-default-bind-ciphers {{ haproxy_global_ssl_default_bind_ciphers }}
 {% endif %}
 
+{% if haproxy_global_ssl_default_bind_ciphersuites != false and haproxy_global_ssl_default_bind_ciphersuites | length > 0 %}
+  ssl-default-bind-ciphersuites {{ haproxy_global_ssl_default_bind_ciphersuites }}
+{% endif %}
+
 {% if haproxy_global_ssl_default_bind_options != false %}
   ssl-default-bind-options {{ haproxy_global_ssl_default_bind_options }}
 {% endif %}
@@ -64,6 +68,10 @@
   # For more information, see ciphers(1SSL). This list is from:
   #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
   ssl-default-server-ciphers {{ haproxy_global_ssl_default_server_ciphers }}
+{% endif %}
+
+{% if haproxy_global_ssl_default_server_ciphersuites != false and haproxy_global_ssl_default_server_ciphersuites | length > 0 %}
+  ssl-default-server-ciphersuites {{ haproxy_global_ssl_default_server_ciphersuites }}
 {% endif %}
 
 {% if haproxy_global_ssl_default_server_options != false %}
