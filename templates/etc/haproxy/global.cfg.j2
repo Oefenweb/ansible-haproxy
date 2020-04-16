@@ -55,7 +55,7 @@
   ssl-default-bind-ciphers {{ haproxy_global_ssl_default_bind_ciphers }}
 {% endif %}
 
-{% if haproxy_global_ssl_default_bind_ciphersuites != false and haproxy_global_ssl_default_bind_ciphersuites | length > 0 %}
+{% if haproxy_global_ssl_default_bind_ciphersuites %}
   ssl-default-bind-ciphersuites {{ haproxy_global_ssl_default_bind_ciphersuites }}
 {% endif %}
 
@@ -70,7 +70,7 @@
   ssl-default-server-ciphers {{ haproxy_global_ssl_default_server_ciphers }}
 {% endif %}
 
-{% if haproxy_global_ssl_default_server_ciphersuites != false and haproxy_global_ssl_default_server_ciphersuites | length > 0 %}
+{% if haproxy_global_ssl_default_server_ciphersuites %}
   ssl-default-server-ciphersuites {{ haproxy_global_ssl_default_server_ciphersuites }}
 {% endif %}
 
