@@ -1,0 +1,25 @@
+{% for resolver in haproxy_resolvers %}
+resolvers {{ resolver.name }}
+  {% for nameserver in resolver.nameservers %}
+  nameserver {{ nameserver.name }} {{ nameserver.listen }}
+  {% endfor %}
+  {% if resolver.accepted_payload_size is defined -%}
+  accepted_payload_size {{ resolver.accepted_payload_size }}
+  {% endif %}
+  {% if resolver.parse_resolv_conf is defined and resolver.parse_resolv_conf -%}
+  parse-resolv-conf
+  {% endif %}
+  {% if resolver.hold is defined -%}
+    {% for status, period in resolver.hold.items() -%}
+      hold {{ status }} {{ period }}
+    {%- endfor %}
+  {%- endif %}
+  {% if resolver.resolve_retries is defined -%}
+  resolve_retries {{ resolver.resolve_retries }}
+  {% endif %}
+  {% if resolver.timeout is defined -%}
+    {% for event, time in resolver.timeout.items() -%}
+      timeout {{ event }} {{ time }}
+    {%- endfor %}
+  {%- endif %}
+{% endfor %}

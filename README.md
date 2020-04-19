@@ -395,6 +395,19 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_userlists.{n}.users.{n}.insecure_password`: [optional] Plaintext password of this user. **One of `password` or `insecure_password` must be set**
 * `haproxy_userlists.{n}.users.{n}.groups`: [optional] List of groups to add the user to
 
+* `haproxy_resolvers`: [default: `[]`]: Resolvers (name servers) declarations
+* `haproxy_resolvers.{n}.name`: [required]: The name of the name server list
+* `haproxy_resolvers.{n}.nameservers`: [required] list of DNS servers
+* `haproxy_resolvers.{n}.nameservers.{n}.name`: [required] label of the server, should be unique
+* `haproxy_resolvers.{n}.nameservers.{n}.listen`: [required] Defines a listening address and/or ports, e.g. `8.8.8.8:53`
+* `haproxy_resolvers.{n}.accepted_payload_size`: [optional]: Defines the maximum payload size (in bytes) accepted by HAProxy and announced to all the name servers configured in this resolvers section. If not set, HAProxy announces 512. (minimal value defined by RFC 6891)
+* `haproxy_resolvers.{n}.parse_resolv_conf`: [optional]: If set to `true`, adds all nameservers found in `/etc/resolv.conf` to this resolver's nameservers list.
+* `haproxy_resolvers.{n}.resolve_retries`: [optional]: Defines the number of queries to send to resolve a server name before giving up.
+* `haproxy_resolvers.{n}.hold`: [optional]: A list of directives defining `<period>` during which the last name resolution should be kept based on last resolution `<status>`.
+* `haproxy_resolvers.{n}.hold.{status}`: [optional]: hold directives in `<status>:<period>` format. Key must be one of (`nx`, `other`, `refused`, `timeout`, `valid`, `obsolete`). Value is interval between two successive name resolutions in HAProxy time format.
+* `haproxy_resolvers.{n}.timeout`: [optional]: Defines timeouts related to name resolution
+* `haproxy_resolvers.{n}.timeout.{event}`: [optional]: timeout directives in `<event>:<time>` format. Key must be one of (`resolve`, `retry`). Value is time related to the event in the HAProxy time format.
+
 * `haproxy_acl_files`: [default: `[]`]: ACL file declarations
 * `haproxy_acl_files.{n}.dest`: [required]: The remote path of the file (e.g. `/etc/haproxy/acl/api.map`)
 * `haproxy_acl_files.{n}.content`: [default: `[]`]: The content (lines) of the file (e.g. `['v1.0 be_alpha', 'v1.1 be_bravo']`)
