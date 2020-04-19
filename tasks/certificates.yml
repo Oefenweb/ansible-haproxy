@@ -23,13 +23,12 @@
   tags:
     - haproxy-certificates-copy-files
 
-- name: certificates | copy deploy script
+- name: certificates | copy SSL deploy script
   template:
-    src: "{{ haproxy_ssl_deploy_script | default('usr/local/bin/haproxy-deploy-certificates.j2') }}"
-    dest: /usr/local/bin/haproxy-deploy-certificates
+    src: "{{ haproxy_scripts_ssl_deploy_template }}"
+    dest: /usr/local/bin/haproxy-ssl-deploy
     owner: root
     group: root
     mode: 0755
-  when: haproxy_ssl_deploy_script | default('usr/local/bin/haproxy-deploy-certificates.j2')
   tags:
     - haproxy-certificates-deploy-script
