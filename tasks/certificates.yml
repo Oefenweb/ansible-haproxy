@@ -22,3 +22,14 @@
   notify: restart haproxy
   tags:
     - haproxy-certificates-copy-files
+
+- name: certificates | copy deploy script
+  template:
+    src: "{{ haproxy_ssl_deploy_script | default('usr/local/bin/haproxy-deploy-certificates.j2') }}"
+    dest: /usr/local/bin/haproxy-deploy-certificates
+    owner: root
+    group: root
+    mode: 0755
+  when: haproxy_ssl_deploy_script | default('usr/local/bin/haproxy-deploy-certificates.j2')
+  tags:
+    - haproxy-certificates-deploy-script
