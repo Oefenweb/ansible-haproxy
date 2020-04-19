@@ -1,5 +1,19 @@
 # tasks file for haproxy
 ---
+- name: configuration | create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  when: item != false
+  with_items:
+    - "{{ haproxy_global_ca_base }}"
+    - "{{ haproxy_global_crt_base }}"
+  tags:
+    - haproxy-configuration-create-directories
+
 - name: configuration | update file
   template:
     src: "{{ haproxy_conf_template }}"
