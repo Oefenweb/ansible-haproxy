@@ -25,7 +25,7 @@ for dir in $(ls -d {{ haproxy_scripts_ssl_deploy_src_path }}/*/); do
   fi
 
 {% if haproxy_scripts_ssl_deploy_remove_existing | default(false) == false %}
-  rm "{{ haproxy_global_crt_base }}/$removePrefix-$domain.pem";
+  rm -f "{{ haproxy_global_crt_base }}/$removePrefix-$domain.pem";
 {% endif %}
 
   cat ${dir}{{ haproxy_scripts_ssl_deploy_fullchain_name }} ${dir}{{ haproxy_scripts_ssl_deploy_privkey_name }} > "{{ haproxy_global_crt_base }}/$prefix-$domain.pem";
