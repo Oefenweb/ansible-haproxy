@@ -4,6 +4,7 @@
   apt_repository:
     repo: "{{ haproxy_ppa }}"
     update_cache: true
+  when: "{{ haproxy_use_ppa }}"
   tags:
     - haproxy-install-add-repository
 
