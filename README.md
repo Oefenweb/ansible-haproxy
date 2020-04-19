@@ -84,12 +84,6 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_ssl_map.{n}.group`: The name of the group that should own the file (optional, default `root`)
 * `haproxy_ssl_map.{n}.mode`: The mode of the file, such as 0644 (optional, default `0640`)
 
-* `haproxy_ssl_deploy_script`: [default: `usr/local/bin/haproxy-deploy-certificates.j2`]: Script to deploy certificates after creation and renewal (for example by Letsencrypt)
-* `haproxy_ssl_deploy_remove_existing`: [default: `false`]: Whether or not the script should remove existing certificates in the destination path
-* `haproxy_ssl_deploy_src_path`: [default: `/etc/letsencrypt/live`]: SSL declarations
-* `haproxy_ssl_deploy_fullchain_name`: [default: `fullchain.pem`]: Filename of the fullchain certificate
-* `haproxy_ssl_deploy_privkey_name`: [default: `privkey.pem`]: Filename of the private key
-
 * `haproxy_listen`: [default: `[]`]: Listen declarations
 * `haproxy_listen.{n}.name`: [required]: The name of the section (e.g. `stats`)
 * `haproxy_listen.{n}.description`: [optional]: A description of the section (e.g. `Global statistics`)
@@ -419,6 +413,13 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_acl_files`: [default: `[]`]: ACL file declarations
 * `haproxy_acl_files.{n}.dest`: [required]: The remote path of the file (e.g. `/etc/haproxy/acl/api.map`)
 * `haproxy_acl_files.{n}.content`: [default: `[]`]: The content (lines) of the file (e.g. `['v1.0 be_alpha', 'v1.1 be_bravo']`)
+
+* `haproxy_scripts_ssl_deploy_template`: [default: `usr/local/bin/haproxy-ssl-deploy.j2`]: Template to deploy SSL certificates after creation and renewal (for example by Letsencrypt)
+* `haproxy_scripts_ssl_deploy_remove_existing`: [default: `false`]: Whether or not the script should remove existing certificates in the destination path
+* `haproxy_scripts_ssl_deploy_first`: [default: `inventory_hostname`]: Name of the certificate that should be the first
+* `haproxy_scripts_ssl_deploy_src_path`: [default: `/etc/letsencrypt/live`]: Path to the directory with the certificates (in directories)
+* `haproxy_scripts_ssl_deploy_fullchain_name`: [default: `fullchain.pem`]: Filename of the fullchain certificate
+* `haproxy_scripts_ssl_deploy_privkey_name`: [default: `privkey.pem`]: Filename of the private key
 
 ## Dependencies
 

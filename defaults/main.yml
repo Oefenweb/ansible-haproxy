@@ -87,3 +87,10 @@ haproxy_resolvers: []
 
 # ACL files
 haproxy_acl_files: []
+
+# Scripts (SSL deploy)
+haproxy_scripts_ssl_deploy_template: usr/local/bin/haproxy-ssl-deploy.j2
+haproxy_scripts_ssl_deploy_first: "{{ inventory_hostname }}"
+haproxy_scripts_ssl_deploy_src_path: /etc/letsencrypt/live
+haproxy_scripts_ssl_deploy_fullchain_name: fullchain.pem
+haproxy_scripts_ssl_deploy_privkey_name: privkey.pem

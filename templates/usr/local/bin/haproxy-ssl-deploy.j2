@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+# Ansible managed
+#
+# set -x;
+set -e;
+set -o pipefail;
+#
+thisFile="$(readlink -f "${0}")";
+thisFilePath="$(dirname "${thisFile}")";
+
+{% if haproxy_scripts_ssl_deploy_remove_existing | default(false) %}
+rm -f "{{ haproxy_global_crt_base }}/*.pem";
+{% endif %}
+
+for dir in $(ls -d {{ haproxy_scripts_ssl_deploy_src_path }}/*/); do
+  domain="$(basename $dir)";
+
+  prefix="100";
+  removePrefix="000";
+
+  if [ $domain == "{{ haproxy_scripts_ssl_deploy_first }}" ]; then
+    prefix="000";
+    removePrefix="100";
+  fi
+
+{% haproxy_scripts_ssl_deploy_remove_existing | default(false) == false %}
+  rm "{{ haproxy_global_crt_base }}/$removePrefix-$domain.pem";
+{% endif %}
+
+  cat ${dir}{{ haproxy_scripts_ssl_deploy_fullchain_name }} ${dir}{{ haproxy_scripts_ssl_deploy_privkey_name }} > "{{ haproxy_global_crt_base }}/$prefix-$domain.pem";
+done
+
+systemctl reload haproxy;
