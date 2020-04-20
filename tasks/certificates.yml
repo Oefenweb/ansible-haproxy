@@ -22,13 +22,3 @@
   notify: restart haproxy
   tags:
     - haproxy-certificates-copy-files
-
-- name: certificates | copy SSL deploy script
-  template:
-    src: "{{ haproxy_scripts_ssl_deploy_template }}"
-    dest: /usr/local/bin/haproxy-ssl-deploy
-    owner: root
-    group: root
-    mode: 0755
-  tags:
-    - haproxy-certificates-deploy-script
