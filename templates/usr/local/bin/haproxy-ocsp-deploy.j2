@@ -28,7 +28,7 @@ for path in $(ls -1d {{ haproxy_scripts_ssl_src_path }}/*/); do
     -cert ${path}{{ haproxy_scripts_ssl_cert_name }} \
     -url ${ocspUrl};
 
-  rm "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.ocsp";
+  rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.ocsp";
 done
 
 systemctl reload haproxy;
