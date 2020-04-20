@@ -10,3 +10,7 @@ haproxy_versions_supported:
   - '2.1'
 
 haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
+
+haproxy_scripts_ssl_deploy: /usr/local/bin/haproxy-ssl-deploy
+
+haproxy_scripts_ocsp_deploy: /usr/local/bin/haproxy-ocsp-deploy

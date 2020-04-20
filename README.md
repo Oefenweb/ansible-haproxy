@@ -415,10 +415,20 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_acl_files.{n}.content`: [default: `[]`]: The content (lines) of the file (e.g. `['v1.0 be_alpha', 'v1.1 be_bravo']`)
 
 * `haproxy_scripts_ssl_deploy_template`: [default: `usr/local/bin/haproxy-ssl-deploy.j2`]: Template to deploy SSL certificates after creation and renewal (for example by Letsencrypt)
-* `haproxy_scripts_ssl_deploy_first`: [default: `inventory_hostname`]: Name of the certificate that should be the first
-* `haproxy_scripts_ssl_deploy_src_path`: [default: `/etc/letsencrypt/live`]: Path to the directory with the certificates (in directories)
-* `haproxy_scripts_ssl_deploy_fullchain_name`: [default: `fullchain.pem`]: Filename of the fullchain certificate
-* `haproxy_scripts_ssl_deploy_privkey_name`: [default: `privkey.pem`]: Filename of the private key
+* `haproxy_scripts_ssl_first_cert`: [default: `inventory_hostname`]: Name of the certificate that should be the first
+* `haproxy_scripts_ssl_src_path`: [default: `/etc/letsencrypt/live`]: Path to the directory with the certificates (in directories)
+* `haproxy_scripts_ssl_fullchain_name`: [default: `fullchain.pem`]: Filename of the fullchain certificate
+* `haproxy_scripts_ssl_chain_name`: [default: `chain.pem`]: Filename of the chain certificate
+* `haproxy_scripts_ssl_privkey_name`: [default: `privkey.pem`]: Filename of the private key
+* `haproxy_scripts_ssl_cert_name`: [default: `cert.pem`]: Filename of the certificate
+* `haproxy_scripts_ocsp_deploy_template`: [default: `usr/local/bin/haproxy-ocsp-deploy.j2`]: Template to deploy OCSP certificates after creation, renewal (for example by Letsencrypt) and daily
+* `haproxy_scripts_ocsp_deploy_job`: [optional]: OCSP deploy job (scheduled by `cron.d`)
+* `haproxy_scripts_ocsp_deploy_job.state`: [default: `absent`]: Whether to ensure the job is present or absent
+* `haproxy_scripts_ocsp_deploy_job.day`: [default: `*`]: Day of the month the job should run (`1-31`, `*`, `*/2`)
+* `haproxy_scripts_ocsp_deploy_job.hour`: [default: `0`]: Hour when the job should run (e.g. `0-23`, `*`, `*/2`)
+* `haproxy_scripts_ocsp_deploy_job.minute`: [default: `*`]: Minute when the job should run (e.g. `0-59`, `*`, `*/2`)
+* `haproxy_scripts_ocsp_deploy_job.month`: [default: `*`]: Month of the year the job should run (e.g `1-12`, `*`, `*/2`)
+* `haproxy_scripts_ocsp_deploy_job.weekday`: [default: `*`]: Day of the week that the job should run (e.g. `0-6` for Sunday-Saturday, `*`)
 
 ## Dependencies
 

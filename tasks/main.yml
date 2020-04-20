@@ -33,6 +33,12 @@
     - haproxy
     - haproxy-configuration
 
+- import_tasks: scripts.yml
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-scripts
+
 - name: start and enable service
   service:
     name: haproxy
