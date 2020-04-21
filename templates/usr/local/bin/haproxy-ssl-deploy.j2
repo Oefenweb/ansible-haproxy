@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Ansible managed
+# {{ ansible_managed }}
 #
 # set -x;
 set -e;
@@ -10,19 +10,19 @@ thisFile="$(readlink -f "${0}")";
 thisFilePath="$(dirname "${thisFile}")";
 
 for path in $(ls -1d {{ haproxy_scripts_ssl_src_path }}/*/); do
-  cert="$(basename $path)";
+  cert="$(basename ${path})";
 
   prefix="100";
   removePrefix="000";
 
-  if [ $cert == "{{ haproxy_scripts_ssl_first_cert }}" ]; then
+  if [ ${cert} == "{{ haproxy_scripts_ssl_first_cert }}" ]; then
     prefix="000";
     removePrefix="100";
   fi
 
-  cat ${path}{{ haproxy_scripts_ssl_fullchain_name }} ${path}{{ haproxy_scripts_ssl_privkey_name }} > "{{ haproxy_global_crt_base }}/$prefix-$cert.pem";
+  cat "${path}{{ haproxy_scripts_ssl_fullchain_name }}" "${path}{{ haproxy_scripts_ssl_privkey_name }}" > "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem";
 
-  rm -f "{{ haproxy_global_crt_base }}/$removePrefix-$cert.pem";
+  rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.pem";
 done
 
 {{ haproxy_scripts_ocsp_deploy }};
