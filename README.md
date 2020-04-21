@@ -78,6 +78,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_default_raw_options`: [default: `[]`]: Additional arbitrary lines to insert in the section
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
+* `haproxy_ssl_map.{n}.state`: [default: `present`]: Whether to ensure the file is present or absent
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
 * `haproxy_ssl_map.{n}.dest`: The remote path of the file to copy (e.g. `/etc/haproxy/ssl/star-example-com.pem`)
 * `haproxy_ssl_map.{n}.owner`: The name of the user that should own the file (optional, default `root`)
