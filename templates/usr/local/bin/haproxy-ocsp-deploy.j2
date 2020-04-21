@@ -20,7 +20,7 @@ for path in $(ls -1d {{ haproxy_scripts_ssl_src_path }}/*/); do
     removePrefix="100";
   fi
 
-  ocspUrl=$(openssl x509 -noout -ocsp_uri -in ${path}{{ haproxy_scripts_ssl_cert_name }});
+  ocspUrl="$(openssl x509 -noout -ocsp_uri -in ${path}{{ haproxy_scripts_ssl_cert_name }})";
 
   openssl ocsp -no_nonce -respout "{{ haproxy_global_crt_base }}/${prefix}-${cert}.ocsp" \
     -issuer "${path}{{ haproxy_scripts_ssl_chain_name }}" \
