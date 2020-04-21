@@ -27,7 +27,7 @@
     state: "{{ haproxy_scripts_ocsp_deploy_job.state | default('absent') }}"
     day: "{{ haproxy_scripts_ocsp_deploy_job.day | default('*') }}"
     hour: "{{ haproxy_scripts_ocsp_deploy_job.hour | default(0) }}"
-    minute: "{{ haproxy_scripts_ocsp_deploy_job.minute | default('*') }}"
+    minute: "{{ haproxy_scripts_ocsp_deploy_job.minute | default(0) }}"
     month: "{{ haproxy_scripts_ocsp_deploy_job.month | default('*') }}"
     weekday: "{{ haproxy_scripts_ocsp_deploy_job.weekday | default('*') }}"
     cron_file: haproxy-ocsp-deploy
