@@ -15,7 +15,7 @@ for path in $(ls -1d {{ haproxy_scripts_ssl_src_path }}/*/); do
   prefix="100";
   removePrefix="000";
 
-  if [ ${cert} == "{{ haproxy_scripts_ssl_first_cert }}" ]; then
+  if [ "${cert}" == "{{ haproxy_scripts_ssl_first_cert }}" ]; then
     prefix="000";
     removePrefix="100";
   fi
