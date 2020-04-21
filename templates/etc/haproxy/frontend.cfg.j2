@@ -32,7 +32,7 @@ frontend {{ frontend.name }}
 {% endfor %}
 
 {% if frontend.logformat is defined %}
-  log-format {{ frontend.logformat }}
+  log-format "{{ frontend.logformat }}"
 {% endif %}
 
 {% if frontend.no_log | default(false) == true %}

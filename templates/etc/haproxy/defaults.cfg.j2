@@ -3,7 +3,7 @@
 {% endif %}
 
 {% if haproxy_defaults_logformat is defined %}
-  log-format {{ haproxy_defaults_logformat }}
+  log-format "{{ haproxy_defaults_logformat }}"
 {% endif %}
 
 {% if haproxy_defaults_mode != false %}
