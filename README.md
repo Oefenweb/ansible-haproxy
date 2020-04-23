@@ -60,7 +60,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_raw_options`: [default: `[]`]: Additional arbitrary lines to insert in the section
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
-* `haproxy_defaults_logformat`: [optional]: Allows you to customize the logs in http mode and tcp mode (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
+* `haproxy_defaults_logformat`: [optional]: Allows you to customize the logs in http mode and tcp mode (e.g. `'"%{+Q}o\ %t\ %s\ %{-Q}r"'`)
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
 * `haproxy_defaults_source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_defaults_option`: [default: `[httplog, dontlognull]`]: Options (default)
@@ -207,7 +207,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
-* `haproxy_frontend.{n}.logformat`: [optional]: Specifies the log format string to use for traffic logs (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
+* `haproxy_frontend.{n}.logformat`: [optional]: Specifies the log format string to use for traffic logs (e.g. `'"%{+Q}o\ %t\ %s\ %{-Q}r"'`)
 * `haproxy_frontend.{n}.stick`: [optional]: Stick declarations
 * `haproxy_frontend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
