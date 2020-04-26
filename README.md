@@ -427,7 +427,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_scripts_ocsp_deploy_job.state`: [default: `absent`]: Whether to ensure the job is present or absent
 * `haproxy_scripts_ocsp_deploy_job.day`: [default: `*`]: Day of the month the job should run (`1-31`, `*`, `*/2`)
 * `haproxy_scripts_ocsp_deploy_job.hour`: [default: `0`]: Hour when the job should run (e.g. `0-23`, `*`, `*/2`)
-* `haproxy_scripts_ocsp_deploy_job.minute`: [default: `*`]: Minute when the job should run (e.g. `0-59`, `*`, `*/2`)
+* `haproxy_scripts_ocsp_deploy_job.minute`: [default: `0`]: Minute when the job should run (e.g. `0-59`, `*`, `*/2`)
 * `haproxy_scripts_ocsp_deploy_job.month`: [default: `*`]: Month of the year the job should run (e.g `1-12`, `*`, `*/2`)
 * `haproxy_scripts_ocsp_deploy_job.weekday`: [default: `*`]: Day of the week that the job should run (e.g. `0-6` for Sunday-Saturday, `*`)
 
