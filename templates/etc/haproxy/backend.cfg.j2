@@ -8,9 +8,11 @@ backend {{ backend.name }}
   bind-process {{ backend.bind_process | join(' ') }}
 {% endif %}
 
+{% if backend.mode is not defined and backend.stats is defined %}
+{% else %}
   mode {{ backend.mode }}
-
-  balance {{ backend.balance }}
+  balance {{ backend.balance | default('roundrobin') }}
+{% endif %}
 
 {% if backend.source is defined %}
   source {{ backend.source }}
