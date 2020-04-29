@@ -1,17 +1,30 @@
 # {{ ansible_managed }}
-
+#--#
+# Global
 global
 {% include 'global.cfg.j2' %}
 
+#--#
+# Defaults
 defaults
 {% include 'defaults.cfg.j2' %}
 
+#--#
+# Userlist
 {% include 'userlist.cfg.j2' %}
 
+#--#
+# Resolvers
 {% include 'resolvers.cfg.j2' %}
 
+#--#
+# Listen
 {% include 'listen.cfg.j2' %}
 
+#--#
+# Frontend
 {% include 'frontend.cfg.j2' %}
 
+#--#
+# Backend
 {% include 'backend.cfg.j2' %}
