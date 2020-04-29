@@ -11,3 +11,15 @@
   notify: restart haproxy
   tags:
     - haproxy-configuration-update-file
+
+- name: configuration | format file (remove empty)
+  lineinfile:
+    path: /etc/haproxy/haproxy.cfg
+    regex: '^\n'
+    state: absent
+
+- name: configuration | format file (empty before headings)
+  replace:
+    dest: /etc/haproxy/haproxy.cfg
+    regexp: "^#--#"
+    replace: ""
