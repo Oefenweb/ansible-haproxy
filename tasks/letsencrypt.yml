@@ -1,0 +1,36 @@
+# tasks file for haproxy
+---
+- name: letsencrypt | copy SSL deploy script
+  template:
+    src: "{{ haproxy_letsencrypt_ssl_deploy_template }}"
+    dest: "{{ haproxy_letsencrypt_ssl_deploy }}"
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - haproxy-letsencrypt-ssl-deploy
+
+- name: letsencrypt | copy OCSP deploy script
+  template:
+    src: "{{ haproxy_letsencrypt_ocsp_deploy_template }}"
+    dest: "{{ haproxy_letsencrypt_ocsp_deploy }}"
+    owner: root
+    group: root
+    mode: 0755
+  tags:
+    - haproxy-letsencrypt-ocsp-deploy
+
+- name: letsencrypt | configure (cron) job for OCSP deploy
+  cron:
+    name: haproxy-letsencrypt-ocsp-deploy
+    job: "{{ haproxy_letsencrypt_ocsp_deploy }}"
+    state: "{{ haproxy_letsencrypt_ocsp_deploy_job.state | default('absent') }}"
+    day: "{{ haproxy_letsencrypt_ocsp_deploy_job.day | default('*') }}"
+    hour: "{{ haproxy_letsencrypt_ocsp_deploy_job.hour | default(0) }}"
+    minute: "{{ haproxy_letsencrypt_ocsp_deploy_job.minute | default(0) }}"
+    month: "{{ haproxy_letsencrypt_ocsp_deploy_job.month | default('*') }}"
+    weekday: "{{ haproxy_letsencrypt_ocsp_deploy_job.weekday | default('*') }}"
+    cron_file: haproxy-letsencrypt-ocsp-deploy
+    user: root
+  tags:
+    - haproxy-letsencrypt-cron-ocsp-deploy
