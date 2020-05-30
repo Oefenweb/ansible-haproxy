@@ -430,7 +430,6 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_letsencrypt_ocsp_deploy_job.minute`: [default: `*`]: Minute when the job should run (e.g. `0-59`, `*`, `*/2`)
 * `haproxy_letsencrypt_ocsp_deploy_job.month`: [default: `*`]: Month of the year the job should run (e.g `1-12`, `*`, `*/2`)
 * `haproxy_letsencrypt_ocsp_deploy_job.weekday`: [default: `*`]: Day of the week that the job should run (e.g. `0-6` for Sunday-Saturday, `*`)
-* `haproxy_letsencrypt_reload_haproxy_after_deploy`: [default: `true`]: Whether or not to reload HAProxy after deploy
 
 ## Dependencies
 

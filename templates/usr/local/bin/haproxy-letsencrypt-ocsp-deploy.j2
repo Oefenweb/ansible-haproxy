@@ -31,6 +31,8 @@ for path in $(ls -1d {{ haproxy_letsencrypt_ssl_src_path }}/*/); do
   rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.ocsp";
 done
 
-{% if haproxy_letsencrypt_reload_haproxy_after_deploy | default(true) %}
+{% if ansible_service_mgr == 'systemd' %}
 systemctl reload haproxy;
+{% else %}
+service haproxy reload;
 {% endif %}
