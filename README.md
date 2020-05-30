@@ -1,6 +1,7 @@
 ## haproxy
 
-[![Build Status](https://travis-ci.org/Oefenweb/ansible-haproxy.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-haproxy) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-haproxy-blue.svg)](https://galaxy.ansible.com/Oefenweb/haproxy)
+[![Build Status](https://travis-ci.org/Oefenweb/ansible-haproxy.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-haproxy)
+[![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-haproxy-blue.svg)](https://galaxy.ansible.com/Oefenweb/haproxy)
 
 Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu systems.
 
@@ -10,7 +11,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 
 #### Variables
 
-* `haproxy_version`: [default: `1.8`]: Version to install (e.g. `1.5`, `1.6`, `1.7`, `1.8`)
+* `haproxy_use_ppa`: [default: `true`]: Whether or not to add the PPA (for installation)
+
+* `haproxy_version`: [default: `1.8`]: Version to install (e.g. `1.5`, `1.6`, `1.7`, `1.8`, `1.9`, `2.0`, `2.1`)
 
 * `haproxy_install`: [default: `[]`]: Additional packages to install (e.g. `socat`)
 
@@ -34,8 +37,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_ca_base`: [default: `/etc/ssl/certs`]: Assigns a default directory to fetch SSL CA certificates and CRLs from when a relative path is used with `"ca-file"` or `"crl-file"` directives
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
 * `haproxy_global_ssl_default_bind_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms ("cipher suite") that are negotiated during the SSL/TLS handshake for all `"bind"` lines which do not explicitly define theirs
+* `haproxy_global_ssl_default_bind_ciphersuites`: [default: ``]: This setting is only available when support for OpenSSL was built in and OpenSSL 1.1.1 or later was used to build HAProxy. It sets the default string describing the list of cipher algorithms ("cipher suite") that are negotiated during the TLSv1.3 handshake for all `"bind"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_bind_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"bind"` lines
 * `haproxy_global_ssl_default_server_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms that are negotiated during the SSL/TLS handshake with the server, for all `"server"` lines which do not explicitly define theirs
+* `haproxy_global_ssl_default_server_ciphersuites`: [default: ``]: This setting is only available when support for OpenSSL was built in and OpenSSL 1.1.1 or later was used to build HAProxy. It sets the default string describing the list of cipher algorithms that are negotiated duringthe TLSv1.3 handshake with the server, for all `"server"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_server_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"server"` lines
 * `haproxy_global_ssl_engines`: [optional, default `[]`]: OpenSSL engine declarations (`>= 1.8.0` only)
 * `haproxy_global_ssl_engines.{n}.name`: [required]: Sets the OpenSSL engine to use (e.g. `rdrand`)
@@ -46,7 +51,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_tune`: [default: `[]`]: (Performance) tuning declarations
 * `haproxy_global_tune.{n}.key`: [required]: Setting name (e.g. `ssl.cachesize`)
 * `haproxy_global_tune.{n}.value`: [required]: Setting value (e.g. `50000`)
-* `haproxy_global_option`: [default: `[]`]: Options (e.g. ['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem'])
+* `haproxy_global_option`: [default: `[]`]: Options (e.g. `['lua-load /etc/haproxy/acme-http01-webroot.lua', 'ssl-dh-param-file /etc/haproxy/dhparams.pem']`)
 * `haproxy_global_peers`: Peer list declarations
 * `haproxy_global_peers.{n}.name`: Peer list name (e.g. `mypeers`)
 * `haproxy_global_peers.{n}.peers`: Peer declarations
@@ -55,7 +60,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_raw_options`: [default: `[]`]: Additional arbitrary lines to insert in the section
 
 * `haproxy_defaults_log`: [default: `global`]: Enable per-instance logging of events and traffic. `global` should be used when the instance's logging parameters are the same as the global ones. This is the most common usage
-* `haproxy_defaults_logformat`: [optional]: Allows you to customize the logs in http mode and tcp mode (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
+* `haproxy_defaults_logformat`: [optional]: Allows you to customize the logs in http mode and tcp mode (e.g. `'"%{+Q}o\ %t\ %s\ %{-Q}r"'`)
 * `haproxy_defaults_mode`: [default: `http`]: Set the running mode or protocol of the instance
 * `haproxy_defaults_source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_defaults_option`: [default: `[httplog, dontlognull]`]: Options (default)
@@ -142,6 +147,14 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
+* `haproxy_listen.{n}.server_template`: [optional]: Server template declarations
+* `haproxy_listen.{n}.server_template.name`: [required]:  A prefix for the server names to be built.
+* `haproxy_listen.{n}.server_template.num`: [required]: Number or range of servers. If specified as `<num>`, this template initializes `<num>` servers with 1 up to `<num>` as server name suffixes. If specified as `<num_low>-<num_high>`, initializes with `<num_low>` up to `<num_high>` as server name suffixes.
+* `haproxy_listen.{n}.server_template.fqdn`: [required]: A FQDN for all the servers this template initializes
+* `haproxy_listen.{n}.server_template.port`: [optional]: Port specification
+* `haproxy_listen.{n}.server_template.{n}.param`: [optional]: A list of parameters for this server template
+* `haproxy_listen.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation.
+* `haproxy_listen.{n}.retries`: [optional]: Number of retries to perform on a server after a connection failure
 * `haproxy_listen.{n}.reqadd`: [optional]: Adds headers at the end of the HTTP request
 * `haproxy_listen.{n}.reqadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_listen.{n}.reqadd.{n}.cond`: [optional]: A matching condition built from ACLs
@@ -194,7 +207,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
 * `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
-* `haproxy_frontend.{n}.logformat`: [optional]: Specifies the log format string to use for traffic logs (e.g. `%{+Q}o\ %t\ %s\ %{-Q}r`)
+* `haproxy_frontend.{n}.logformat`: [optional]: Specifies the log format string to use for traffic logs (e.g. `'"%{+Q}o\ %t\ %s\ %{-Q}r"'`)
 * `haproxy_frontend.{n}.stick`: [optional]: Stick declarations
 * `haproxy_frontend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
@@ -360,6 +373,16 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server.{n}.name`: [required]: The internal name assigned to this server
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
+* `haproxy_backend.{n}.server_template`: [optional]: Server template declarations
+* `haproxy_backend.{n}.server_template.name`: [required]:  A prefix for the server names to be built.
+* `haproxy_backend.{n}.server_template.num`: [required]: Number or range of servers. If specified as `<num>`, this template initializes `<num>` servers with 1 up to `<num>` as server name suffixes. If specified as `<num_low>-<num_high>`, initializes with `<num_low>` up to `<num_high>` as server name suffixes.
+* `haproxy_backend.{n}.server_template.fqdn`: [required]: A FQDN for all the servers this template initializes
+* `haproxy_backend.{n}.server_template.port`: [optional]: Port specification
+* `haproxy_backend.{n}.server_template.{n}.param`: [optional]: A list of parameters for this server template
+* `haproxy_backend.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation.
+* `haproxy_backend.{n}.retries`: [optional]: Number of retries to perform on a server after a connection failure
+
+
 * `haproxy_backend.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_backend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
@@ -373,6 +396,19 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_userlists.{n}.users.{n}.password`: [optional] Password hash of this user. **One of `password` or `insecure_password` must be set**
 * `haproxy_userlists.{n}.users.{n}.insecure_password`: [optional] Plaintext password of this user. **One of `password` or `insecure_password` must be set**
 * `haproxy_userlists.{n}.users.{n}.groups`: [optional] List of groups to add the user to
+
+* `haproxy_resolvers`: [default: `[]`]: Resolvers (name servers) declarations
+* `haproxy_resolvers.{n}.name`: [required]: The name of the name server list
+* `haproxy_resolvers.{n}.nameservers`: [required] list of DNS servers
+* `haproxy_resolvers.{n}.nameservers.{n}.name`: [required] label of the server, should be unique
+* `haproxy_resolvers.{n}.nameservers.{n}.listen`: [required] Defines a listening address and/or ports, e.g. `8.8.8.8:53`
+* `haproxy_resolvers.{n}.accepted_payload_size`: [optional]: Defines the maximum payload size (in bytes) accepted by HAProxy and announced to all the name servers configured in this resolvers section. If not set, HAProxy announces 512. (minimal value defined by RFC 6891)
+* `haproxy_resolvers.{n}.parse_resolv_conf`: [optional]: If set to `true`, adds all nameservers found in `/etc/resolv.conf` to this resolver's nameservers list.
+* `haproxy_resolvers.{n}.resolve_retries`: [optional]: Defines the number of queries to send to resolve a server name before giving up.
+* `haproxy_resolvers.{n}.hold`: [optional]: A list of directives defining `<period>` during which the last name resolution should be kept based on last resolution `<status>`.
+* `haproxy_resolvers.{n}.hold.{status}`: [optional]: hold directives in `<status>:<period>` format. Key must be one of (`nx`, `other`, `refused`, `timeout`, `valid`, `obsolete`). Value is interval between two successive name resolutions in HAProxy time format.
+* `haproxy_resolvers.{n}.timeout`: [optional]: Defines timeouts related to name resolution
+* `haproxy_resolvers.{n}.timeout.{event}`: [optional]: timeout directives in `<event>:<time>` format. Key must be one of (`resolve`, `retry`). Value is time related to the event in the HAProxy time format.
 
 * `haproxy_acl_files`: [default: `[]`]: ACL file declarations
 * `haproxy_acl_files.{n}.dest`: [required]: The remote path of the file (e.g. `/etc/haproxy/acl/api.map`)

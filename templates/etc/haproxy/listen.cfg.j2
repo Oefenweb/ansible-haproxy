@@ -66,10 +66,6 @@ listen {{ listen.name }}
 {% endfor %}
 {% endif %}
 {% endif %}
-{% for http_request in listen.http_request | default([]) %}
-  http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
-
-{% endfor %}
 {% for tcp_request_inspect_delay in listen.tcp_request_inspect_delay | default([]) %}
   tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
 {% endfor %}
@@ -83,6 +79,10 @@ listen {{ listen.name }}
 {% endfor %}
 {% for tcp_request_session in listen.tcp_request_session | default([]) %}
   tcp-request session {{ tcp_request_session.action }}{% if tcp_request_session.cond is defined %} {{ tcp_request_session.cond }}{% endif %}
+
+{% endfor %}
+{% for http_request in listen.http_request | default([]) %}
+  http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
 
 {% endfor %}
 {% for http_response in listen.http_response | default([]) %}
@@ -113,7 +113,6 @@ listen {{ listen.name }}
 {% endfor %}
 {% for compression in listen.compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
-
 {% endfor %}
 {% if listen.default_server_params | default([]) %}
   default-server {% for param in listen.default_server_params | default([]) %} {{ param }}{% endfor %}
@@ -123,10 +122,20 @@ listen {{ listen.name }}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
 {% endfor %}
+{% if listen.server_template is defined %}
+  server-template {{ listen.server_template.name }} {{ listen.server_template.num}} {{ listen.server_template.fqdn }}{% if listen.server_template.port is defined %}:{{ listen.server_template.port }}{% endif %} {% for param in listen.server_template.param | default([]) %} {{ param }}{% endfor %}
+
+{% endif %}
+{% if listen.retry_on is defined %}
+  retry-on {% for r in listen.retry_on %}{{ r }}{% endfor %}
+
+{% endif %}
+{% if listen.retries is defined %}
+  retries {{ listen.retries }}
+{% endif %}
 {% for errorfile in listen.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
-
 {% for line in listen.raw_options | default([]) %}
   {{ line }}
 {% endfor %}

@@ -95,7 +95,6 @@ backend {{ backend.name }}
 {% endfor %}
 {% for compression in backend.compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
-
 {% endfor %}
 {% if backend.default_server_params | default([]) %}
   default-server {% for param in backend.default_server_params | default([]) %} {{ param }}{% endfor %}
@@ -112,10 +111,20 @@ backend {{ backend.name }}
 
 {% endfor %}
 {% endfor %}
+{% if backend.server_template is defined %}
+  server-template {{ backend.server_template.name }} {{ backend.server_template.num}} {{ backend.server_template.fqdn }}{% if backend.server_template.port is defined %}:{{ backend.server_template.port }}{% endif %} {% for param in backend.server_template.param | default([]) %} {{ param }}{% endfor %}
+
+{% endif %}
+{% if backend.retry_on is defined %}
+  retry-on {% for r in backend.retry_on %}{{ r }} {% endfor %}
+
+{% endif %}
+{% if backend.retries is defined %}
+  retries {{ backend.retries }}
+{% endif %}
 {% for errorfile in backend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
-
 {% for line in backend.raw_options | default([]) %}
   {{ line }}
 {% endfor %}

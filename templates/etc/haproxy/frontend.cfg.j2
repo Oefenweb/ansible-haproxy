@@ -38,14 +38,6 @@ frontend {{ frontend.name }}
 {% for capture in frontend.capture | default([]) %}
   capture {{ capture.type }} {{ capture.name }} len {{ capture.length }}
 {% endfor %}
-{% for http_request in frontend.http_request | default([]) %}
-  http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
-
-{% endfor %}
-{% for http_response in frontend.http_response | default([]) %}
-  http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
-
-{% endfor %}
 {% for tcp_request_inspect_delay in frontend.tcp_request_inspect_delay | default([]) %}
   tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
 {% endfor %}
@@ -59,6 +51,14 @@ frontend {{ frontend.name }}
 {% endfor %}
 {% for tcp_request_session in frontend.tcp_request_session | default([]) %}
   tcp-request session {{ tcp_request_session.action }}{% if tcp_request_session.cond is defined %} {{ tcp_request_session.cond }}{% endif %}
+
+{% endfor %}
+{% for http_request in frontend.http_request | default([]) %}
+  http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
+
+{% endfor %}
+{% for http_response in frontend.http_response | default([]) %}
+  http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
 
 {% endfor %}
 {% for action in ['reqadd', 'rspadd'] %}
@@ -101,7 +101,6 @@ frontend {{ frontend.name }}
 {% for errorfile in frontend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
-
 {% for line in frontend.raw_options | default([]) %}
   {{ line }}
 {% endfor %}
