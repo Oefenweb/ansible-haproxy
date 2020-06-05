@@ -379,6 +379,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server_template.fqdn`: [required]: A FQDN for all the servers this template initializes
 * `haproxy_backend.{n}.server_template.port`: [optional]: Port specification
 * `haproxy_backend.{n}.server_template.{n}.param`: [optional]: A list of parameters for this server template
+* `haproxy_backend.{n}.server_dynamic`: [optional]: Dynamic backend server declaration
+* `haproxy_backend.{n}.server_dynamic.{n}.group`: [required]: An ansible group containing hosts to be added as backend servers. Uses `inventory_hostname` for name and either `ansible_host` (if defined) or `inventory_hostname` for the listen address of each host.
+* `haproxy_backend.{n}.server_dynamic.{n}.listen_port`: [optional]: The port to use with each dynamic backend (translates to `listen <ansible_host/inventory_hostname>:<listen_port>`).
+* `haproxy_backend.{n}.server_dynamic.{n}.param`: [optional]: A list of parameters to apply on each backend server.
 * `haproxy_backend.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation.
 * `haproxy_backend.{n}.retries`: [optional]: Number of retries to perform on a server after a connection failure
 
