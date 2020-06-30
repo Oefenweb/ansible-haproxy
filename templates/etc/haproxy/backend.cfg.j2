@@ -11,10 +11,10 @@ backend {{ backend.name }}
 {% if backend.source is defined %}
   source {{ backend.source }}
 {% endif %}
-{% for option in backend.option | default([])%}
+{% for option in backend.option | default([]) %}
   option {{ option }}
 {% endfor %}
-{% for option in backend.no_option | default([])%}
+{% for option in backend.no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
 {% if backend.http_check is defined %}
