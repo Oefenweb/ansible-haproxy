@@ -44,20 +44,17 @@ backend {{ backend.name }}
 {% endfor %}
 {% for action in ['reqadd', 'rspadd'] %}
 {% for params in backend[action] | default([]) %}
-  {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.string }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% for action in ['reqdel', 'reqidel', 'rspdel', 'rspidel'] %}
 {% for params in backend[action] | default([]) %}
-  {{ action }} {{ params.search }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.search }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% for action in ['reqrep', 'reqirep', 'rsprep', 'rspirep'] %}
 {% for params in backend[action] | default([]) %}
-  {{ action }} {{ params.search }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.search }} {{ params.string }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% if backend.stats is defined %}
@@ -79,38 +76,31 @@ backend {{ backend.name }}
 {% endif %}
 {% endif %}
 {% for http_request in backend.http_request | default([]) %}
-  http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
-
+  http-request {{ http_request.action }}{{ http_request.param is defined | ternary([''] + [http_request.param], []) | join(' ') }}{{ http_request.cond is defined | ternary([''] + [http_request.cond], []) | join(' ') }}
 {% endfor %}
 {% for tcp_request_inspect_delay in backend.tcp_request_inspect_delay | default([]) %}
   tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
 {% endfor %}
 {% for tcp_request_content in backend.tcp_request_content | default([]) %}
-  tcp-request content {{ tcp_request_content.action }}{% if tcp_request_content.cond is defined %} {{ tcp_request_content.cond }}{% endif %}
-
+  tcp-request content {{ tcp_request_content.action }}{{ tcp_request_content.cond is defined | ternary([''] + [tcp_request_content.cond], []) | join(' ') }}
 {% endfor %}
 {% for http_response in backend.http_response | default([]) %}
-  http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
-
+  http-response {{ http_response.action }}{{ http_response.param is defined | ternary([''] + [http_response.param], []) | join(' ') }}{{ http_response.cond is defined | ternary([''] + [http_response.cond], []) | join(' ') }}
 {% endfor %}
 {% for compression in backend.compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
 {% if backend.default_server_params | default([]) %}
-  default-server {% for param in backend.default_server_params | default([]) %} {{ param }}{% endfor %}
-
+  default-server {{ backend.default_server_params | join(' ') }}
 {% endif %}
 {% for server in backend.server | default([]) %}
-  server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
-
+  server {{ server.name }} {{ server.listen }}{{ ([''] + server.param | default([])) | join(' ') }}
 {% endfor %}
 {% if backend.server_template is defined %}
-  server-template {{ backend.server_template.name }} {{ backend.server_template.num}} {{ backend.server_template.fqdn }}{% if backend.server_template.port is defined %}:{{ backend.server_template.port }}{% endif %} {% for param in backend.server_template.param | default([]) %} {{ param }}{% endfor %}
-
+  server-template {{ backend.server_template.name }} {{ backend.server_template.num}} {{ backend.server_template.fqdn }}{{ backend.server_template.port is defined | ternary([''] + [backend.server_template.port], []) | join(':') }}{{ ([''] + backend.server_template.param | default([])) | join(' ') }}
 {% endif %}
 {% if backend.retry_on is defined %}
-  retry-on {% for r in backend.retry_on %}{{ r }} {% endfor %}
-
+  retry-on {{ backend.retry_on | join(' ') }}
 {% endif %}
 {% if backend.retries is defined %}
   retries {{ backend.retries }}

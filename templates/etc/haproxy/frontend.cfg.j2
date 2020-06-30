@@ -4,8 +4,7 @@ frontend {{ frontend.name }}
   description {{ frontend.description }}
 {% endif %}
 {% for bind in frontend.bind %}
-  bind {{ bind.listen }}{% for param in bind.param | default([]) %} {{ param }}{% endfor %}
-
+  bind {{ bind.listen }}{{ ([''] + bind.param | default([])) | join(' ') }}
 {% endfor %}
 {% if frontend.bind_process is defined %}
   bind-process {{ frontend.bind_process | join(' ') }}
@@ -42,46 +41,37 @@ frontend {{ frontend.name }}
   tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
 {% endfor %}
 {% for tcp_request_connection in frontend.tcp_request_connection | default([]) %}
-  tcp-request connection {{ tcp_request_connection.action }}{% if tcp_request_connection.cond is defined %} {{ tcp_request_connection.cond }}{% endif %}
-
+  tcp-request connection {{ tcp_request_connection.action }}{{ tcp_request_connection.cond is defined | ternary([''] + [tcp_request_connection.cond], []) | join(' ') }}
 {% endfor %}
 {% for tcp_request_content in frontend.tcp_request_content | default([]) %}
-  tcp-request content {{ tcp_request_content.action }}{% if tcp_request_content.cond is defined %} {{ tcp_request_content.cond }}{% endif %}
-
+  tcp-request content {{ tcp_request_content.action }}{{ tcp_request_content.cond is defined | ternary([''] + [tcp_request_content.cond], []) | join(' ') }}
 {% endfor %}
 {% for tcp_request_session in frontend.tcp_request_session | default([]) %}
-  tcp-request session {{ tcp_request_session.action }}{% if tcp_request_session.cond is defined %} {{ tcp_request_session.cond }}{% endif %}
-
+  tcp-request session {{ tcp_request_session.action }}{{ tcp_request_session.cond is defined | ternary([''] + [tcp_request_session.cond], []) | join(' ') }}
 {% endfor %}
 {% for http_request in frontend.http_request | default([]) %}
-  http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
-
+  http-request {{ http_request.action }}{{ http_request.param is defined | ternary([''] + [http_request.param], []) | join(' ') }}{{ http_request.cond is defined | ternary([''] + [http_request.cond], []) | join(' ') }}
 {% endfor %}
 {% for http_response in frontend.http_response | default([]) %}
-  http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
-
+  http-response {{ http_response.action }}{{ http_response.param is defined | ternary([''] + [http_response.param], []) | join(' ') }}{{ http_response.cond is defined | ternary([''] + [http_response.cond], []) | join(' ') }}
 {% endfor %}
 {% for action in ['reqadd', 'rspadd'] %}
 {% for params in frontend[action] | default([]) %}
-  {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.string }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% for action in ['reqdel', 'reqidel', 'rspdel', 'rspidel'] %}
 {% for params in frontend[action] | default([]) %}
-  {{ action }} {{ params.search }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.search }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% for action in ['reqrep', 'reqirep', 'rsprep', 'rspirep'] %}
 {% for params in frontend[action] | default([]) %}
-  {{ action }} {{ params.search }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.search }} {{ params.string }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% for redirect in frontend.redirect | default([]) %}
-  redirect {{ redirect.string }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
-
+  redirect {{ redirect.string }}{{ redirect.cond is defined | ternary([''] + [redirect.cond], []) | join(' ') }}
 {% endfor %}
 {% for compression in frontend.compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}

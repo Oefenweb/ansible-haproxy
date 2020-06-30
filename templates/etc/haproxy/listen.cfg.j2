@@ -4,8 +4,7 @@ listen {{ listen.name }}
   description {{ listen.description }}
 {% endif %}
 {% for bind in listen.bind %}
-  bind {{ bind.listen }}{% for param in bind.param | default([]) %} {{ param }}{% endfor %}
-
+  bind {{ bind.listen }}{{ ([''] + bind.param | default([])) | join(' ') }}
 {% endfor %}
 {% if listen.bind_process is defined %}
   bind-process {{ listen.bind_process | join(' ') }}
@@ -70,65 +69,52 @@ listen {{ listen.name }}
   tcp-request inspect-delay {{ tcp_request_inspect_delay.timeout }}
 {% endfor %}
 {% for tcp_request_connection in listen.tcp_request_connection | default([]) %}
-  tcp-request connection {{ tcp_request_connection.action }}{% if tcp_request_connection.cond is defined %} {{ tcp_request_connection.cond }}{% endif %}
-
+  tcp-request connection {{ tcp_request_connection.action }}{{ tcp_request_connection.cond is defined | ternary([''] + [tcp_request_connection.cond], []) | join(' ') }}
 {% endfor %}
 {% for tcp_request_content in listen.tcp_request_content | default([]) %}
-  tcp-request content {{ tcp_request_content.action }}{% if tcp_request_content.cond is defined %} {{ tcp_request_content.cond }}{% endif %}
-
+  tcp-request content {{ tcp_request_content.action }}{{ tcp_request_content.cond is defined | ternary([''] + [tcp_request_content.cond], []) | join(' ') }}
 {% endfor %}
 {% for tcp_request_session in listen.tcp_request_session | default([]) %}
-  tcp-request session {{ tcp_request_session.action }}{% if tcp_request_session.cond is defined %} {{ tcp_request_session.cond }}{% endif %}
-
+  tcp-request session {{ tcp_request_session.action }}{{ tcp_request_session.cond is defined | ternary([''] + [tcp_request_session.cond], []) | join(' ') }}
 {% endfor %}
 {% for http_request in listen.http_request | default([]) %}
-  http-request {{ http_request.action }}{% if http_request.param is defined %} {{ http_request.param }}{% endif %}{% if http_request.cond is defined %} {{ http_request.cond }}{% endif %}
-
+  http-request {{ http_request.action }}{{ http_request.param is defined | ternary([''] + [http_request.param], []) | join(' ') }}{{ http_request.cond is defined | ternary([''] + [http_request.cond], []) | join(' ') }}
 {% endfor %}
 {% for http_response in listen.http_response | default([]) %}
-  http-response {{ http_response.action }}{% if http_response.param is defined %} {{ http_response.param }}{% endif %}{% if http_response.cond is defined %} {{ http_response.cond }}{% endif %}
-
+  http-response {{ http_response.action }}{{ http_response.param is defined | ternary([''] + [http_response.param], []) | join(' ') }}{{ http_response.cond is defined | ternary([''] + [http_response.cond], []) | join(' ') }}
 {% endfor %}
 {% for action in ['reqadd', 'rspadd'] %}
 {% for params in listen[action] | default([]) %}
-  {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.string }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% for action in ['reqdel', 'reqidel', 'rspdel', 'rspidel'] %}
 {% for params in listen[action] | default([]) %}
-  {{ action }} {{ params.search }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.search }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% for action in ['reqrep', 'reqirep', 'rsprep', 'rspirep'] %}
 {% for params in listen[action] | default([]) %}
-  {{ action }} {{ params.search }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
-
+  {{ action }} {{ params.search }} {{ params.string }}{{ params.cond is defined | ternary([''] + [params.cond], []) | join(' ') }}
 {% endfor %}
 {% endfor %}
 {% for redirect in listen.redirect | default([]) %}
-  redirect {{ redirect.string }}{% if redirect.cond is defined %} {{ redirect.cond }}{% endif %}
-
+  redirect {{ redirect.string }}{{ redirect.cond is defined | ternary([''] + [redirect.cond], []) | join(' ') }}
 {% endfor %}
 {% for compression in listen.compression | default([]) %}
   compression {{ compression.name }} {{ compression.value }}
 {% endfor %}
 {% if listen.default_server_params | default([]) %}
-  default-server {% for param in listen.default_server_params | default([]) %} {{ param }}{% endfor %}
-
+  default-server {{ listen.default_server_params | join(' ') }}
 {% endif %}
 {% for server in listen.server | default([]) %}
-  server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
-
+  server {{ server.name }} {{ server.listen }}{{ ([''] + server.param | default([])) | join(' ') }}
 {% endfor %}
 {% if listen.server_template is defined %}
-  server-template {{ listen.server_template.name }} {{ listen.server_template.num}} {{ listen.server_template.fqdn }}{% if listen.server_template.port is defined %}:{{ listen.server_template.port }}{% endif %} {% for param in listen.server_template.param | default([]) %} {{ param }}{% endfor %}
-
+  server-template {{ listen.server_template.name }} {{ listen.server_template.num}} {{ listen.server_template.fqdn }}{{ listen.server_template.port is defined | ternary([''] + [listen.server_template.port], []) | join(':') }}{{ ([''] + listen.server_template.param | default([])) | join(' ') }}
 {% endif %}
 {% if listen.retry_on is defined %}
-  retry-on {% for r in listen.retry_on %}{{ r }}{% endfor %}
-
+  retry-on {{ listen.retry_on | join (' ') }}
 {% endif %}
 {% if listen.retries is defined %}
   retries {{ listen.retries }}
