@@ -23,9 +23,17 @@ backend {{ backend.name }}
 {% if backend.cookie is defined %}
   cookie {{ backend.cookie }}
 {% endif %}
-{% for acl in backend.acl | default([]) %}
-  acl {{ acl.string }}
+{% if backend.acl is defined %}
+{% if backend.acl is mapping %}
+{% for name, value in backend.acl.items() %}
+  acl {{ name }} {{ value }}
 {% endfor %}
+{% else %}
+{% for acl in backend.acl | default([]) %}
+  acl {{ acl.string | default(acl) }}
+{% endfor %}
+{% endif %}
+{% endif %}
 {% for stick in backend.stick | default([]) %}
   stick-table {{ stick.table }}
   stick on {{ stick.stick_on }}

@@ -42,9 +42,17 @@ listen {{ listen.name }}
 {% for timeout in listen.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
-{% for acl in listen.acl | default([]) %}
-  acl {{ acl.string }}
+{% if listen.acl is defined %}
+{% if listen.acl is mapping %}
+{% for name, value in listen.acl.items() %}
+  acl {{ name }} {{ value }}
 {% endfor %}
+{% else %}
+{% for acl in listen.acl | default([]) %}
+  acl {{ acl.string | default(acl) }}
+{% endfor %}
+{% endif %}
+{% endif %}
 {% for capture in listen.capture | default([]) %}
   capture {{ capture.type }} {{ capture.name }} len {{ capture.length }}
 {% endfor %}

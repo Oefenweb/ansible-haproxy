@@ -32,9 +32,17 @@ frontend {{ frontend.name }}
 {% for timeout in frontend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
-{% for acl in frontend.acl | default([]) %}
-  acl {{ acl.string }}
+{% if frontend.acl is defined %}
+{% if frontend.acl is mapping %}
+{% for name, value in frontend.acl.items() %}
+  acl {{ name }} {{ value }}
 {% endfor %}
+{% else %}
+{% for acl in frontend.acl | default([]) %}
+  acl {{ acl.string | default(acl) }}
+{% endfor %}
+{% endif %}
+{% endif %}
 {% for capture in frontend.capture | default([]) %}
   capture {{ capture.type }} {{ capture.name }} len {{ capture.length }}
 {% endfor %}
