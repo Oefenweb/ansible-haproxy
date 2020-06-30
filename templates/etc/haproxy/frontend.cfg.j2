@@ -32,6 +32,11 @@ frontend {{ frontend.name }}
 {% for timeout in frontend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
+{% if frontend.filter is defined %}
+{% for name, value in frontend.filter.items() %}
+  filter {{ name }} {{ value }}
+{% endfor %}
+{% endif %}
 {% for acl in frontend.acl | default([]) %}
   acl {{ acl.string }}
 {% endfor %}

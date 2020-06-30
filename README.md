@@ -112,6 +112,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
 * `haproxy_listen.{n}.capture.name`: [required]: Name of the header or cookie to capture
 * `haproxy_listen.{n}.capture.length`: [required]: Maximum number of characters to capture and report in the logs
+* `haproxy_listen.{n}.filter`: [optional]: Dictionary of content filters to apply to this section
+* `haproxy_listen.{n}.filter.{name}`: [required]: One or more filter `name: param` entries to apply
 * `haproxy_listen.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_listen.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_listen.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
@@ -222,6 +224,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
 * `haproxy_frontend.{n}.capture.name`: [required]: Name of the header or cookie to capture
 * `haproxy_frontend.{n}.capture.length`: [required]: Maximum number of characters to capture and report in the logs
+* `haproxy_frontend.{n}.filter`: [optional]: Dictionary of content filters to apply to this section
+* `haproxy_frontend.{n}.filter.{name}`: [required]: One or more filter `name: param` entries to apply
 * `haproxy_frontend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_frontend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_frontend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
@@ -344,6 +348,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.rspirep.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
 * `haproxy_backend.{n}.rspirep.{n}.cond`: [optional]: Matching condition built from ACLs
 * `haproxy_backend.{n}.cookie`: [optional]: Enable cookie-based persistence in a backend (e.g. `JSESSIONID prefix nocache`)
+* `haproxy_backend.{n}.filter`: [optional]: Dictionary of content filters to apply to this section
+* `haproxy_backend.{n}.filter.{name}`: [required]: One or more filter `name: param` entries to apply
 * `haproxy_backend.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_backend.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_backend.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)

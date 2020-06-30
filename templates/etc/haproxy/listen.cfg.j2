@@ -42,6 +42,11 @@ listen {{ listen.name }}
 {% for timeout in listen.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
+{% if listen.filter is defined %}
+{% for name, value in listen.filter.items() %}
+  filter {{ name }} {{ value }}
+{% endfor %}
+{% endif %}
 {% for acl in listen.acl | default([]) %}
   acl {{ acl.string }}
 {% endfor %}

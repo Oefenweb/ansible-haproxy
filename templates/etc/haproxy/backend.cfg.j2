@@ -23,6 +23,11 @@ backend {{ backend.name }}
 {% if backend.cookie is defined %}
   cookie {{ backend.cookie }}
 {% endif %}
+{% if backend.filter is defined %}
+{% for name, value in backend.filter.items() %}
+  filter {{ name }} {{ value }}
+{% endfor %}
+{% endif %}
 {% for acl in backend.acl | default([]) %}
   acl {{ acl.string }}
 {% endfor %}
