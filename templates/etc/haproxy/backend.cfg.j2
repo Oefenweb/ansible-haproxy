@@ -28,7 +28,9 @@ backend {{ backend.name }}
 {% endfor %}
 {% for stick in backend.stick | default([]) %}
   stick-table {{ stick.table }}
+{% if stick.stick_on is defined %}
   stick on {{ stick.stick_on }}
+{% endif %}
 {% endfor %}
 {% for option in backend.no_option | default([]) %}
   no option {{ option }}
