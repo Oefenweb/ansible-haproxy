@@ -102,7 +102,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
 * `haproxy_listen.{n}.stick`: [optional]: Stick declarations
 * `haproxy_listen.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
-* `haproxy_listen.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
+* `haproxy_listen.{n}.stick.{n}.stick_on`: [optional]: Define a request pattern to associate a user to a server (e.g. `src`)
 * `haproxy_listen.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_listen.{n}.timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
 * `haproxy_listen.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
@@ -209,7 +209,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_frontend.{n}.logformat`: [optional]: Specifies the log format string to use for traffic logs (e.g. `'"%{+Q}o\ %t\ %s\ %{-Q}r"'`)
 * `haproxy_frontend.{n}.stick`: [optional]: Stick declarations
-* `haproxy_frontend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
+* `haproxy_frontend.{n}.stick.{n}.table`: [optional]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
 * `haproxy_frontend.{n}.option`: [optional]: Options to set (e.g. `[tcplog]`)
 * `haproxy_frontend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_frontend.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
