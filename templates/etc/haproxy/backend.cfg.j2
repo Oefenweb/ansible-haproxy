@@ -6,7 +6,9 @@ backend {{ backend.name }}
 {% if backend.bind_process is defined %}
   bind-process {{ backend.bind_process | join(' ') }}
 {% endif %}
+{% if backend.mode is defined %}
   mode {{ backend.mode }}
+{% endif %}
   balance {{ backend.balance }}
 {% if backend.source is defined %}
   source {{ backend.source }}

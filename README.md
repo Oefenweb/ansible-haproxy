@@ -91,7 +91,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.bind.{n}.listen`: [required]: Defines one or several listening addresses and/or ports (e.g. `0.0.0.0:1936`)
 * `haproxy_listen.{n}.bind.{n}.param`: [optional]: A list of parameters common to this bind declarations
 * `haproxy_listen.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
-* `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_listen.{n}.mode`: [optional]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_listen.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_listen.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_listen.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
@@ -205,7 +205,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.bind.{n}.listen`: [required]: Defines one or several listening addresses and/or ports (e.g. `0.0.0.0:443`)
 * `haproxy_frontend.{n}.bind.{n}.param`: [optional]: A list of parameters common to this bind declarations
 * `haproxy_frontend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
-* `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_frontend.{n}.mode`: [optional]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_frontend.{n}.logformat`: [optional]: Specifies the log format string to use for traffic logs (e.g. `'"%{+Q}o\ %t\ %s\ %{-Q}r"'`)
 * `haproxy_frontend.{n}.stick`: [optional]: Stick declarations
@@ -292,7 +292,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
 * `haproxy_backend.{n}.description`: [optional]: A description of the section (e.g. `Back-end with all (Apache) webservers`)
 * `haproxy_backend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
-* `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_backend.{n}.mode`: [optional]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)

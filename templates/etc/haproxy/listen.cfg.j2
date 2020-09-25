@@ -10,7 +10,9 @@ listen {{ listen.name }}
 {% if listen.bind_process is defined %}
   bind-process {{ listen.bind_process | join(' ') }}
 {% endif %}
+{% if listen.mode is defined %}
   mode {{ listen.mode }}
+{% endif %}
 {% if listen.balance is defined %}
   balance {{ listen.balance }}
 {% endif %}
