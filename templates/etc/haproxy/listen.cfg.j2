@@ -22,7 +22,9 @@ listen {{ listen.name }}
 {% endif %}
 {% for stick in listen.stick | default([]) %}
   stick-table {{ stick.table }}
+{% if stick.stick_on is defined %}
   stick on {{ stick.stick_on }}
+{% endif %}
 {% endfor %}
 {% if listen.source is defined %}
   source {{ listen.source }}
