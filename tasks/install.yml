@@ -4,7 +4,7 @@
   apt_repository:
     repo: "{{ haproxy_ppa }}"
     update_cache: true
-  when: haproxy_use_ppa
+  when: haproxy_use_ppa | bool
   tags:
     - haproxy-install-add-repository
 
@@ -18,8 +18,7 @@
 
 - name: install | additional
   apt:
-    name: "{{ item }}"
+    name: "{{ haproxy_install }}"
     state: "{{ apt_install_state | default('latest') }}"
-  with_items: "{{ haproxy_install }}"
   tags:
     - haproxy-install-additional
