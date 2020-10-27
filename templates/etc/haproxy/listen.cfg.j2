@@ -17,7 +17,7 @@ listen {{ listen.name }}
   balance {{ listen.balance }}
 {% endif %}
 {% if listen.hash-type is defined %}
-  hash-type {{ hash-type }}
+  hash-type {{ listen.hash-type }}
 {% endif %}
 {% if listen.maxconn is defined %}
   maxconn {{ listen.maxconn }}
