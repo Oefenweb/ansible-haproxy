@@ -46,6 +46,9 @@ backend {{ backend.name }}
 {% for timeout in backend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
+{% if backend.hash-type is defined %}
+  hash-type {{ hash-type }}
+{% endif %}
 {% for action in ['reqadd', 'rspadd'] %}
 {% for params in backend[action] | default([]) %}
   {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
