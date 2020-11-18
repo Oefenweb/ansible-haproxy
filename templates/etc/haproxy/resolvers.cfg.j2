@@ -10,7 +10,7 @@ resolvers {{ resolver.name }}
   parse-resolv-conf
   {% endif %}
   {% if resolver.hold is defined -%}
-    {% for status, period in resolver.hold.items() -%}
+    {% for status, period in resolver.hold.items() | sort -%}
       hold {{ status }} {{ period }}
     {%- endfor %}
   {%- endif %}
@@ -18,7 +18,7 @@ resolvers {{ resolver.name }}
   resolve_retries {{ resolver.resolve_retries }}
   {% endif %}
   {% if resolver.timeout is defined -%}
-    {% for event, time in resolver.timeout.items() -%}
+    {% for event, time in resolver.timeout.items() | sort -%}
       timeout {{ event }} {{ time }}
     {%- endfor %}
   {%- endif %}
