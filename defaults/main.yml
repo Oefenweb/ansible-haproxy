@@ -24,7 +24,7 @@ haproxy_global_log:
     level: notice
 haproxy_global_stats:
   sockets:
-    - listen: /run/haproxy/admin.sock
+    - listen: /run/haproxy.sock
   timeout: 30s
 haproxy_global_user: haproxy
 haproxy_global_group: haproxy
