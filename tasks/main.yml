@@ -16,6 +16,12 @@
     - haproxy-install
   when: haproxy_use_ppa
 
+- import_tasks: "user.yml"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-user
+
 - import_tasks: certificates.yml
   tags:
     - configuration
