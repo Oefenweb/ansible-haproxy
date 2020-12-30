@@ -2,6 +2,7 @@
 ---
 haproxy_use_ppa: true
 haproxy_version: 1.8
+haproxy_patch: false
 
 haproxy_dependencies:
   - name: haproxy
