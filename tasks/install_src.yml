@@ -1,0 +1,90 @@
+---
+- name: install | dependecies
+  package:
+    name: 
+      - make
+      - gcc
+      - perl
+      - pcre-devel
+      - zlib-devel
+      - openssl-devel
+    state: latest
+  tags:
+    - haproxy-install-dependencies
+
+- name: install | Extracting HAProxy
+  unarchive:
+    src: "http://www.haproxy.org/download/{{ haproxy_version }}/src/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}.tar.gz"
+    dest: /tmp/
+    remote_src: yes
+  tags:
+    - haproxy-install-from-source
+
+- name: install | Compile HAProxy
+  make:
+    chdir: /tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}
+    params: 
+      TARGET: linux-glibc
+      USE_PCRE: 1
+      USE_PCRE_JIT: 1
+      USE_OPENSSL: 1
+      USE_ZLIB: 1
+      USE_LINUX_TPROXY: 1
+      USE_REGPARM: 1
+      USE_LUA: "{{ 1 if haproxy_use_lua else '' }}"
+      USE_THREAD: 1
+      USE_TFO: 1
+  tags:
+    - haproxy-install-from-source
+
+- name: install | Install HAProxy
+  make:
+    chdir: /tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}
+    target: install
+  tags:
+    - haproxy-install-from-source
+
+- name: install | Create /etc/haproxy folder
+  file:
+    path: "/etc/haproxy/"
+    state: directory
+  tags:
+    - haproxy-install-from-source
+
+- name: install | Create haproxy symbolic link
+  file:
+    src: "/usr/local/sbin/haproxy"
+    dest: "/usr/sbin/haproxy"
+    state: link
+  tags:
+    - haproxy-install-from-source
+
+- name: install | Copying errors file
+  copy:
+    src: "/tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}/examples/errorfiles/"
+    dest: "/etc/haproxy/errors/"
+    remote_src: yes
+  tags:
+    - haproxy-install-from-source
+
+- name: install | Service
+  copy:
+    src: "/tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}/examples/haproxy.init"
+    dest: "/etc/init.d/haproxy"
+    remote_src: yes
+    mode: '0755'
+  tags:
+    - haproxy-install-from-source
+
+- name: install | Check if systemd is installed
+  package_facts:
+    manager: "auto"
+  tags:
+    - haproxy-install-from-source
+
+- name: install | Reload systemctl daemon
+  systemd:
+    daemon_reload: yes
+  when: "'systemd' in ansible_facts.packages"
+  tags:
+  - haproxy-install-from-source

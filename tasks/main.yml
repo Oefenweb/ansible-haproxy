@@ -16,6 +16,13 @@
     - haproxy-install
   when: haproxy_use_ppa
 
+- import_tasks: "install_src.yml"
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-install
+  when: not haproxy_use_ppa
+
 - import_tasks: "user.yml"
   tags:
     - configuration
