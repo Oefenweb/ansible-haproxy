@@ -44,10 +44,13 @@
   tags:
     - haproxy-install-from-source
 
-- name: install | Create /etc/haproxy folder
+- name: install | Create haproxy folders
   file:
-    path: "/etc/haproxy/"
+    path: "{{ item }}"
     state: directory
+  with_items:
+    - "/etc/haproxy/"
+    - "/etc/haproxy/errors/"
   tags:
     - haproxy-install-from-source
 
@@ -64,6 +67,7 @@
     src: "/tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch }}/examples/errorfiles/"
     dest: "/etc/haproxy/errors/"
     remote_src: yes
+    directory_mode: yes
   tags:
     - haproxy-install-from-source
 
