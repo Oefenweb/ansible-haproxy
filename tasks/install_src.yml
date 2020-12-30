@@ -14,7 +14,7 @@
 
 - name: install | Extracting HAProxy
   unarchive:
-    src: "http://www.haproxy.org/download/{{ haproxy_version }}/src/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}.tar.gz"
+    src: "http://www.haproxy.org/download/{{ haproxy_version }}/src/haproxy-{{ haproxy_version }}.{{ haproxy_patch }}.tar.gz"
     dest: /tmp/
     remote_src: yes
   tags:
@@ -22,7 +22,7 @@
 
 - name: install | Compile HAProxy
   make:
-    chdir: /tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}
+    chdir: /tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch }}
     params: 
       TARGET: linux-glibc
       USE_PCRE: 1
@@ -39,7 +39,7 @@
 
 - name: install | Install HAProxy
   make:
-    chdir: /tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}
+    chdir: /tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch }}
     target: install
   tags:
     - haproxy-install-from-source
@@ -61,7 +61,7 @@
 
 - name: install | Copying errors file
   copy:
-    src: "/tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}/examples/errorfiles/"
+    src: "/tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch }}/examples/errorfiles/"
     dest: "/etc/haproxy/errors/"
     remote_src: yes
   tags:
@@ -69,7 +69,7 @@
 
 - name: install | Service
   copy:
-    src: "/tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch if haproxy_patch is not false else 0 }}/examples/haproxy.init"
+    src: "/tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch }}/examples/haproxy.init"
     dest: "/etc/init.d/haproxy"
     remote_src: yes
     mode: '0755'
