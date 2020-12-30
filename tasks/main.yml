@@ -9,11 +9,12 @@
     - haproxy
     - haproxy-check-version-support
 
-- import_tasks: install.yml
+- import_tasks: "install_ppa.yml"
   tags:
     - configuration
     - haproxy
     - haproxy-install
+  when: haproxy_use_ppa
 
 - import_tasks: certificates.yml
   tags:
