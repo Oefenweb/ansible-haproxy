@@ -16,12 +16,16 @@
     - haproxy-install
   when: haproxy_use_ppa
 
+- include_vars: "{{ ansible_os_family }}.yml"
+  when: not haproxy_use_ppa
+
 - import_tasks: "install_src.yml"
   tags:
     - configuration
     - haproxy
     - haproxy-install
   when: not haproxy_use_ppa
+
 
 - import_tasks: "user.yml"
   tags:

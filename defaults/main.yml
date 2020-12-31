@@ -9,6 +9,7 @@ haproxy_use_lua: false
 haproxy_dependencies:
   - name: haproxy
     state: latest
+haproxy_src_dependencies: []
 haproxy_install: []
 
 haproxy_restart_handler_state: restarted

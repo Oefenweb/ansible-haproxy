@@ -1,13 +1,7 @@
 ---
 - name: install | dependecies
   package:
-    name: 
-      - make
-      - gcc
-      - perl
-      - pcre-devel
-      - zlib-devel
-      - openssl-devel
+    name: "{{ haproxy_src_dependencies }}"
     state: latest
   tags:
     - haproxy-install-dependencies
