@@ -71,24 +71,24 @@
   tags:
     - haproxy-install-from-source
 
-- name: install | Service
+- name: install | Service file
   copy:
-    src: "/tmp/haproxy-{{ haproxy_version }}.{{ haproxy_patch }}/examples/haproxy.init"
-    dest: "/etc/init.d/haproxy"
-    remote_src: yes
-    mode: '0755'
+    src: "files/systemd/system/haproxy.service"
+    dest: "/usr/lib/systemd/system/haproxy.service"
+    mode: '0644'
   tags:
     - haproxy-install-from-source
 
-- name: install | Check if systemd is installed
-  package_facts:
-    manager: "auto"
+- name: install | Create service file symbolic link
+  file:
+    src: "/usr/lib/systemd/system/haproxy.service"
+    dest: "/etc/systemd/system/haproxy.service"
+    state: link
   tags:
     - haproxy-install-from-source
 
 - name: install | Reload systemctl daemon
   systemd:
     daemon_reload: yes
-  when: "'systemd' in ansible_facts.packages"
   tags:
   - haproxy-install-from-source
