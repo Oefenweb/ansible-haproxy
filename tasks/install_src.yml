@@ -68,16 +68,8 @@
 - name: install | Service file
   copy:
     src: "files/systemd/system/haproxy.service"
-    dest: "/usr/lib/systemd/system/haproxy.service"
-    mode: '0644'
-  tags:
-    - haproxy-install-from-source
-
-- name: install | Create service file symbolic link
-  file:
-    src: "/usr/lib/systemd/system/haproxy.service"
     dest: "/etc/systemd/system/haproxy.service"
-    state: link
+    mode: '0644'
   tags:
     - haproxy-install-from-source
 
