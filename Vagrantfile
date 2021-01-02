@@ -25,6 +25,27 @@ boxes = [
     :cpu => "50",
     :ram => "384"
   },
+  {
+    :name => "centos-7",
+    :box => "centos/7",
+    :ip => '10.0.0.15',
+    :cpu => "50",
+    :ram => "384"
+  },
+  {
+    :name => "centos-8",
+    :box => "centos/8",
+    :ip => '10.0.0.16',
+    :cpu => "50",
+    :ram => "384"
+  },
+  {
+    :name => "ami-2",
+    :box => "bento/amazonlinux-2",
+    :ip => '10.0.0.17',
+    :cpu => "50",
+    :ram => "384"
+  },
 ]
 
 Vagrant.configure("2") do |config|
