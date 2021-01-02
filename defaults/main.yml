@@ -1,6 +1,6 @@
 # defaults file for haproxy
 ---
-haproxy_use_ppa: true
+haproxy_use_ppa: false
 haproxy_version: 1.8
 haproxy_patch: 0
 
