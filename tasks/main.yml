@@ -3,7 +3,7 @@
 - name: check version support
   fail:
     msg: "HAProxy version {{ haproxy_version }} is not supported"
-  when: haproxy_version | string not in haproxy_versions_supported
+  when: (haproxy_version | regex_replace('([0-9]+.[0-9]+).[0-9]','\\1')) | string not in haproxy_versions_supported
   tags:
     - configuration
     - haproxy
@@ -18,13 +18,25 @@
     - haproxy-install
   when: haproxy_use_ppa
 
+- name: install | Check for existing haproxy installation
+  stat:
+    path: "/usr/sbin/haproxy"
+  register: haproxy_exist
+  when: not haproxy_use_ppa
+
+- name: install | Check for existing haproxy version
+  shell: /usr/sbin/haproxy -v | head -1 | sed 's/HA-Proxy version \([0-9]\.[0-9]\.[0-9]\+\).*/\1/'
+  register: haproxy_version_installed
+  when: ("haproxy_exist.stat.exists") and (not haproxy_use_ppa)
+  changed_when: False
+  failed_when: False
+
 - import_tasks: "install_src.yml"
   tags:
     - configuration
     - haproxy
     - haproxy-install
-  when: not haproxy_use_ppa
-
+  when: (''.join((haproxy_src_version | string, haproxy_src_patch | string)) != haproxy_version_installed.stdout) and (not haproxy_use_ppa)
 
 - import_tasks: "user.yml"
   tags:

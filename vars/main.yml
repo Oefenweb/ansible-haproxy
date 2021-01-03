@@ -10,4 +10,7 @@ haproxy_versions_supported:
   - '2.1'
   - '2.2'
 
-haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
+haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version}}"
+
+haproxy_src_version: "{{ haproxy_version | regex_replace('([0-9]+.[0-9]+).*','\\1') }}"
+haproxy_src_patch: "{{ haproxy_version | regex_replace('[0-9]+.[0-9]+.([0-9]+)','.\\1') if haproxy_version | regex_search('[0-9]+.[0-9]+.([0-9]+)','\\1') else '.0'}}"
