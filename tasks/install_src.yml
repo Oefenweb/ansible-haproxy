@@ -28,6 +28,7 @@
       USE_LUA: "{{ 1 if haproxy_use_lua else '' }}"
       USE_THREAD: 1
       USE_TFO: 1
+      USE_CPU_AFFINITY: 1
   tags:
     - haproxy-install-from-source
 
