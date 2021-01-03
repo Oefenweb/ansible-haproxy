@@ -2,7 +2,6 @@
 ---
 haproxy_use_ppa: false
 haproxy_version: 1.8
-haproxy_patch: 0
 
 haproxy_use_lua: false
 
