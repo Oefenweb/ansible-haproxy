@@ -8,7 +8,7 @@
 
 - name: install | Extracting HAProxy
   unarchive:
-    src: "http://www.haproxy.org/download/{{ haproxy_src_version }}/src/haproxy-{{ haproxy_src_version }}{{ haproxy_src_patch }}.tar.gz"
+    src: "http://www.haproxy.org/download/{{ haproxy_src_version }}/src/haproxy-{{ haproxy_full_version }}.tar.gz"
     dest: /tmp/
     remote_src: yes
   tags:

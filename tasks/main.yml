@@ -36,7 +36,7 @@
     - configuration
     - haproxy
     - haproxy-install
-  when: (''.join((haproxy_src_version | string, haproxy_src_patch | string)) != haproxy_version_installed.stdout) and (not haproxy_use_ppa)
+  when: (haproxy_full_version != haproxy_version_installed.stdout) and (not haproxy_use_ppa)
 
 - import_tasks: "user.yml"
   tags:
