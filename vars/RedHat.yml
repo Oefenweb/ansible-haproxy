@@ -1,0 +1,7 @@
+haproxy_src_dependencies:
+  - make
+  - gcc
+  - perl
+  - pcre-devel
+  - zlib-devel
+  - openssl-devel

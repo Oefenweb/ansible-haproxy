@@ -1,0 +1,14 @@
+[Unit]
+Description=HAProxy Load Balancer
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Environment="CONFIG=/etc/haproxy/haproxy.cfg" "PIDFILE=/run/haproxy.pid"
+ExecStartPre=/usr/sbin/haproxy -f $CONFIG -c -q
+ExecStart=/usr/sbin/haproxy -f $CONFIG -p $PIDFILE
+ExecReload=/usr/sbin/haproxy -f $CONFIG -c -q
+ExecReload=/bin/kill -USR2 $MAINPID
+KillMode=mixed
+Restart=always
+Type=Simple

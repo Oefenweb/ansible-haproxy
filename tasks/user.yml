@@ -1,0 +1,30 @@
+---
+- name: Gather available groups
+  getent:
+    database: group
+
+- name: Gather available users
+  getent:
+    database: passwd
+
+- name: Add the group '{{ haproxy_global_group }}'
+  group:
+    name: "{{ haproxy_global_group }}"
+    state: present
+  when:
+    - "'{{ haproxy_global_group }}' not in ansible_facts.getent_group"
+  loop: "{{ ansible_facts.getent_group | dict2items }}"
+
+- name: Add the user '{{ haproxy_global_user }}'
+  user:
+    name: "{{ haproxy_global_user }}"
+    group: "{{ haproxy_global_group }}"
+    shell: /sbin/nologin
+    system: yes
+    create_home: no
+    append: yes
+    state: present
+  when:
+    - "'{{ haproxy_global_user }}' not in ansible_facts.getent_group"
+  loop: "{{ ansible_facts.getent_group | dict2items }}"
+  

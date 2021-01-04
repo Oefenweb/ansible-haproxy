@@ -1,11 +1,14 @@
 # defaults file for haproxy
 ---
-haproxy_use_ppa: true
+haproxy_use_ppa: false
 haproxy_version: 1.8
+
+haproxy_use_lua: false
 
 haproxy_dependencies:
   - name: haproxy
     state: latest
+haproxy_src_dependencies: []
 haproxy_install: []
 
 haproxy_restart_handler_state: restarted
@@ -21,11 +24,11 @@ haproxy_global_log:
     level: notice
 haproxy_global_stats:
   sockets:
-    - listen: /run/haproxy/admin.sock
+    - listen: /run/haproxy.sock
   timeout: 30s
 haproxy_global_user: haproxy
 haproxy_global_group: haproxy
-haproxy_global_daemon: true
+haproxy_global_daemon: false
 haproxy_global_ca_base: /etc/ssl/certs
 haproxy_global_crt_base: /etc/ssl/private
 haproxy_global_ssl_default_bind_ciphers: 'kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL'
