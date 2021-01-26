@@ -1,0 +1,67 @@
+# vars file for haproxy
+---
+# global parameters
+haproxy_global_raw_options:
+  - cpu-map 1/all 0-3
+  - server-state-file /tmp/haproxy.state
+
+# default section
+haproxy_default_raw_options:
+  - load-server-state-from-file global
+
+# front-end section
+haproxy_frontend:
+  - name: http
+    bind:
+      - listen: '0.0.0.0:80'
+    mode: http
+    default_backend: webservers
+    reqrep:
+      - search: "^Host:\\ (.*)"
+        string: "Host:\\ foo.com"
+    raw_options:
+      - rspideny ^Content-type:\\.*/ms-word
+
+# back-end section
+haproxy_backend:
+  - name: webservers
+    mode: http
+    balance: roundrobin
+    option:
+      - forwardfor
+      - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
+    server: []
+    raw_options:
+      - rspdeny ^Content-type:\\.*/ms-word
+
+# user-lists section
+haproxy_userlists:
+  - name: test_userlist
+    users:
+      - name: testuser1
+        # secrete
+        password: $6$gLMr0TwOYURPhpXh$onP.5aHZGPE3xufyF8U0/wEKHMz71ECFBx4.uiO7t2ypgyvXS6MNFKHTo16qLttYJYObb0WbXyDmoNRsO4jtq.
+        groups:
+          - test_grp1
+          - test_grp2
+      - name: testuser2
+        insecure_password: secrete
+        groups:
+          - test_grp2
+
+# ACL files
+haproxy_acl_files:
+  - dest: /etc/haproxy/acl/ported-paths.list
+    content:
+      - |
+        ^/users/add_player$
+        ^/users/view.*$
+
+  - dest: /etc/haproxy/acl/api.map
+    content:
+      - |
+        v1.0 be_alpha
+        v1.1 be_bravo
+        v2.5 be_charlie
+        v2.2 be_alpha
+        v1.1 be_delta
