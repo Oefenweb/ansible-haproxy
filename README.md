@@ -8,6 +8,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 #### Requirements
 
 * `python-apt`
+* `software-properties-common` (will be installed)
+* `dirmngr` (will be installed)
 
 #### Variables
 
