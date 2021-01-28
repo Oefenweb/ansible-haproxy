@@ -8,5 +8,11 @@ haproxy_versions_supported:
   - '1.9'
   - '2.0'
   - '2.1'
+  - '2.2'
+  - '2.3'
+
+haproxy_dependencies_pre:
+  - software-properties-common
+  - dirmngr
 
 haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"

@@ -6,14 +6,13 @@ galaxy_info:
   company: Oefenweb.nl B.V.
   description: Set up the latest version of HAProxy in Ubuntu systems
   license: MIT
-  min_ansible_version: 2.6.0
+  min_ansible_version: 2.8.0
   platforms:
     - name: Ubuntu
       versions:
-        - precise
-        - trusty
         - xenial
         - bionic
+        - focal
   galaxy_tags:
     - system
     - clustering
