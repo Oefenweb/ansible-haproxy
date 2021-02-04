@@ -1,6 +1,6 @@
 ## haproxy
 
-[![Build Status](https://travis-ci.org/Oefenweb/ansible-haproxy.svg?branch=master)](https://travis-ci.org/Oefenweb/ansible-haproxy)
+[![CI](https://github.com/Oefenweb/ansible-haproxy/workflows/CI/badge.svg)](https://github.com/Oefenweb/ansible-haproxy/actions?query=workflow%3ACI)
 [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-haproxy-blue.svg)](https://galaxy.ansible.com/Oefenweb/haproxy)
 
 Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu systems.
@@ -8,12 +8,14 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 #### Requirements
 
 * `python-apt`
+* `software-properties-common` (will be installed)
+* `dirmngr` (will be installed)
 
 #### Variables
 
 * `haproxy_use_ppa`: [default: `true`]: Whether or not to add the PPA (for installation)
 
-* `haproxy_version`: [default: `1.8`]: Version to install (e.g. `1.5`, `1.6`, `1.7`, `1.8`, `1.9`, `2.0`, `2.1`)
+* `haproxy_version`: [default: `2.0`]: Version to install (e.g. `1.5`, `1.6`, `1.7`, `1.8`, `1.9`, `2.0`, `2.1`, `2.2`, `2.3`)
 
 * `haproxy_install`: [default: `[]`]: Additional packages to install (e.g. `socat`)
 
@@ -92,8 +94,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.bind.{n}.listen`: [required]: Defines one or several listening addresses and/or ports (e.g. `0.0.0.0:1936`)
 * `haproxy_listen.{n}.bind.{n}.param`: [optional]: A list of parameters common to this bind declarations
 * `haproxy_listen.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
-* `haproxy_listen.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_listen.{n}.mode`: [optional]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_listen.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
+* `haproxy_listen.{n}.hash_type`: [optional]: The hashing type to be used for balancing (e.g. `consistent`)
 * `haproxy_listen.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_listen.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_listen.{n}.option`: [optional]: Options to set (e.g. `[dontlog-normal]`)
@@ -103,7 +106,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
 * `haproxy_listen.{n}.stick`: [optional]: Stick declarations
 * `haproxy_listen.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
-* `haproxy_listen.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
+* `haproxy_listen.{n}.stick.{n}.stick_on`: [optional]: Define a request pattern to associate a user to a server (e.g. `src`)
 * `haproxy_listen.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_listen.{n}.timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
 * `haproxy_listen.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
@@ -206,7 +209,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.bind.{n}.listen`: [required]: Defines one or several listening addresses and/or ports (e.g. `0.0.0.0:443`)
 * `haproxy_frontend.{n}.bind.{n}.param`: [optional]: A list of parameters common to this bind declarations
 * `haproxy_frontend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
-* `haproxy_frontend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_frontend.{n}.mode`: [optional]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_frontend.{n}.maxconn`: [optional]: Fix the maximum number of concurrent connections
 * `haproxy_frontend.{n}.logformat`: [optional]: Specifies the log format string to use for traffic logs (e.g. `'"%{+Q}o\ %t\ %s\ %{-Q}r"'`)
 * `haproxy_frontend.{n}.stick`: [optional]: Stick declarations
@@ -293,7 +296,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.name`: [required]: The name of the section (e.g. `webservers`)
 * `haproxy_backend.{n}.description`: [optional]: A description of the section (e.g. `Back-end with all (Apache) webservers`)
 * `haproxy_backend.{n}.bind_process`:  [optional]: Limits the declaration to a certain set of processes numbers (e.g. `[all]`, `[1]`, `[2 ,3, 4]`)
-* `haproxy_backend.{n}.mode`: [required]: Set the running mode or protocol of the section (e.g. `http`)
+* `haproxy_backend.{n}.mode`: [optional]: Set the running mode or protocol of the section (e.g. `http`)
 * `haproxy_backend.{n}.balance`: [required]: The load balancing algorithm to be used (e.g. `roundrobin`)
 * `haproxy_backend.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
@@ -301,7 +304,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
 * `haproxy_backend.{n}.stick`: [optional]: Stick declarations
 * `haproxy_backend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
-* `haproxy_backend.{n}.stick.{n}.stick_on`: [required]: Define a request pattern to associate a user to a server (e.g. `src`)
+* `haproxy_backend.{n}.stick.{n}.stick_on`: [optional]: Define a request pattern to associate a user to a server (e.g. `src`)
+* `haproxy_backend.{n}.hash_type`: [optional]: The hashing type to be used for balancing (e.g. `consistent`)
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[forceclose]`)
 * `haproxy_backend.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
 * `haproxy_backend.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
@@ -380,6 +384,10 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server_template.fqdn`: [required]: A FQDN for all the servers this template initializes
 * `haproxy_backend.{n}.server_template.port`: [optional]: Port specification
 * `haproxy_backend.{n}.server_template.{n}.param`: [optional]: A list of parameters for this server template
+* `haproxy_backend.{n}.server_dynamic`: [optional]: Dynamic backend server declaration
+* `haproxy_backend.{n}.server_dynamic.{n}.group`: [required]: An ansible group containing hosts to be added as backend servers. Uses `inventory_hostname` for name and either `ansible_host` (if defined) or `inventory_hostname` for the listen address of each host.
+* `haproxy_backend.{n}.server_dynamic.{n}.listen_port`: [optional]: The port to use with each dynamic backend (translates to `listen <ansible_host/inventory_hostname>:<listen_port>`).
+* `haproxy_backend.{n}.server_dynamic.{n}.param`: [optional]: A list of parameters to apply on each backend server.
 * `haproxy_backend.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation.
 * `haproxy_backend.{n}.retries`: [optional]: Number of retries to perform on a server after a connection failure
 

@@ -10,9 +10,14 @@ listen {{ listen.name }}
 {% if listen.bind_process is defined %}
   bind-process {{ listen.bind_process | join(' ') }}
 {% endif %}
+{% if listen.mode is defined %}
   mode {{ listen.mode }}
+{% endif %}
 {% if listen.balance is defined %}
   balance {{ listen.balance }}
+{% endif %}
+{% if listen.hash_type is defined %}
+  hash-type {{ listen.hash_type }}
 {% endif %}
 {% if listen.maxconn is defined %}
   maxconn {{ listen.maxconn }}
@@ -22,7 +27,9 @@ listen {{ listen.name }}
 {% endif %}
 {% for stick in listen.stick | default([]) %}
   stick-table {{ stick.table }}
+{% if stick.stick_on is defined %}
   stick on {{ stick.stick_on }}
+{% endif %}
 {% endfor %}
 {% if listen.source is defined %}
   source {{ listen.source }}

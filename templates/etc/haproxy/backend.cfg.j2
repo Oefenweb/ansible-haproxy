@@ -6,7 +6,9 @@ backend {{ backend.name }}
 {% if backend.bind_process is defined %}
   bind-process {{ backend.bind_process | join(' ') }}
 {% endif %}
+{% if backend.mode is defined %}
   mode {{ backend.mode }}
+{% endif %}
   balance {{ backend.balance }}
 {% if backend.source is defined %}
   source {{ backend.source }}
@@ -28,7 +30,9 @@ backend {{ backend.name }}
 {% endfor %}
 {% for stick in backend.stick | default([]) %}
   stick-table {{ stick.table }}
+{% if stick.stick_on is defined %}
   stick on {{ stick.stick_on }}
+{% endif %}
 {% endfor %}
 {% for option in backend.no_option | default([]) %}
   no option {{ option }}
@@ -42,6 +46,9 @@ backend {{ backend.name }}
 {% for timeout in backend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
+{% if backend.hash_type is defined %}
+  hash-type {{ backend.hash_type }}
+{% endif %}
 {% for action in ['reqadd', 'rspadd'] %}
 {% for params in backend[action] | default([]) %}
   {{ action }} {{ params.string }}{% if params.cond is defined %} {{ params.cond }}{% endif %}
@@ -103,6 +110,13 @@ backend {{ backend.name }}
 {% for server in backend.server | default([]) %}
   server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
 
+{% endfor %}
+{% for server_dynamic in backend.server_dynamic | default([]) %}
+{% for server_name in groups[server_dynamic.group] %}
+{% set server = hostvars[server_name] %}
+  server {{ server.inventory_hostname }} {% if server.ansible_host is defined %}{{ server.ansible_host }}{% else %}{{ server_name }}{% endif %}{% if server_dynamic.listen_port is defined %}:{{ server_dynamic.listen_port }}{% endif %}{% for param in server_dynamic.param | default([]) %} {{ param }}{% endfor %}
+
+{% endfor %}
 {% endfor %}
 {% if backend.server_template is defined %}
   server-template {{ backend.server_template.name }} {{ backend.server_template.num}} {{ backend.server_template.fqdn }}{% if backend.server_template.port is defined %}:{{ backend.server_template.port }}{% endif %} {% for param in backend.server_template.param | default([]) %} {{ param }}{% endfor %}

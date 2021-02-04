@@ -1,10 +1,19 @@
 # tasks file for haproxy
 ---
+- name: install | dependencies (pre)
+  apt:
+    name: "{{ haproxy_dependencies_pre }}"
+    state: "{{ apt_install_state | default('latest') }}"
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  tags:
+    - haproxy-repository-install-dependencies
+
 - name: install | add repository from PPA and install its signing key
   apt_repository:
     repo: "{{ haproxy_ppa }}"
     update_cache: true
-  when: haproxy_use_ppa
+  when: haproxy_use_ppa | bool
   tags:
     - haproxy-install-add-repository
 
@@ -18,8 +27,7 @@
 
 - name: install | additional
   apt:
-    name: "{{ item }}"
+    name: "{{ haproxy_install }}"
     state: "{{ apt_install_state | default('latest') }}"
-  with_items: "{{ haproxy_install }}"
   tags:
     - haproxy-install-additional
