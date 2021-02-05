@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+#
+# {{ ansible_managed }}
+#
+# set -x;
+set -e;
+set -o pipefail;
+#
+thisFile="$(readlink -f "${0}")";
+thisFilePath="$(dirname "${thisFile}")";
+
+for path in $(ls -1d {{ haproxy_letsencrypt_ssl_src_path }}/*/); do
+  cert="$(basename ${path})";
+
+  prefix="100";
+  removePrefix="000";
+
+  if [ "${cert}" == "{{ haproxy_letsencrypt_ssl_first_cert }}" ]; then
+    prefix="000";
+    removePrefix="100";
+  fi
+
+  ocspUrl="$(openssl x509 -noout -ocsp_uri -in ${path}{{ haproxy_letsencrypt_ssl_cert_name }})";
+
+  openssl ocsp -no_nonce -respout "{{ haproxy_global_crt_base }}/${prefix}-${cert}.ocsp" \
+    -issuer "${path}{{ haproxy_letsencrypt_ssl_chain_name }}" \
+    -verify_other "${path}{{ haproxy_letsencrypt_ssl_chain_name }}" \
+    -cert "${path}{{ haproxy_letsencrypt_ssl_cert_name }}" \
+    -url "${ocspUrl}";
+
+  rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.ocsp";
+done
+
+{% if ansible_service_mgr == 'systemd' %}
+systemctl reload haproxy;
+{% else %}
+service haproxy reload;
+{% endif %}

@@ -80,6 +80,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_default_raw_options`: [default: `[]`]: Additional arbitrary lines to insert in the section
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
+* `haproxy_ssl_map.{n}.state`: [default: `present`]: Whether to ensure the file is present or absent
 * `haproxy_ssl_map.{n}.src`: The local path of the file to copy, can be absolute or relative (e.g. `../../../files/haproxy/etc/haproxy/ssl/star-example-com.pem`)
 * `haproxy_ssl_map.{n}.dest`: The remote path of the file to copy (e.g. `/etc/haproxy/ssl/star-example-com.pem`)
 * `haproxy_ssl_map.{n}.owner`: The name of the user that should own the file (optional, default `root`)
@@ -421,6 +422,22 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_acl_files`: [default: `[]`]: ACL file declarations
 * `haproxy_acl_files.{n}.dest`: [required]: The remote path of the file (e.g. `/etc/haproxy/acl/api.map`)
 * `haproxy_acl_files.{n}.content`: [default: `[]`]: The content (lines) of the file (e.g. `['v1.0 be_alpha', 'v1.1 be_bravo']`)
+
+* `haproxy_letsencrypt_ssl_deploy_template`: [default: `usr/local/bin/haproxy-letsencrypt-ssl-deploy.j2`]: Template to deploy SSL certificates after creation and renewal by Letsencrypt
+* `haproxy_letsencrypt_ssl_first_cert`: [default: `inventory_hostname`]: Name of the certificate that should be the first
+* `haproxy_letsencrypt_ssl_src_path`: [default: `/etc/letsencrypt/live`]: Path to the directory with the certificates (in directories)
+* `haproxy_letsencrypt_ssl_fullchain_name`: [default: `fullchain.pem`]: Filename of the fullchain certificate
+* `haproxy_letsencrypt_ssl_chain_name`: [default: `chain.pem`]: Filename of the chain certificate
+* `haproxy_letsencrypt_ssl_privkey_name`: [default: `privkey.pem`]: Filename of the private key
+* `haproxy_letsencrypt_ssl_cert_name`: [default: `cert.pem`]: Filename of the certificate
+* `haproxy_letsencrypt_ocsp_deploy_template`: [default: `usr/local/bin/haproxy-letsencrypt-ocsp-deploy.j2`]: Template to deploy OCSP certificates after creation, renewal (by Letsencrypt) and daily
+* `haproxy_letsencrypt_ocsp_deploy_job`: [optional]: OCSP deploy job (scheduled by `cron.d`)
+* `haproxy_letsencrypt_ocsp_deploy_job.state`: [default: `absent`]: Whether to ensure the job is present or absent
+* `haproxy_letsencrypt_ocsp_deploy_job.day`: [default: `*`]: Day of the month the job should run (`1-31`, `*`, `*/2`)
+* `haproxy_letsencrypt_ocsp_deploy_job.hour`: [default: `0`]: Hour when the job should run (e.g. `0-23`, `*`, `*/2`)
+* `haproxy_letsencrypt_ocsp_deploy_job.minute`: [default: `*`]: Minute when the job should run (e.g. `0-59`, `*`, `*/2`)
+* `haproxy_letsencrypt_ocsp_deploy_job.month`: [default: `*`]: Month of the year the job should run (e.g `1-12`, `*`, `*/2`)
+* `haproxy_letsencrypt_ocsp_deploy_job.weekday`: [default: `*`]: Day of the week that the job should run (e.g. `0-6` for Sunday-Saturday, `*`)
 
 ## Dependencies
 

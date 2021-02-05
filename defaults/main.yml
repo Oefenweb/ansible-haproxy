@@ -87,3 +87,14 @@ haproxy_resolvers: []
 
 # ACL files
 haproxy_acl_files: []
+
+# Letsencrypt (SSL/OCSP deploy)
+haproxy_letsencrypt_ssl_deploy_template: usr/local/bin/haproxy-letsencrypt-ssl-deploy.j2
+haproxy_letsencrypt_ssl_first_cert: "{{ inventory_hostname }}"
+haproxy_letsencrypt_ssl_src_path: /etc/letsencrypt/live
+haproxy_letsencrypt_ssl_fullchain_name: fullchain.pem
+haproxy_letsencrypt_ssl_chain_name: chain.pem
+haproxy_letsencrypt_ssl_privkey_name: privkey.pem
+haproxy_letsencrypt_ssl_cert_name: cert.pem
+haproxy_letsencrypt_ocsp_deploy_template: usr/local/bin/haproxy-letsencrypt-ocsp-deploy.j2
+haproxy_letsencrypt_ocsp_deploy_job: {}

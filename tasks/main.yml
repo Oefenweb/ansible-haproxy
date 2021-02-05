@@ -33,6 +33,12 @@
     - haproxy
     - haproxy-configuration
 
+- import_tasks: letsencrypt.yml
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-letsencrypt
+
 - name: start and enable service
   service:
     name: haproxy

@@ -16,3 +16,7 @@ haproxy_dependencies_pre:
   - dirmngr
 
 haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
+
+haproxy_letsencrypt_ssl_deploy: /usr/local/bin/haproxy-letsencrypt-ssl-deploy
+
+haproxy_letsencrypt_ocsp_deploy: /usr/local/bin/haproxy-letsencrypt-ocsp-deploy
