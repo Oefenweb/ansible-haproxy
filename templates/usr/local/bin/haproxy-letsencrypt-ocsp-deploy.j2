@@ -22,13 +22,13 @@ for path in $(ls -1d {{ haproxy_letsencrypt_ssl_src_path }}/*/); do
 
   ocspUrl="$(openssl x509 -noout -ocsp_uri -in ${path}{{ haproxy_letsencrypt_ssl_cert_name }})";
 
-  openssl ocsp -no_nonce -respout "{{ haproxy_global_crt_base }}/${prefix}-${cert}.ocsp" \
+  openssl ocsp -no_nonce -respout "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem.ocsp" \
     -issuer "${path}{{ haproxy_letsencrypt_ssl_chain_name }}" \
     -verify_other "${path}{{ haproxy_letsencrypt_ssl_chain_name }}" \
     -cert "${path}{{ haproxy_letsencrypt_ssl_cert_name }}" \
     -url "${ocspUrl}";
 
-  rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.ocsp";
+  rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.pem.ocsp";
 done
 
 {% if ansible_service_mgr == 'systemd' %}
