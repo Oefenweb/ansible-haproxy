@@ -28,6 +28,10 @@ for path in $(ls -1d {{ haproxy_letsencrypt_ssl_src_path }}/*/); do
     -cert "${path}{{ haproxy_letsencrypt_ssl_cert_name }}" \
     -url "${ocspUrl}";
 
+  chown --reference="{{ haproxy_global_crt_base }}" "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem.ocsp";
+  chmod --reference="{{ haproxy_global_crt_base }}" "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem.ocsp";
+  chmod -x "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem.ocsp";
+
   rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.pem.ocsp";
 done
 
