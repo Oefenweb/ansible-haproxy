@@ -35,6 +35,8 @@ for path in $(ls -1d {{ haproxy_letsencrypt_ssl_src_path }}/*/); do
   rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.pem.ocsp";
 done
 
+find "{{ haproxy_global_crt_base }}" -mindepth 1 -name "*.ocsp" -mtime +0 -delete;
+
 {% if ansible_service_mgr == 'systemd' %}
 systemctl reload haproxy;
 {% else %}
