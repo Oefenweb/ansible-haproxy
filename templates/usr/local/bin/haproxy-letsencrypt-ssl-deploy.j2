@@ -22,6 +22,10 @@ for path in $(ls -1d {{ haproxy_letsencrypt_ssl_src_path }}/*/); do
 
   cat "${path}{{ haproxy_letsencrypt_ssl_fullchain_name }}" "${path}{{ haproxy_letsencrypt_ssl_privkey_name }}" > "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem";
 
+  chown --reference="{{ haproxy_global_crt_base }}" "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem";
+  chmod --reference="{{ haproxy_global_crt_base }}" "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem";
+  chmod -x "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem";
+
   rm -f "{{ haproxy_global_crt_base }}/${removePrefix}-${cert}.pem";
 done
 
