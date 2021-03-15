@@ -1,4 +1,4 @@
-# vars file for haproxy
+# vars file
 ---
 # global parameters
 haproxy_global_raw_options:

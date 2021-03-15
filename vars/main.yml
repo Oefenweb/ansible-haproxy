@@ -1,4 +1,4 @@
-# vars file for haproxy
+# vars file
 ---
 haproxy_versions_supported:
   - '1.5'

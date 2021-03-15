@@ -1,4 +1,4 @@
-# test file for haproxy
+# test file
 ---
 - hosts: localhost
   connection: local

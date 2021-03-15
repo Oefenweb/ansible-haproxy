@@ -1,4 +1,4 @@
-# handlers file for haproxy
+# handlers file
 ---
 - name: restart haproxy
   service:

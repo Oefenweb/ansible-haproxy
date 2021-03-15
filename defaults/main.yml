@@ -1,4 +1,4 @@
-# defaults file for haproxy
+# defaults file
 ---
 haproxy_use_ppa: true
 haproxy_version: 2.0

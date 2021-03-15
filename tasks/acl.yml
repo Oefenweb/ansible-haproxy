@@ -1,4 +1,4 @@
-# tasks file for haproxy
+# tasks file
 ---
 - name: acl | create directories
   file:
