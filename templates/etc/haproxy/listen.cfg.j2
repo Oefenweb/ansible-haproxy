@@ -40,6 +40,9 @@ listen {{ listen.name }}
 {% for option in listen.no_option | default([])  %}
   no option {{ option }}
 {% endfor %}
+{% if listen.logformat is defined %}
+  log-format {{ listen.logformat }}
+{% endif %}
 {% if listen.no_log | default(false) == true %}
   no log
 {% endif %}
