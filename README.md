@@ -203,6 +203,8 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular listen entry.
 * `haproxy_listen.{n}.raw_options`: [default: `[]`]: Additional arbitrary lines to insert in the section
 
+* `haproxy_map.{n}.name|value`: [optional]: Add map in /etc/haproxy/{n}.map
+
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
 * `haproxy_frontend.{n}.name`: [required]: The name of the section (e.g. `https`)
 * `haproxy_frontend.{n}.description`: [optional]: A description of the section (e.g. `Front-end for all HTTPS traffic`)
