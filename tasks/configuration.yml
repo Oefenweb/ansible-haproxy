@@ -1,4 +1,5 @@
 # tasks file
+---
 - name: Generate map files from templates
   template:
     src: "etc/haproxy/map.map.j2"
@@ -10,7 +11,7 @@
   tags:
     - haproxy-configuration-update-file
 
----
+
 - name: configuration | update file
   template:
     src: "{{ haproxy_conf_template }}"
