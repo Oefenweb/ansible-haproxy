@@ -3,11 +3,11 @@
 - name: configuration | update file
   template:
     src: "{{ haproxy_conf_template }}"
-    dest: /etc/haproxy/haproxy.cfg
+    dest: "{{ haproxy_conf_loc }}"
     owner: root
     group: root
     mode: 0640
-    validate: 'haproxy -f %s -c'
+    validate: "haproxy -f %s -c {{ haproxy_conf_loc }}"
   notify: restart haproxy
   tags:
     - haproxy-configuration-update-file

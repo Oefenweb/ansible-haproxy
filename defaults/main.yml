@@ -11,6 +11,7 @@ haproxy_install: []
 haproxy_restart_handler_state: restarted
 
 haproxy_conf_template: "etc/haproxy/haproxy.cfg.j2"
+haproxy_conf_loc: "/etc/haproxy/haproxy.cfg"
 
 # global section
 haproxy_global_log:
