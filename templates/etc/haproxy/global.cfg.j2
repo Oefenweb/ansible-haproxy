@@ -69,7 +69,7 @@
 {% if haproxy_global_ssl_mode_async | default(false) | bool %}
   ssl-mode-async
 {% endif %}
-{% if haproxy_version < 2.3 %}
+{% if haproxy_version is version('2.5', '<') %}
   nbproc {{ haproxy_global_nbproc }}
 {% endif %}
 {% if haproxy_global_nbthread is defined %}
