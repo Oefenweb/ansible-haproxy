@@ -1,5 +1,17 @@
 # tasks file
 ---
+- name: Generate map files from templates
+  template:
+    src: "etc/haproxy/map.map.j2"
+    dest: "/etc/haproxy/{{ item.key }}.map"
+  with_items: "{{ haproxy_map | dict2items }}"
+  when: haproxy_map is defined
+  notify:
+    - restart haproxy
+  tags:
+    - haproxy-configuration-update-file
+
+
 - name: configuration | update file
   template:
     src: "{{ haproxy_conf_template }}"
