@@ -1,0 +1,14 @@
+{% if haproxy_program is defined %}
+{% for program in haproxy_program %}
+program {{ program.name }}
+{% if program.command is defined %}
+  command {{ program.command }}
+{% endif %}
+{% for option in program.option | default([]) %}
+  option {{ option }}
+{% endfor %}
+{% for option in program.no_option | default([]) %}
+  no option {{ option }}
+{% endfor %}
+{% endfor %}
+{% endif %}
