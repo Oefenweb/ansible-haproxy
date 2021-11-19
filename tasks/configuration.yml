@@ -1,5 +1,14 @@
 # tasks file
 ---
+- name: configuration | fail
+  fail:
+    msg: "haproxy_global_nbproc is deprecated"
+  when:
+    - haproxy_version is version('2.3', '>=') and haproxy_version is version('2.5', '<')
+    - haproxy_global_nbproc > 1
+  tags:
+    - haproxy-configuration-warn-or-fail
+
 - name: configuration | update file
   template:
     src: "{{ haproxy_conf_template }}"
