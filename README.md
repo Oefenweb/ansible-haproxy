@@ -440,6 +440,18 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_letsencrypt_ocsp_deploy_job.month`: [default: `*`]: Month of the year the job should run (e.g `1-12`, `*`, `*/2`)
 * `haproxy_letsencrypt_ocsp_deploy_job.weekday`: [default: `*`]: Day of the week that the job should run (e.g. `0-6` for Sunday-Saturday, `*`)
 
+* `haproxy_cache`: [default: `[]`]: Caching declarations
+* `haproxy_cache.{n}.name`: [default: [required]]: The name of the cache
+* `haproxy_cache.{n}.total_max_size`: [default: []]: Max size (in MB) of the cache
+* `haproxy_cache.{n}.max_object_size`: [default: []]: Max size (in MB) of any single object in the cache
+* `haproxy_cache.{n}.max_age`: [default: []]: Max age (in seconds) to hold an item in cache
+
+* `haproxy_program`: [default: `[]`]: Program declarations
+* `haproxy_program.{n}.name`: [default: [required]]: The name of the program
+* `haproxy_program.{n}.command`: [default: `[]`]: Command to execute
+* `haproxy_program.{n}.option`: [default: `[]`]: Options to enable
+* `haproxy_program.{n}.no_option`: [default: `[]`]: Options to inverse/disable 
+
 ## Dependencies
 
 None
