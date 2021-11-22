@@ -112,8 +112,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.capture.type`: [required]: What to capture (`cookie`, `request header`, `response header`)
 * `haproxy_listen.{n}.capture.name`: [required]: Name of the header or cookie to capture
 * `haproxy_listen.{n}.capture.length`: [required]: Maximum number of characters to capture and report in the logs
-* `haproxy_listen.{n}.filter`: [optional]: Dictionary of content filters to apply to this section
-* `haproxy_listen.{n}.filter.{name}`: [required]: One or more filter `name: param` entries to apply
+* `haproxy_listen.{n}.filter`: [optional]: Content filters to apply to this section
+* `haproxy_listen.{n}.filter.{n}.name`: [required]: The filter to apply
+* `haproxy_listen.{n}.filter.{n}.params`: [optional]: Parameters for the filter
 * `haproxy_listen.{n}.http_request`: [optional]: Access control for Layer 7 requests
 * `haproxy_listen.{n}.http_request.{n}.action`: [required]: The rules action (e.g. `add-header`)
 * `haproxy_listen.{n}.http_request.{n}.param`: [optional]: The complete line to be added (e.g. `X-Forwarded-Proto https`)
