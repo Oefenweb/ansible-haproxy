@@ -81,12 +81,12 @@
 {% for option in haproxy_global_option | default([]) %}
   {{ option }}
 {% endfor %}
+{% for line in haproxy_global_raw_options | default([]) %}
+  {{ line }}
+{% endfor %}
 {% for peers in haproxy_global_peers | default([]) %}
 peers {{ peers.name }}
 {% for peer in peers.peers | default([]) %}
   peer {{ peer.name }} {{ peer.listen }}
 {% endfor %}
-{% endfor %}
-{% for line in haproxy_global_raw_options | default([]) %}
-  {{ line }}
 {% endfor %}
