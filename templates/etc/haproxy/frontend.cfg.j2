@@ -34,6 +34,9 @@ frontend {{ frontend.name }}
 {% for timeout in frontend.timeout | default([]) %}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
+{% for filter in frontend.filter | default([]) %}
+  filter {{ filter.name }}{{ filter.params is defined | ternary([''] + [filter.params], []) | join(' ') }}
+{% endfor %}
 {% for acl in frontend.acl | default([]) %}
   acl {{ acl.string }}
 {% endfor %}
