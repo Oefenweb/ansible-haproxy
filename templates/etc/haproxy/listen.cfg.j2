@@ -53,7 +53,7 @@ listen {{ listen.name }}
   timeout {{ timeout.type }} {{ timeout.timeout }}
 {% endfor %}
 {% for filter in listen.filter | default([]) %}
-  filter {{ filter.name }}{{ filter.params is defined | ternary([''] + [filter.params], []) | join(' ') }}
+  filter {{ filter.name }}{% for param in filter.param | default([]) %} {{ param }}{% endfor %}
 {% endfor %}
 {% for acl in listen.acl | default([]) %}
   acl {{ acl.string }}

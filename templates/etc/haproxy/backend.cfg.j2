@@ -26,7 +26,7 @@ backend {{ backend.name }}
   cookie {{ backend.cookie }}
 {% endif %}
 {% for filter in backend.filter | default([]) %}
-  filter {{ filter.name }}{{ filter.params is defined | ternary([''] + [filter.params], []) | join(' ') }}
+  filter {{ filter.name }}{% for param in filter.param | default([]) %} {{ param }}{% endfor %}
 {% endfor %}
 {% for acl in backend.acl | default([]) %}
   acl {{ acl.string }}

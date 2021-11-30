@@ -1,5 +1,4 @@
-{% if cache is defined %}
-{% for cache in haproxy_cache %}
+{% for cache in haproxy_cache | default([]) %}
 cache {{ cache.name }}
 {% if cache.total_max_size is defined %}
   total-max-size {{ cache.total_max_size }}
@@ -11,4 +10,3 @@ cache {{ cache.name }}
   max-age {{ cache.max_age }}
 {% endif %}
 {% endfor %}
-{% endif %}

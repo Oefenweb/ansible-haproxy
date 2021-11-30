@@ -1,5 +1,4 @@
-{% if haproxy_program is defined %}
-{% for program in haproxy_program %}
+{% for program in haproxy_program | default([]) %}
 program {{ program.name }}
 {% if program.command is defined %}
   command {{ program.command }}
@@ -11,4 +10,3 @@ program {{ program.name }}
   no option {{ option }}
 {% endfor %}
 {% endfor %}
-{% endif %}
