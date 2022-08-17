@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: install | dependencies (pre)
-  apt:
+  ansible.builtin.apt:
     name: "{{ haproxy_dependencies_pre }}"
     state: "{{ apt_install_state | default('latest') }}"
     update_cache: true
@@ -10,7 +10,7 @@
     - haproxy-repository-install-dependencies
 
 - name: install | add repository from PPA and install its signing key
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: "{{ haproxy_ppa }}"
     update_cache: true
   when: haproxy_use_ppa | bool
@@ -18,7 +18,7 @@
     - haproxy-install-add-repository
 
 - name: install | dependencies
-  apt:
+  ansible.builtin.apt:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
   with_items: "{{ haproxy_dependencies }}"
@@ -26,7 +26,7 @@
     - haproxy-install-dependencies
 
 - name: install | additional
-  apt:
+  ansible.builtin.apt:
     name: "{{ haproxy_install }}"
     state: "{{ apt_install_state | default('latest') }}"
   tags:
