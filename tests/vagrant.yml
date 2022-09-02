@@ -5,6 +5,6 @@
   become: true
   pre_tasks:
     - name: include vars
-      include_vars: "{{ playbook_dir }}/vars/main.yml"
+      ansible.builtin.include_vars: "{{ playbook_dir }}/vars/main.yml"
   roles:
     - ../../

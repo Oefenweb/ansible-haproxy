@@ -23,7 +23,9 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies
-        run: pip install ansible-lint[community,yamllint]
+        run: |
+          pip install ansible-lint
+          ansible-galaxy install -r requirements.yml
 
       - name: Lint code
         run: |
@@ -43,11 +45,7 @@ jobs:
       matrix:
         include:
           - distro: ubuntu1604
-            ansible-version: '>=2.9, <2.10'
-            molecule_version: "==3.0.8"
-          - distro: ubuntu1604
             ansible-version: '>=2.10, <2.11'
-            molecule_version: "==3.2.4"
           - distro: ubuntu1604
           - distro: ubuntu1804
           - distro: ubuntu2004
@@ -64,7 +62,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies
-        run: pip install 'ansible${{ matrix.ansible-version }}' 'molecule[docker]${{ matrix.molecule_version }}' docker
+        run: pip install 'ansible${{ matrix.ansible-version }}' molecule[docker] docker
 
       - name: Run Molecule tests
         run: |
