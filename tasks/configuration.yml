@@ -1,6 +1,6 @@
 # tasks file
 ---
-- name: configuration | warn or fail
+- name: configuration | warn or fail  # noqa: ignore-errors
   ansible.builtin.fail:
     msg: "haproxy_global_nbproc is deprecated"
   ignore_errors: "{{ haproxy_version is version('2.5', '<') }}"
