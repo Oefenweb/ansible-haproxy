@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: letsencrypt | copy SSL deploy script
-  template:
+  ansible.builtin.template:
     src: "{{ haproxy_letsencrypt_ssl_deploy_template }}"
     dest: "{{ haproxy_letsencrypt_ssl_deploy }}"
     owner: root
@@ -11,7 +11,7 @@
     - haproxy-letsencrypt-ssl-deploy
 
 - name: letsencrypt | copy OCSP deploy script
-  template:
+  ansible.builtin.template:
     src: "{{ haproxy_letsencrypt_ocsp_deploy_template }}"
     dest: "{{ haproxy_letsencrypt_ocsp_deploy }}"
     owner: root
@@ -21,7 +21,7 @@
     - haproxy-letsencrypt-ocsp-deploy
 
 - name: letsencrypt | configure (cron) job for OCSP deploy
-  cron:
+  ansible.builtin.cron:
     name: haproxy-letsencrypt-ocsp-deploy
     job: "{{ haproxy_letsencrypt_ocsp_deploy }}"
     state: "{{ haproxy_letsencrypt_ocsp_deploy_job.state | default('absent') }}"

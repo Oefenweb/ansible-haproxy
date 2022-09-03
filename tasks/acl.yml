@@ -1,7 +1,7 @@
 # tasks file
 ---
 - name: acl | create directories
-  file:
+  ansible.builtin.file:
     path: "{{ item.dest | dirname }}"
     state: directory
     owner: "{{ item.owner | default('root') }}"
@@ -12,7 +12,7 @@
     - haproxy-acl-create-directories
 
 - name: acl | update files
-  template:
+  ansible.builtin.template:
     src: etc/haproxy/acl.j2
     dest: "{{ item.dest }}"
     owner: "{{ item.owner | default('root') }}"
