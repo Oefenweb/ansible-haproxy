@@ -9,31 +9,36 @@
     - haproxy
     - haproxy-check-version-support
 
-- ansible.builtin.import_tasks: install.yml
+- name: install
+  ansible.builtin.import_tasks: install.yml
   tags:
     - configuration
     - haproxy
     - haproxy-install
 
-- ansible.builtin.import_tasks: certificates.yml
+- name: certificates
+  ansible.builtin.import_tasks: certificates.yml
   tags:
     - configuration
     - haproxy
     - haproxy-certificates
 
-- ansible.builtin.import_tasks: acl.yml
+- name: acl
+  ansible.builtin.import_tasks: acl.yml
   tags:
     - configuration
     - haproxy
     - haproxy-acl
 
-- ansible.builtin.import_tasks: configuration.yml
+- name: configuration
+  ansible.builtin.import_tasks: configuration.yml
   tags:
     - configuration
     - haproxy
     - haproxy-configuration
 
-- ansible.builtin.import_tasks: letsencrypt.yml
+- name: letsencrypt
+  ansible.builtin.import_tasks: letsencrypt.yml
   tags:
     - configuration
     - haproxy
