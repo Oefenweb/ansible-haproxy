@@ -1,6 +1,6 @@
 # test file
 ---
-- hosts: all
+- name: Test | Remote
   remote_user: vagrant
   become: true
   pre_tasks:

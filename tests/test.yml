@@ -1,6 +1,6 @@
 # test file
 ---
-- hosts: localhost
+- name: Test | Local
   connection: local
   become: true
   pre_tasks:
