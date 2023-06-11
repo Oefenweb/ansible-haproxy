@@ -62,7 +62,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install test dependencies
-        run: pip install 'ansible${{ matrix.ansible-version }}' molecule[docker] docker
+        run: pip install 'ansible${{ matrix.ansible-version }}' molecule-plugins[docker] docker
 
       - name: Run Molecule tests
         run: |
