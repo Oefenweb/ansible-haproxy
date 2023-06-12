@@ -20,7 +20,13 @@ backend {{ backend.name }}
   no option {{ option }}
 {% endfor %}
 {% if backend.http_check is defined %}
+{% if backend.http_check is string %}
   http-check {{ backend.http_check }}
+{% else %}
+{% for http_check in backend.http_check %}
+  http-check {{ http_check }}
+{% endfor %}
+{% endif %}
 {% endif %}
 {% if backend.cookie is defined %}
   cookie {{ backend.cookie }}
