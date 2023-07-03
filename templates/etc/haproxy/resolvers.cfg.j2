@@ -5,15 +5,15 @@ resolvers {{ resolver.name }}
   {% endfor %}
   {% if resolver.accepted_payload_size is defined -%}
   accepted_payload_size {{ resolver.accepted_payload_size }}
-  {% endif %}
+  {% endif -%}
   {% if resolver.parse_resolv_conf is defined and resolver.parse_resolv_conf -%}
   parse-resolv-conf
-  {% endif %}
+  {% endif -%}
   {% if resolver.hold is defined -%}
     {% for status, period in resolver.hold.items() | sort -%}
       hold {{ status }} {{ period }}
-    {%- endfor %}
-  {%- endif %}
+    {% endfor %}
+  {%- endif -%}
   {% if resolver.resolve_retries is defined -%}
   resolve_retries {{ resolver.resolve_retries }}
   {% endif %}
