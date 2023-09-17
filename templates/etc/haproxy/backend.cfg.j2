@@ -141,6 +141,9 @@ backend {{ backend.name }}
 {% for errorfile in backend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
 {% endfor %}
+{% for email_alert in backend.email_alert | default([]) %}
+  email-alert {{ email_alert.code }} {{ email_alert.value }}
+{% endfor %}
 {% for line in backend.raw_options | default([]) %}
   {{ line }}
 {% endfor %}

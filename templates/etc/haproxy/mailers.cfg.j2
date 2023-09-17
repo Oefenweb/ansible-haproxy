@@ -1,0 +1,6 @@
+{% for mailer in haproxy_mailers | default([]) %}
+mailers {{ mailer.name }}
+{% for server in mailer.servers | default([]) %}
+  mailer {{ server.name }} {{ server.host }}:{{ server.port | default(25) }}
+{% endfor %}
+{% endfor %}

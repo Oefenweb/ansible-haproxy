@@ -73,6 +73,9 @@ haproxy_ssl_map: []
 # listen section
 haproxy_listen: []
 
+# mailers section
+haproxy_mailers: []
+
 # front-end section
 haproxy_frontend: []
 
