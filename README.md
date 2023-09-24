@@ -400,7 +400,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server_dynamic.{n}.param`: [optional]: A list of parameters to apply on each backend server.
 * `haproxy_backend.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation.
 * `haproxy_backend.{n}.retries`: [optional]: Number of retries to perform on a server after a connection failure
-
+* `haproxy_backend.{n}.email_alert`: [default: `[]`]: Specify email alerts option
+* `haproxy_backend.{n}.email_alert.{n}.code`: [required]: Email alert key can be : mailers, from, to or level
+* `haproxy_backend.{n}.email_alert.{n}.value`: [required]: Email alert key value
 
 * `haproxy_backend.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
@@ -460,6 +462,13 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_program.{n}.command`: [optional]: Command to execute
 * `haproxy_program.{n}.option`: [default: `[]`]: Options to enable
 * `haproxy_program.{n}.no_option`: [default: `[]`]: Options to inverse/disable
+
+* `haproxy_mailers`: [default: `[]`]: Mailers declarations
+* `haproxy_mailers.{n}.name`: [required]: The name of the mailers group
+* `haproxy_mailers.{n}.servers`: [default: `[]`]: SMTP servers declarations
+* `haproxy_mailers.{n}.servers.{n}.name`: [required]: SMTP server name
+* `haproxy_mailers.{n}.servers.{n}.host`: [required]: SMTP server host
+* `haproxy_mailers.{n}.servers.{n}.port`: [default: `25`]: SMTP server name port
 
 ## Dependencies
 
