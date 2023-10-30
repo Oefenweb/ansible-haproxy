@@ -26,7 +26,7 @@ for path in $(ls -1d {{ haproxy_letsencrypt_ssl_src_path }}/*/); do
     -issuer "${path}{{ haproxy_letsencrypt_ssl_chain_name }}" \
     -verify_other "${path}{{ haproxy_letsencrypt_ssl_chain_name }}" \
     -cert "${path}{{ haproxy_letsencrypt_ssl_cert_name }}" \
-    -url "${ocspUrl}";
+    -url "${ocspUrl}" || true;
 
   chown --reference="{{ haproxy_global_crt_base }}" "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem.ocsp";
   chmod --reference="{{ haproxy_global_crt_base }}" "{{ haproxy_global_crt_base }}/${prefix}-${cert}.pem.ocsp";
