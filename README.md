@@ -485,7 +485,7 @@ None
 ---
 - hosts: all
   roles:
-    - haproxy
+    - oefenweb.haproxy
   vars:
     haproxy_ssl_map:
       - src: ../../../files/haproxy/etc/haproxy/ssl/star-example0-com.pem
@@ -607,7 +607,7 @@ None
 ```yaml
 - hosts: all
   roles:
-    - haproxy
+    - oefenweb.haproxy
   vars:
     haproxy_global_stats_sockets_default_param:
       - 'mode 660'
@@ -735,7 +735,7 @@ None
 ---
 - hosts: all
   roles:
-    - haproxy
+    - oefenweb.haproxy
   vars:
     haproxy_frontend:
       - name: memcached
@@ -770,7 +770,7 @@ None
 ---
 - hosts: all
   roles:
-    - haproxy
+    - oefenweb.haproxy
   vars:
     haproxy_listen:
       - name: redis
