@@ -1,7 +1,6 @@
 {% if haproxy_global_log != false %}
 {% for log in haproxy_global_log %}
-  log {{ log.address }}{% if log.length is defined %} len {{log.length }}{% endif %} {{ log.facility }}{% if log.level is defined %} {{log.level }}{% endif %}{% if log.minlevel is defined %} {{ log.minlevel }}{% endif %}
-
+  log {{ log.address }}{{ log.length is defined | ternary(['', 'len'] + [log.length], []) | join(' ') }} {{ log.facility }}{{ log.level is defined | ternary([''] + [log.level], []) | join(' ') }}{{ log.minlevel is defined | ternary([''] + [log.minlevel], []) | join(' ') }}
 {% endfor %}
 {% endif %}
 {% if haproxy_global_chroot is defined %}
@@ -9,8 +8,7 @@
 {% endif %}
 {% if haproxy_global_stats != false %}
 {% for socket in haproxy_global_stats.sockets | default([]) %}
-  stats socket {{ socket.listen }}{% for param in socket.param | default([]) %} {{ param }}{% endfor %}
-
+  stats socket {{ socket.listen }}{{ ([''] + socket.param | default([])) | join(' ') }}
 {% endfor %}
 {% if haproxy_global_stats.timeout is defined %}
   stats timeout {{ haproxy_global_stats.timeout }}
@@ -63,8 +61,7 @@
   ssl-default-server-options {{ haproxy_global_ssl_default_server_options }}
 {% endif %}
 {% for ssl_engine in haproxy_global_ssl_engines | default([]) %}
-  ssl-engine {{ ssl_engine.name }}{% if ssl_engine.algos | default([]) | length %} algo {{ ssl_engine.algos | join(', ') }}{% endif %}
-
+  ssl-engine {{ ssl_engine.name }}{{ ssl_engine.algos | default([]) | length | ternary([[' algo']]+[ssl_engine.algos], []) | map('join', ', ') | join(' ') }}
 {% endfor %}
 {% if haproxy_global_ssl_mode_async | default(false) | bool %}
   ssl-mode-async
