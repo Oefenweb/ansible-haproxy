@@ -13,9 +13,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 
 #### Variables
 
-* `haproxy_use_ppa`: [default: `true`]: Whether or not to add the PPA (for installation)
+* `haproxy_use_ppa`: [default: `true`]: Whether to add the PPA (for installation)
 
-* `haproxy_version`: [default: `2.0`]: Version to install (e.g. `1.5` ... `2.8`)
+* `haproxy_version`: [default: `2.8`]: Version to install (e.g. `1.5` ... `2.8`)
 
 * `haproxy_install`: [default: `[]`]: Additional packages to install (e.g. `socat`)
 
@@ -34,7 +34,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
 * `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
 * `haproxy_global_daemon`: [default: `true`]: Makes the process fork into background. This is the recommended mode of operation
-* `haproxy_global_master_worker`: [optional, default: `false`]: Whether or not to use master/worker mode (`>= 1.8.0` only)
+* `haproxy_global_master_worker`: [optional, default: `false`]: Whether to use master/worker mode (`>= 1.8.0` only)
 * `haproxy_global_maxconn`: [optional]: Sets the maximum per-process number of concurrent connections
 * `haproxy_global_ca_base`: [default: `/etc/ssl/certs`]: Assigns a default directory to fetch SSL CA certificates and CRLs from when a relative path is used with `"ca-file"` or `"crl-file"` directives
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
