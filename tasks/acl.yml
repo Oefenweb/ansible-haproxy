@@ -6,7 +6,7 @@
     state: directory
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
-    mode: 0750
+    mode: '0750'
   with_items: "{{ haproxy_acl_files }}"
   tags:
     - haproxy-acl-create-directories
