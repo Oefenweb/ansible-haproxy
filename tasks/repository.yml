@@ -1,0 +1,47 @@
+# tasks file
+---
+- name: repository | install dependencies (pre)
+  ansible.builtin.apt:
+    name: "{{ haproxy_dependencies_pre }}"
+    state: "{{ apt_install_state | default('latest') }}"
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+  tags:
+    - haproxy-repository-install-dependencies
+
+- name: repository | (keyrings) directory | create
+  ansible.builtin.file:
+    path: "{{ haproxy_keyring_dst | dirname }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+  tags:
+    - haproxy-repository-keyrings-directory-create
+
+- name: repository | (keyring) file | download
+  ansible.builtin.apt_key:
+    id: "{{ haproxy_keyring_id }}"
+    keyserver: "{{ apt_key_keyserver | default('keyserver.ubuntu.com') }}"
+    keyring: "{{ haproxy_keyring_dst }}"
+    state: present
+  tags:
+    - haproxy-repository-keyring-file-download
+
+- name: repository | cleanup
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items: "{{ haproxy_repository_files_absent }}"
+  tags:
+    - haproxy-repository-cleanup
+
+- name: repository | add
+  ansible.builtin.apt_repository:
+    repo: "{{ item.type }} {{ item.url }} {{ item.component }}"
+    state: "{{ item.state | default('present') }}"
+    update_cache: true
+    mode: '0644'
+  with_items: "{{ haproxy_repositories }}"
+  tags:
+    - haproxy-repository-add

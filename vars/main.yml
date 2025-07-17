@@ -17,13 +17,21 @@ haproxy_versions_supported:
   - '2.8'
   - '2.9'
 
+haproxy_keyring_id: 3D653970FBAB0A890E4E4E9A0F14D8B0CF4EFE96
+haproxy_keyring_dst: /usr/share/keyrings/haproxy.gpg
+haproxy_repositories:
+  - type: "deb [signed-by={{ haproxy_keyring_dst }}]"
+    url: "https://ppa.launchpadcontent.net/vbernat/haproxy-{{ haproxy_version }}/{{ ansible_distribution | lower }} {{ ansible_distribution_release }}"
+    component: main
+_haproxy_version_sources_list_d: "{{ (haproxy_version | string).split('.') | join('_') }}"
+haproxy_repository_files_absent:
+  - "/etc/apt/sources.list.d/ppa_vbernat_haproxy_{{ _haproxy_version_sources_list_d }}_{{ ansible_distribution_release }}.list"
+  - "/etc/apt/sources.list.d/ppa_vbernat_haproxy_{{ _haproxy_version_sources_list_d }}_{{ ansible_distribution_release }}.list.save"
+
 haproxy_dependencies_pre:
   - software-properties-common
   - dirmngr
-  - gpg-agent
   - apt-transport-https
-
-haproxy_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"
 
 haproxy_letsencrypt_ssl_deploy: /usr/local/bin/haproxy-letsencrypt-ssl-deploy
 
