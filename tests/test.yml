@@ -4,7 +4,7 @@
   connection: local
   become: true
   pre_tasks:
-    - name: include variables
+    - name: include (first found) variables
       ansible.builtin.include_vars: "{{ item }}"
       with_first_found:
         - "{{ playbook_dir }}/vars/_{{ ansible_distribution_release }}.yml"
