@@ -4,12 +4,10 @@
   become: true
   pre_tasks:
     - name: include variables
-      ansible.builtin.include_vars: "{{ item }}"
+      ansible.builtin.include_vars: "{{ playbook_dir }}/../../tests/vars/{{ item }}"
       with_first_found:
-        - "{{ playbook_dir }}/../../tests/vars/_{{ ansible_distribution_release }}.yml"
-        - "{{ playbook_dir }}/../../tests/vars/_{{ ansible_distribution | lower }}.yml"
-        - "{{ playbook_dir }}/../../tests/vars/_default.yml"
+        - "_{{ ansible_distribution_release }}.yml"
+        - "_{{ ansible_distribution | lower }}.yml"
+        - "_default.yml"
     - name: include variables
       ansible.builtin.include_vars: "{{ playbook_dir }}/../../tests/vars/main.yml"
-  roles:
-    - ../../../
