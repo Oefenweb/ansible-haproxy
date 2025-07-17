@@ -16,11 +16,12 @@ haproxy_frontend:
       - listen: '0.0.0.0:80'
     mode: http
     default_backend: webservers
-    reqrep:
-      - search: "^Host:\\ (.*)"
-        string: "Host:\\ foo.com"
-    raw_options:
-      - rspideny ^Content-type:\\.*/ms-word
+    http_request:
+      - action: replace-header
+        param: 'Host (.*) foo.com'
+    http_response:
+      - action: deny
+        cond: 'if { hdr(Content-type) -i -m end ms-word }'
 
 # back-end section
 haproxy_backend:
@@ -29,10 +30,11 @@ haproxy_backend:
     balance: roundrobin
     option:
       - forwardfor
-      - 'httpchk HEAD / HTTP/1.1\r\nHost:localhost'
+    http_check: 'send meth HEAD uri / ver HTTP/1.1 hdr Host localhost'
     server: []
-    raw_options:
-      - rspdeny ^Content-type:\\.*/ms-word
+    http_response:
+      - action: deny
+        cond: 'if { hdr(Content-type) -m end ms-word }'
 
 # user-lists section
 haproxy_userlists:
