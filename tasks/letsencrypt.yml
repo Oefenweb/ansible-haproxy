@@ -6,7 +6,7 @@
     dest: "{{ haproxy_letsencrypt_ssl_deploy }}"
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
   tags:
     - haproxy-letsencrypt-ssl-deploy
 
@@ -16,7 +16,7 @@
     dest: "{{ haproxy_letsencrypt_ocsp_deploy }}"
     owner: root
     group: root
-    mode: 0755
+    mode: '0755'
   tags:
     - haproxy-letsencrypt-ocsp-deploy
 

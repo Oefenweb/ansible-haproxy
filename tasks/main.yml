@@ -9,6 +9,14 @@
     - haproxy
     - haproxy-check-version-support
 
+- name: repository
+  ansible.builtin.import_tasks: repository.yml
+  when: haproxy_use_ppa | bool
+  tags:
+    - configuration
+    - haproxy
+    - haproxy-repository
+
 - name: install
   ansible.builtin.import_tasks: install.yml
   tags:

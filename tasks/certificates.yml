@@ -6,7 +6,7 @@
     state: directory
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
-    mode: 0750
+    mode: '0750'
   with_items: "{{ haproxy_ssl_map }}"
   when: item.state is undefined or item.state == 'present'
   tags:
