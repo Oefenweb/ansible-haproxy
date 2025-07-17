@@ -15,7 +15,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 
 * `haproxy_use_ppa`: [default: `true`]: Whether to add the PPA (for installation)
 
-* `haproxy_version`: [default: `2.8`]: Version to install (e.g. `1.5` ... `2.8`)
+* `haproxy_version`: [default: `2.8`]: Version to install (e.g. `1.5` ... `2.9`)
 
 * `haproxy_install`: [default: `[]`]: Additional packages to install (e.g. `socat`)
 

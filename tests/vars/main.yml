@@ -1,5 +1,7 @@
 # vars file
 ---
+haproxy_version: 2.9
+
 # global parameters
 haproxy_global_raw_options:
   - cpu-map 1/all 0-3
