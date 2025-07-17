@@ -2,12 +2,4 @@
 - name: Prepare
   hosts: all
   become: true
-  pre_tasks:
-    - name: include variables
-      ansible.builtin.include_vars: "{{ playbook_dir }}/../../tests/vars/{{ item }}"
-      with_first_found:
-        - "_{{ ansible_distribution_release }}.yml"
-        - "_{{ ansible_distribution | lower }}.yml"
-        - "_default.yml"
-    - name: include variables
-      ansible.builtin.include_vars: "{{ playbook_dir }}/../../tests/vars/main.yml"
+  tasks: []
