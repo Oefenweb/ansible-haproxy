@@ -1,19 +1,19 @@
 # tasks file
 ---
 - name: certificates | create directories
-  file:
+  ansible.builtin.file:
     path: "{{ item.dest | dirname }}"
     state: directory
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
-    mode: 0750
+    mode: '0750'
   with_items: "{{ haproxy_ssl_map }}"
   when: item.state is undefined or item.state == 'present'
   tags:
     - haproxy-certificates-create-directories
 
 - name: certificates | copy files
-  copy:
+  ansible.builtin.copy:
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: "{{ item.owner | default('root') }}"
@@ -26,7 +26,7 @@
     - haproxy-certificates-copy-files
 
 - name: certificates | remove files
-  file:
+  ansible.builtin.file:
     path: "{{ item.dest }}"
     state: absent
   with_items: "{{ haproxy_ssl_map }}"

@@ -13,9 +13,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 
 #### Variables
 
-* `haproxy_use_ppa`: [default: `true`]: Whether or not to add the PPA (for installation)
+* `haproxy_use_ppa`: [default: `true`]: Whether to add the PPA (for installation)
 
-* `haproxy_version`: [default: `2.0`]: Version to install (e.g. `1.5`, `1.6`, `1.7`, `1.8`, `1.9`, `2.0`, `2.1`, `2.2`, `2.3`)
+* `haproxy_version`: [default: `2.8`]: Version to install (e.g. `1.5` ... `3.2`)
 
 * `haproxy_install`: [default: `[]`]: Additional packages to install (e.g. `socat`)
 
@@ -34,7 +34,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
 * `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
 * `haproxy_global_daemon`: [default: `true`]: Makes the process fork into background. This is the recommended mode of operation
-* `haproxy_global_master_worker`: [optional, default: `false`]: Whether or not to use master/worker mode (`>= 1.8.0` only)
+* `haproxy_global_master_worker`: [optional, default: `false`]: Whether to use master/worker mode (`>= 1.8.0` only)
 * `haproxy_global_maxconn`: [optional]: Sets the maximum per-process number of concurrent connections
 * `haproxy_global_ca_base`: [default: `/etc/ssl/certs`]: Assigns a default directory to fetch SSL CA certificates and CRLs from when a relative path is used with `"ca-file"` or `"crl-file"` directives
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
@@ -69,7 +69,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
 * `haproxy_defaults_timeout`: [default: See `defaults/main.yml`]: Timeout declarations
 * `haproxy_defaults_timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
-* `haproxy_defaults_timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_defaults_timeout.timeout`: [required]: The timeout (in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_defaults_errorfile`: [default: See `defaults/main.yml`]: Errorfile declarations
 * `haproxy_defaults_errorfile.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_defaults_errorfile.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
@@ -110,7 +110,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.stick.{n}.stick_on`: [optional]: Define a request pattern to associate a user to a server (e.g. `src`)
 * `haproxy_listen.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_listen.{n}.timeout.type`: [required]: The type (e.g. `connect`, `client`, `server`)
-* `haproxy_listen.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_listen.{n}.timeout.timeout`: [required]: The timeout (in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_listen.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
 * `haproxy_listen.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_listen.{n}.capture`: [optional]: Capture fields from request or response
@@ -223,7 +223,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.no_log`: [optional, default `false`]: Used when the logger list must be flushed. For example, if you don't want to inherit from the default logger list
 * `haproxy_frontend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_frontend.{n}.timeout.type`: [required]: The type (e.g. `client`)
-* `haproxy_frontend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_frontend.{n}.timeout.timeout`: [required]: The timeout (in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_frontend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
 * `haproxy_frontend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_frontend.{n}.capture`: [optional]: Capture fields from request or response
@@ -308,7 +308,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.source`: [optional]: Set the source address or interface for connections from the proxy
 * `haproxy_backend.{n}.option`: [optional]: Options to set (e.g. `[forwardfor]`)
 * `haproxy_backend.{n}.no_option`: [optional]: Options to unset (e.g. `[redispatch]`)
-* `haproxy_backend.{n}.http_check`: [optional]: Make HTTP health checks consider response contents or specific status codes (e.g. `expect status 403`)
+* `haproxy_backend.{n}.http_check.{n}`: [optional]: Configure HTTP health checks (e.g. `expect status 403`, `send meth GET uri /healthz`)
 * `haproxy_backend.{n}.stick`: [optional]: Stick declarations
 * `haproxy_backend.{n}.stick.{n}.table`: [required]: Configure the stickiness table for the current section (e.g. `type ip size 500k`)
 * `haproxy_backend.{n}.stick.{n}.stick_on`: [optional]: Define a request pattern to associate a user to a server (e.g. `src`)
@@ -318,7 +318,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.tcp_check`: [optional]: Perform health checks using tcp-check send/expect sequences (e.g. `['expect string +OK\ POP3\ ready']`)
 * `haproxy_backend.{n}.timeout`: [optional]: Timeout declarations
 * `haproxy_backend.{n}.timeout.type`: [required]: The type (e.g. `server`)
-* `haproxy_backend.{n}.timeout.timeout`: [required]: The timeout (in in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
+* `haproxy_backend.{n}.timeout.timeout`: [required]: The timeout (in milliseconds by default, but can be in any other unit if the number is suffixed by the unit) (e.g. `5000`, `50000`)
 * `haproxy_backend.{n}.acl`: [optional]: Create an ACL check which can be later used in evaluations/conditionals
 * `haproxy_backend.{n}.acl.{n}.string`: [required]: ACL entry to be used in conditional check later
 * `haproxy_backend.{n}.reqadd`: [optional]: Adds headers at the end of the HTTP request
@@ -400,7 +400,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server_dynamic.{n}.param`: [optional]: A list of parameters to apply on each backend server.
 * `haproxy_backend.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation.
 * `haproxy_backend.{n}.retries`: [optional]: Number of retries to perform on a server after a connection failure
-
+* `haproxy_backend.{n}.email_alert`: [default: `[]`]: Specify email alerts option
+* `haproxy_backend.{n}.email_alert.{n}.code`: [required]: Email alert key can be : mailers, from, to or level
+* `haproxy_backend.{n}.email_alert.{n}.value`: [required]: Email alert key value
 
 * `haproxy_backend.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
@@ -461,6 +463,13 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_program.{n}.option`: [default: `[]`]: Options to enable
 * `haproxy_program.{n}.no_option`: [default: `[]`]: Options to inverse/disable
 
+* `haproxy_mailers`: [default: `[]`]: Mailers declarations
+* `haproxy_mailers.{n}.name`: [required]: The name of the mailers group
+* `haproxy_mailers.{n}.servers`: [default: `[]`]: SMTP servers declarations
+* `haproxy_mailers.{n}.servers.{n}.name`: [required]: SMTP server name
+* `haproxy_mailers.{n}.servers.{n}.host`: [required]: SMTP server host
+* `haproxy_mailers.{n}.servers.{n}.port`: [default: `25`]: SMTP server name port
+
 ## Dependencies
 
 None
@@ -476,7 +485,7 @@ None
 ---
 - hosts: all
   roles:
-    - haproxy
+    - oefenweb.haproxy
   vars:
     haproxy_ssl_map:
       - src: ../../../files/haproxy/etc/haproxy/ssl/star-example0-com.pem
@@ -598,7 +607,7 @@ None
 ```yaml
 - hosts: all
   roles:
-    - haproxy
+    - oefenweb.haproxy
   vars:
     haproxy_global_stats_sockets_default_param:
       - 'mode 660'
@@ -726,7 +735,7 @@ None
 ---
 - hosts: all
   roles:
-    - haproxy
+    - oefenweb.haproxy
   vars:
     haproxy_frontend:
       - name: memcached
@@ -761,7 +770,7 @@ None
 ---
 - hosts: all
   roles:
-    - haproxy
+    - oefenweb.haproxy
   vars:
     haproxy_listen:
       - name: redis

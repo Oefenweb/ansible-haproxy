@@ -1,7 +1,7 @@
 # defaults file
 ---
 haproxy_use_ppa: true
-haproxy_version: 2.0
+haproxy_version: 2.8
 
 haproxy_dependencies:
   - name: haproxy
@@ -78,6 +78,9 @@ haproxy_ssl_map: []
 
 # listen section
 haproxy_listen: []
+
+# mailers section
+haproxy_mailers: []
 
 # front-end section
 haproxy_frontend: []

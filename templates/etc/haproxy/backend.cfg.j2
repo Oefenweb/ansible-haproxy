@@ -13,14 +13,20 @@ backend {{ backend.name }}
 {% if backend.source is defined %}
   source {{ backend.source }}
 {% endif %}
-{% for option in backend.option | default([])%}
+{% for option in backend.option | default([]) %}
   option {{ option }}
 {% endfor %}
-{% for option in backend.no_option | default([])%}
+{% for option in backend.no_option | default([]) %}
   no option {{ option }}
 {% endfor %}
 {% if backend.http_check is defined %}
+{% if backend.http_check is string %}
   http-check {{ backend.http_check }}
+{% else %}
+{% for http_check in backend.http_check %}
+  http-check {{ http_check }}
+{% endfor %}
+{% endif %}
 {% endif %}
 {% if backend.cookie is defined %}
   cookie {{ backend.cookie }}
@@ -134,6 +140,9 @@ backend {{ backend.name }}
 {% endif %}
 {% for errorfile in backend.errorfile | default([]) %}
   errorfile {{ errorfile.code }} {{ errorfile.file }}
+{% endfor %}
+{% for email_alert in backend.email_alert | default([]) %}
+  email-alert {{ email_alert.code }} {{ email_alert.value }}
 {% endfor %}
 {% for line in backend.raw_options | default([]) %}
   {{ line }}

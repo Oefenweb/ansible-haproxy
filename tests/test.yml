@@ -4,7 +4,13 @@
   connection: local
   become: true
   pre_tasks:
-    - name: include vars
-      include_vars: "{{ playbook_dir }}/vars/main.yml"
+    - name: include (first found) variables
+      ansible.builtin.include_vars: "{{ item }}"
+      with_first_found:
+        - "{{ playbook_dir }}/vars/_{{ ansible_distribution_release }}.yml"
+        - "{{ playbook_dir }}/vars/_{{ ansible_distribution | lower }}.yml"
+        - "{{ playbook_dir }}/vars/_default.yml"
+    - name: include variables
+      ansible.builtin.include_vars: "{{ playbook_dir }}/vars/main.yml"
   roles:
     - ../../

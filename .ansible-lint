@@ -1,4 +1,5 @@
 ---
 warn_list:
-  - '106'
-  - ignore-errors
+  - role-name
+  - name[play]
+  - name[casing]
