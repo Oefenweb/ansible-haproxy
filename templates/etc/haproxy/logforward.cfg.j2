@@ -1,4 +1,4 @@
-{% if haproxy_version is version('2.3', '=<') %}
+{% if haproxy_version is version('2.3', '>=') %}
 {% for logforward in haproxy_logforwards %}
 log-forward {{ logforward.name }}
   {% if logforward.bind is defined %}
