@@ -470,6 +470,29 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_mailers.{n}.servers.{n}.host`: [required]: SMTP server host
 * `haproxy_mailers.{n}.servers.{n}.port`: [default: `25`]: SMTP server name port
 
+* `haproxy_rings`: [default: `[]`]: Enable ring-buffers, to be used as target for log servers or traces.
+* `haproxy_rings.{n}.name`: Creates a new ring-buffer with name <rings.name>
+* `haproxy_rings.{n}.description`: Optional description string of the ring. It will appear on CLI. By default, <name> is reused to fill this field.
+* `haproxy_rings.{n}.format`: Format used to store events into the ring buffer. (May be on of follow: iso, local, raw, rfc3164, rfc5424, short, priority, timed)
+* `haproxy_rings.{n}.maxlen`: The maximum length of an event message stored into the ring, including formatted header. If an event message is longer than <length>, it will be truncated to this length.
+* `haproxy_rings.{n}.size`: This is the optional size in bytes for the ring-buffer. Default value is set to BUFSIZE.
+* `haproxy_rings.{n}.timeout`: Timeouts list declaration
+* `haproxy_rings.{n}.timeout.connect`: Set the maximum time to wait for a connection attempt to a server to succeed.
+* `haproxy_rings.{n}.timeout.server`: Set the maximum time for pending data staying into output buffer.
+* `haproxy_rings.{n}.server`: Server list declaration
+* `haproxy_rings.{n}.server.name`: Custom name of remote server
+* `haproxy_rings.{n}.server.listen`: Remote server address
+* `haproxy_rings.{n}.server.param`: Specific server directive such as "log-proto" to set the protocol used to send messages.
+
+* `haproxy_logforwards`: [default: `[]`]: Declare one or multiple log forwarding section, haproxy will forward all received log messages to a log servers list.
+* `haproxy_logforwards.{n}.name`: Creates a new logforward with name <logforward.name>
+* `haproxy_logforwards.{n}.bind`: Used to configure a stream log listener to receive messages to forward. This supports the "bind" parameters found in 5.1 paragraph including those about ssl but some statements such as "alpn" may be irrelevant for syslog protocol over TCP.
+* `haproxy_logforwards.{n}.dgram-bind`: Used to configure a datagram log listener to receive messages to forward. Addresses must be in IPv4 or IPv6 form,followed by a port. This supports for some of the "bind" parameters found in 5.1 paragraph among which "interface", "namespace" or "transparent", the other ones being silently ignored as irrelevant for UDP/syslog case.
+* `haproxy_logforwards.{n}.backlog`: Give hints to the system about the approximate listen backlog desired size on connections accept.
+* `haproxy_logforwards.{n}.maxconn`: Fix the maximum number of concurrent connections on a log forwarder. 10 is the default.
+* `haproxy_logforwards.{n}.timeout client`: Set the maximum inactivity time on the client side.
+* `haproxy_logforwards.{n}.log`: [ log <address> [len <length>] [format <format>] [sample <ranges>:<sample_size>] <facility> [<level> [<minlevel>]] ]Used to configure target log servers. See more details on proxies documentation. If no format specified, haproxy tries to keep the incoming log format. Configured facility is ignored, except if incoming message does not present a facility but one is mandatory on the outgoing format. If there is no timestamp available in the input format, but the field exists in output format, haproxy will use the local date.
+
 ## Dependencies
 
 None
