@@ -19,7 +19,7 @@ ring {{ ring.name }}
   timeout server {{ ring.timeout.server }}
   {% endif %}
   {%- for server in ring.server %}
-  server {{ server.name }} {{ server.address }}:{{ server.port }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
+  server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
   {% endfor %}
 
 {% endfor %}
