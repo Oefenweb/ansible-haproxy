@@ -491,7 +491,9 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_logforwards.{n}.backlog`: Give hints to the system about the approximate listen backlog desired size on connections accept.
 * `haproxy_logforwards.{n}.maxconn`: Fix the maximum number of concurrent connections on a log forwarder. 10 is the default.
 * `haproxy_logforwards.{n}.timeout client`: Set the maximum inactivity time on the client side.
-* `haproxy_logforwards.{n}.log`: [ log <address> [len <length>] [format <format>] [sample <ranges>:<sample_size>] <facility> [<level> [<minlevel>]] ]Used to configure target log servers. See more details on proxies documentation. If no format specified, haproxy tries to keep the incoming log format. Configured facility is ignored, except if incoming message does not present a facility but one is mandatory on the outgoing format. If there is no timestamp available in the input format, but the field exists in output format, haproxy will use the local date.
+* `haproxy_logforwards.{n}.log`: Log list declaration
+* `haproxy_logforwards.{n}.log.address`: [required]: Used to configure target log servers
+* `haproxy_logforwards.{n}.log.param`: [optional]: A list of parameters common to this log declarations. See more details on proxies documentation.
 
 ## Dependencies
 
