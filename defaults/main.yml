@@ -37,6 +37,12 @@ haproxy_global_ssl_default_server_options: 'no-sslv3'
 haproxy_global_nbproc: 1
 haproxy_global_option: []
 
+# Logforward section
+haproxy_logforwards: []
+
+# Rings section
+haproxy_rings: []
+
 # defaults section
 haproxy_defaults_log: global
 haproxy_defaults_mode: http
@@ -90,6 +96,7 @@ haproxy_resolvers: []
 
 # ACL files
 haproxy_acl_files: []
+
 
 # Letsencrypt (SSL/OCSP deploy)
 haproxy_letsencrypt_ssl_deploy_template: usr/local/bin/haproxy-letsencrypt-ssl-deploy.j2

@@ -1,0 +1,25 @@
+{% for ring in haproxy_rings %}
+ring {{ ring.name }}
+  {% if ring.description is defined %}
+  description {{ ring.description }}
+  {% endif %}
+  {%- if ring.format is defined %}
+  format {{ ring.format }}
+  {% endif %}
+  {%- if ring.maxlen is defined %}
+  maxlen {{ ring.maxlen }}
+  {% endif %}
+  {%- if ring.size is defined %}
+  size {{ ring.size }}
+  {% endif %}
+  {%- if ring.timeout.connect is defined %}
+  timeout connect {{ ring.timeout.connect }}
+  {% endif %}
+  {%- if ring.timeout.server is defined %}
+  timeout server {{ ring.timeout.server }}
+  {% endif %}
+  {%- for server in ring.server %}
+  server {{ server.name }} {{ server.listen }}{% for param in server.param | default([]) %} {{ param }}{% endfor %}
+  {% endfor %}
+
+{% endfor %}

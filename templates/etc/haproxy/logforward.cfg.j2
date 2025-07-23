@@ -1,0 +1,24 @@
+{% if haproxy_version is version('2.3', '>=') %}
+{% for logforward in haproxy_logforwards %}
+log-forward {{ logforward.name }}
+  {% if logforward.bind is defined %}
+  bind {{ logforward.bind }}
+  {% endif %}
+  {%- if logforward.dgram_bind is defined %}
+  dgram-bind {{ logforward.dgram_bind }}
+  {% endif %}
+  {%- if logforward.backlog is defined %}
+  backlog {{ logforward.backlog }}
+  {% endif %}
+  {%- if logforward.maxconn is defined %}
+  maxconn {{ logforward.maxconn }}
+  {% endif %}
+  {%- if logforward.timeout is defined %}
+  timeout client {{ logforward.timeout }}
+  {% endif %}
+  {%- for log in logforward.log %}
+  log {{ log.address }}{% for param in log.param | default([]) %} {{ param }}{% endfor %}
+  {% endfor %}
+
+{% endfor %}
+{% endif %}
