@@ -50,6 +50,9 @@
 {% if haproxy_global_ssl_default_bind_options != false %}
   ssl-default-bind-options {{ haproxy_global_ssl_default_bind_options }}
 {% endif %}
+{% if haproxy_version is version('2.9', '>=') and haproxy_global_ssl_default_server_curves is defined %}
+  ssl-default-server-curves {{ haproxy_global_ssl_default_server_curves }}
+{% endif %}
 {% if haproxy_global_ssl_default_server_ciphers != false %}
   ssl-default-server-ciphers {{ haproxy_global_ssl_default_server_ciphers }}
 {% endif %}
