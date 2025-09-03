@@ -39,7 +39,7 @@
   crt-base {{ haproxy_global_crt_base }}
 {% endif %}
 {% if haproxy_version is version('2.2', '>=') and haproxy_global_ssl_default_bind_curves is defined %}
-ssl-default-bind-curves {{ haproxy_global_ssl_default_bind_curves }}
+  ssl-default-bind-curves {{ haproxy_global_ssl_default_bind_curves }}
 {% endif %}
 {% if haproxy_global_ssl_default_bind_ciphers != false %}
   ssl-default-bind-ciphers {{ haproxy_global_ssl_default_bind_ciphers }}
