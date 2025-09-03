@@ -38,10 +38,10 @@
 {% if haproxy_global_crt_base != false %}
   crt-base {{ haproxy_global_crt_base }}
 {% endif %}
+{% if haproxy_version is version('2.2', '>=') and haproxy_global_ssl_default_bind_curves is defined %}
+ssl-default-bind-curves {{ haproxy_global_ssl_default_bind_curves }}
+{% endif %}
 {% if haproxy_global_ssl_default_bind_ciphers != false %}
-  # Default ciphers to use on SSL-enabled listening sockets.
-  # For more information, see ciphers(1SSL). This list is from:
-  #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
   ssl-default-bind-ciphers {{ haproxy_global_ssl_default_bind_ciphers }}
 {% endif %}
 {% if haproxy_global_ssl_default_bind_ciphersuites %}
@@ -51,9 +51,6 @@
   ssl-default-bind-options {{ haproxy_global_ssl_default_bind_options }}
 {% endif %}
 {% if haproxy_global_ssl_default_server_ciphers != false %}
-  # Default ciphers to use on SSL-enabled listening sockets.
-  # For more information, see ciphers(1SSL). This list is from:
-  #  https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
   ssl-default-server-ciphers {{ haproxy_global_ssl_default_server_ciphers }}
 {% endif %}
 {% if haproxy_global_ssl_default_server_ciphersuites %}

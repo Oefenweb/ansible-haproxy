@@ -32,12 +32,13 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_global_stats.sockets.{n}.param`:  [optional]: A list of parameters common to this bind declarations (e.g. `['mode 660', 'level admin', 'process 1']`)
 * `haproxy_global_stats.timeout`:  [optional]: The default timeout on the stats socket
 * `haproxy_global_user`: [default: `haproxy`]: Similar to `"uid"` but uses the UID of user name `<user name>` from `/etc/passwd`
-* `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`.
+* `haproxy_global_group`: [default: `haproxy`]: Similar to `"gid"` but uses the GID of group name `<group name>` from `/etc/group`
 * `haproxy_global_daemon`: [default: `true`]: Makes the process fork into background. This is the recommended mode of operation
 * `haproxy_global_master_worker`: [optional, default: `false`]: Whether to use master/worker mode (`>= 1.8.0` only)
 * `haproxy_global_maxconn`: [optional]: Sets the maximum per-process number of concurrent connections
 * `haproxy_global_ca_base`: [default: `/etc/ssl/certs`]: Assigns a default directory to fetch SSL CA certificates and CRLs from when a relative path is used with `"ca-file"` or `"crl-file"` directives
 * `haproxy_global_crt_base`: [default: `/etc/ssl/private`]: Assigns a default directory to fetch SSL certificates from when a relative path is used with `"crtfile"` directives
+* `haproxy_global_ssl_default_bind_curves`: [optional]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of elliptic curves algorithms ("curve suite") that are negotiated during the SSL/TLS handshake with ECDHE (`>= 2.2` only)
 * `haproxy_global_ssl_default_bind_ciphers`: [default: `kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL`]: This setting is only available when support for OpenSSL was built in. It sets the default string describing the list of cipher algorithms ("cipher suite") that are negotiated during the SSL/TLS handshake for all `"bind"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_bind_ciphersuites`: [default: ``]: This setting is only available when support for OpenSSL was built in and OpenSSL 1.1.1 or later was used to build HAProxy. It sets the default string describing the list of cipher algorithms ("cipher suite") that are negotiated during the TLSv1.3 handshake for all `"bind"` lines which do not explicitly define theirs
 * `haproxy_global_ssl_default_bind_options`: [default: `no-sslv3`]: This setting is only available when support for OpenSSL was built in. It sets default ssl-options to force on all `"bind"` lines
@@ -76,7 +77,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_defaults_compression`: [optional]: Compression declarations
 * `haproxy_defaults_compression.{}.name`: [required]: The compression name (e.g. `algo`, `type`, `offload`)
 * `haproxy_defaults_compression.{}.value`: [required]: The compression value, (e.g. if name = algo : one of this values `identity`, `gzip`, `deflate`, `raw-deflate` / if name = type : list of mime type separated by space for example `text/html text/plain text/css` / if name = `offload` value is empty)
-* `haproxy_default_server_params`: [optional]: Default server backend parameters passed to each backend/listen server.
+* `haproxy_default_server_params`: [optional]: Default server backend parameters passed to each backend/listen server
 * `haproxy_default_raw_options`: [default: `[]`]: Additional arbitrary lines to insert in the section
 
 * `haproxy_ssl_map`: [default: `[]`]: SSL declarations
@@ -128,17 +129,17 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_listen.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_listen.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
-* `haproxy_listen.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition.
-* `haproxy_listen.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule.
-* `haproxy_listen.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule.
-* `haproxy_listen.{n}.tcp_request_connection`: [optional]: Perform an action on an incoming connection depending on a layer 4 condition.
-* `haproxy_listen.{n}.tcp_request_connection.{n}.action`: [required]: The action for the `tcp-request connection` rule.
-* `haproxy_listen.{n}.tcp_request_connection.{n}.cond`: [optional]: A matching condition for the `tcp-request connection` rule.
-* `haproxy_listen.{n}.tcp_request_session`: [optional]: Perform an action on a validated session depending on a layer 5 condition.
-* `haproxy_listen.{n}.tcp_request_session.{n}.action`: [required]: The action for the `tcp-request session` rule.
-* `haproxy_listen.{n}.tcp_request_session.{n}.cond`: [optional]: A matching condition for the `tcp-request session` rule.
-* `haproxy_listen.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection.
-* `haproxy_listen.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule.
+* `haproxy_listen.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition
+* `haproxy_listen.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule
+* `haproxy_listen.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule
+* `haproxy_listen.{n}.tcp_request_connection`: [optional]: Perform an action on an incoming connection depending on a layer 4 condition
+* `haproxy_listen.{n}.tcp_request_connection.{n}.action`: [required]: The action for the `tcp-request connection` rule
+* `haproxy_listen.{n}.tcp_request_connection.{n}.cond`: [optional]: A matching condition for the `tcp-request connection` rule
+* `haproxy_listen.{n}.tcp_request_session`: [optional]: Perform an action on a validated session depending on a layer 5 condition
+* `haproxy_listen.{n}.tcp_request_session.{n}.action`: [required]: The action for the `tcp-request session` rule
+* `haproxy_listen.{n}.tcp_request_session.{n}.cond`: [optional]: A matching condition for the `tcp-request session` rule
+* `haproxy_listen.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection
+* `haproxy_listen.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule
 * `haproxy_listen.{n}.stats`: [optional]: Stats declarations
 * `haproxy_listen.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_listen.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
@@ -156,12 +157,12 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_listen.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 * `haproxy_listen.{n}.server_template`: [optional]: Server template declarations
-* `haproxy_listen.{n}.server_template.name`: [required]:  A prefix for the server names to be built.
-* `haproxy_listen.{n}.server_template.num`: [required]: Number or range of servers. If specified as `<num>`, this template initializes `<num>` servers with 1 up to `<num>` as server name suffixes. If specified as `<num_low>-<num_high>`, initializes with `<num_low>` up to `<num_high>` as server name suffixes.
+* `haproxy_listen.{n}.server_template.name`: [required]:  A prefix for the server names to be built
+* `haproxy_listen.{n}.server_template.num`: [required]: Number or range of servers. If specified as `<num>`, this template initializes `<num>` servers with 1 up to `<num>` as server name suffixes. If specified as `<num_low>-<num_high>`, initializes with `<num_low>` up to `<num_high>` as server name suffixes
 * `haproxy_listen.{n}.server_template.fqdn`: [required]: A FQDN for all the servers this template initializes
 * `haproxy_listen.{n}.server_template.port`: [optional]: Port specification
 * `haproxy_listen.{n}.server_template.{n}.param`: [optional]: A list of parameters for this server template
-* `haproxy_listen.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation.
+* `haproxy_listen.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation
 * `haproxy_listen.{n}.retries`: [optional]: Number of retries to perform on a server after a connection failure
 * `haproxy_listen.{n}.reqadd`: [optional]: Adds headers at the end of the HTTP request
 * `haproxy_listen.{n}.reqadd.{n}.string`: [required]: The complete line to be added. Any space or known delimiter must be escaped using a backslash (`'\'`) (in version < 1.6)
@@ -203,7 +204,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_listen.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_listen.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_listen.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
-* `haproxy_listen.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular listen entry.
+* `haproxy_listen.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular listen entry
 * `haproxy_listen.{n}.raw_options`: [default: `[]`]: Additional arbitrary lines to insert in the section
 
 * `haproxy_frontend`: [default: `[]`]: Front-end declarations
@@ -241,17 +242,17 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_frontend.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_frontend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_frontend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
-* `haproxy_frontend.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition.
-* `haproxy_frontend.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule.
-* `haproxy_frontend.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule.
-* `haproxy_frontend.{n}.tcp_request_connection`: [optional]: Perform an action on an incoming connection depending on a layer 4 condition.
-* `haproxy_frontend.{n}.tcp_request_connection.{n}.action`: [required]: The action for the `tcp-request connection` rule.
-* `haproxy_frontend.{n}.tcp_request_connection.{n}.cond`: [optional]: A matching condition for the `tcp-request connection` rule.
-* `haproxy_frontend.{n}.tcp_request_session`: [optional]: Perform an action on a validated session depending on a layer 5 condition.
-* `haproxy_frontend.{n}.tcp_request_session.{n}.action`: [required]: The action for the `tcp-request session` rule.
-* `haproxy_frontend.{n}.tcp_request_session.{n}.cond`: [optional]: A matching condition for the `tcp-request session` rule.
-* `haproxy_frontend.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection.
-* `haproxy_frontend.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule.
+* `haproxy_frontend.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition
+* `haproxy_frontend.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule
+* `haproxy_frontend.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule
+* `haproxy_frontend.{n}.tcp_request_connection`: [optional]: Perform an action on an incoming connection depending on a layer 4 condition
+* `haproxy_frontend.{n}.tcp_request_connection.{n}.action`: [required]: The action for the `tcp-request connection` rule
+* `haproxy_frontend.{n}.tcp_request_connection.{n}.cond`: [optional]: A matching condition for the `tcp-request connection` rule
+* `haproxy_frontend.{n}.tcp_request_session`: [optional]: Perform an action on a validated session depending on a layer 5 condition
+* `haproxy_frontend.{n}.tcp_request_session.{n}.action`: [required]: The action for the `tcp-request session` rule
+* `haproxy_frontend.{n}.tcp_request_session.{n}.cond`: [optional]: A matching condition for the `tcp-request session` rule
+* `haproxy_frontend.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection
+* `haproxy_frontend.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule
 * `haproxy_frontend.{n}.use_backend`: [optional]: Switch to a specific backend if/unless a Layer 7 condition is matched. (e.g. '%[req.hdr(host),lower,map_dom(/etc/haproxy/haproxy_backend.map,bk_default)]' or `['foo-backend if is_foo', 'bar-backend if is_bar']`)
 * `haproxy_frontend.{n}.default_backend`: [optional]: The backend to use when no `"use_backend"` rule has been matched (e.g. `webservers`)
 * `haproxy_frontend.{n}.reqadd`: [optional]: Adds headers at the end of the HTTP request
@@ -367,11 +368,11 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.http_response.{n}.action`: [required]: The rules action (e.g. `del-header`)
 * `haproxy_backend.{n}.http_response.{n}.param`: [optional]: The complete line to be added (e.g. `X-Varnish`)
 * `haproxy_backend.{n}.http_response.{n}.cond`: [optional]: A matching condition built from ACLs
-* `haproxy_backend.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition.
-* `haproxy_backend.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule.
-* `haproxy_backend.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule.
-* `haproxy_backend.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection.
-* `haproxy_backend.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule.
+* `haproxy_backend.{n}.tcp_request_content`: [optional]: Perform an action on a new session depending on a layer 4-7 condition
+* `haproxy_backend.{n}.tcp_request_content.{n}.action`: [required]: The action for the `tcp-request content` rule
+* `haproxy_backend.{n}.tcp_request_content.{n}.cond`: [optional]: A matching condition for the `tcp-request content` rule
+* `haproxy_backend.{n}.tcp_request_inspect_delay`: [optional]: Set the maximum allowed time to wait for data during content inspection
+* `haproxy_backend.{n}.tcp_request_inspect_delay.{n}.timeout`: [required]: The timeout value in millisecond for the `tcp-request inspect-delay` rule
 * `haproxy_backend.{n}.stats`: [optional]: Stats declarations
 * `haproxy_backend.{n}.stats.enable`: [required]: Enables statistics reporting with default settings
 * `haproxy_backend.{n}.stats.uri`: [optional, default `/`]: Define the URI prefix to access statistics
@@ -389,16 +390,16 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.server.{n}.listen`: [required]: Defines a listening address and/or ports
 * `haproxy_backend.{n}.server.{n}.param`: [optional]: A list of parameters for this server
 * `haproxy_backend.{n}.server_template`: [optional]: Server template declarations
-* `haproxy_backend.{n}.server_template.name`: [required]:  A prefix for the server names to be built.
-* `haproxy_backend.{n}.server_template.num`: [required]: Number or range of servers. If specified as `<num>`, this template initializes `<num>` servers with 1 up to `<num>` as server name suffixes. If specified as `<num_low>-<num_high>`, initializes with `<num_low>` up to `<num_high>` as server name suffixes.
+* `haproxy_backend.{n}.server_template.name`: [required]:  A prefix for the server names to be built
+* `haproxy_backend.{n}.server_template.num`: [required]: Number or range of servers. If specified as `<num>`, this template initializes `<num>` servers with 1 up to `<num>` as server name suffixes. If specified as `<num_low>-<num_high>`, initializes with `<num_low>` up to `<num_high>` as server name suffixes
 * `haproxy_backend.{n}.server_template.fqdn`: [required]: A FQDN for all the servers this template initializes
 * `haproxy_backend.{n}.server_template.port`: [optional]: Port specification
 * `haproxy_backend.{n}.server_template.{n}.param`: [optional]: A list of parameters for this server template
 * `haproxy_backend.{n}.server_dynamic`: [optional]: Dynamic backend server declaration
-* `haproxy_backend.{n}.server_dynamic.{n}.group`: [required]: An ansible group containing hosts to be added as backend servers. Uses `inventory_hostname` for name and either `ansible_host` (if defined) or `inventory_hostname` for the listen address of each host.
-* `haproxy_backend.{n}.server_dynamic.{n}.listen_port`: [optional]: The port to use with each dynamic backend (translates to `listen <ansible_host/inventory_hostname>:<listen_port>`).
-* `haproxy_backend.{n}.server_dynamic.{n}.param`: [optional]: A list of parameters to apply on each backend server.
-* `haproxy_backend.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation.
+* `haproxy_backend.{n}.server_dynamic.{n}.group`: [required]: An ansible group containing hosts to be added as backend servers. Uses `inventory_hostname` for name and either `ansible_host` (if defined) or `inventory_hostname` for the listen address of each host
+* `haproxy_backend.{n}.server_dynamic.{n}.listen_port`: [optional]: The port to use with each dynamic backend (translates to `listen <ansible_host/inventory_hostname>:<listen_port>`)
+* `haproxy_backend.{n}.server_dynamic.{n}.param`: [optional]: A list of parameters to apply on each backend server
+* `haproxy_backend.{n}.retry_on`: [optional, default `[]`]: Specify when to attempt to automatically retry a failed request. Provide a list of keywords or HTTP status codes, each representing a type of failure event on which an attempt to retry the request is desired. For details, see HAProxy documentation
 * `haproxy_backend.{n}.retries`: [optional]: Number of retries to perform on a server after a connection failure
 * `haproxy_backend.{n}.email_alert`: [default: `[]`]: Specify email alerts option
 * `haproxy_backend.{n}.email_alert.{n}.code`: [required]: Email alert key can be : mailers, from, to or level
@@ -407,7 +408,7 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_backend.{n}.errorfile`: [optional]: Errorfile declarations
 * `haproxy_backend.{n}.errorfile.{n}.code`: [required]: The HTTP status code. Currently, HAProxy is capable of generating codes 200, 400, 403, 408, 500, 502, 503, and 504 (e.g. `400`)
 * `haproxy_backend.{n}.errorfile.{n}.file`: [required]: A file containing the full HTTP response (e.g `/etc/haproxy/errors/400.http`)
-* `haproxy_backend.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular backend entry.
+* `haproxy_backend.{n}.default_server_params`: [optional]: Default server params applied for each server for this particular backend entry
 * `haproxy_backend.{n}.raw_options`: [default: `[]`]: Additional arbitrary lines to insert in the section
 
 * `haproxy_userlists`: [default: `[]`]: Userlist declarations
@@ -424,12 +425,12 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_resolvers.{n}.nameservers.{n}.name`: [required] label of the server, should be unique
 * `haproxy_resolvers.{n}.nameservers.{n}.listen`: [required] Defines a listening address and/or ports, e.g. `8.8.8.8:53`
 * `haproxy_resolvers.{n}.accepted_payload_size`: [optional]: Defines the maximum payload size (in bytes) accepted by HAProxy and announced to all the name servers configured in this resolvers section. If not set, HAProxy announces 512. (minimal value defined by RFC 6891)
-* `haproxy_resolvers.{n}.parse_resolv_conf`: [optional]: If set to `true`, adds all nameservers found in `/etc/resolv.conf` to this resolver's nameservers list.
-* `haproxy_resolvers.{n}.resolve_retries`: [optional]: Defines the number of queries to send to resolve a server name before giving up.
-* `haproxy_resolvers.{n}.hold`: [optional]: A list of directives defining `<period>` during which the last name resolution should be kept based on last resolution `<status>`.
-* `haproxy_resolvers.{n}.hold.{status}`: [optional]: hold directives in `<status>:<period>` format. Key must be one of (`nx`, `other`, `refused`, `timeout`, `valid`, `obsolete`). Value is interval between two successive name resolutions in HAProxy time format.
+* `haproxy_resolvers.{n}.parse_resolv_conf`: [optional]: If set to `true`, adds all nameservers found in `/etc/resolv.conf` to this resolver's nameservers list
+* `haproxy_resolvers.{n}.resolve_retries`: [optional]: Defines the number of queries to send to resolve a server name before giving up
+* `haproxy_resolvers.{n}.hold`: [optional]: A list of directives defining `<period>` during which the last name resolution should be kept based on last resolution `<status>`
+* `haproxy_resolvers.{n}.hold.{status}`: [optional]: hold directives in `<status>:<period>` format. Key must be one of (`nx`, `other`, `refused`, `timeout`, `valid`, `obsolete`). Value is interval between two successive name resolutions in HAProxy time format
 * `haproxy_resolvers.{n}.timeout`: [optional]: Defines timeouts related to name resolution
-* `haproxy_resolvers.{n}.timeout.{event}`: [optional]: timeout directives in `<event>:<time>` format. Key must be one of (`resolve`, `retry`). Value is time related to the event in the HAProxy time format.
+* `haproxy_resolvers.{n}.timeout.{event}`: [optional]: timeout directives in `<event>:<time>` format. Key must be one of (`resolve`, `retry`). Value is time related to the event in the HAProxy time format
 
 * `haproxy_acl_files`: [default: `[]`]: ACL file declarations
 * `haproxy_acl_files.{n}.dest`: [required]: The remote path of the file (e.g. `/etc/haproxy/acl/api.map`)
@@ -470,30 +471,30 @@ Set up (the latest version of) [HAProxy](http://www.haproxy.org/) in Ubuntu syst
 * `haproxy_mailers.{n}.servers.{n}.host`: [required]: SMTP server host
 * `haproxy_mailers.{n}.servers.{n}.port`: [default: `25`]: SMTP server name port
 
-* `haproxy_rings`: [default: `[]`]: Enable ring-buffers, to be used as target for log servers or traces.
+* `haproxy_rings`: [default: `[]`]: Enable ring-buffers, to be used as target for log servers or traces
 * `haproxy_rings.{n}.name`: Creates a new ring-buffer with name <rings.name>
-* `haproxy_rings.{n}.description`: Optional description string of the ring. It will appear on CLI. By default, <name> is reused to fill this field.
+* `haproxy_rings.{n}.description`: Optional description string of the ring. It will appear on CLI. By default, <name> is reused to fill this field
 * `haproxy_rings.{n}.format`: Format used to store events into the ring buffer. (May be on of follow: iso, local, raw, rfc3164, rfc5424, short, priority, timed)
-* `haproxy_rings.{n}.maxlen`: The maximum length of an event message stored into the ring, including formatted header. If an event message is longer than <length>, it will be truncated to this length.
-* `haproxy_rings.{n}.size`: This is the optional size in bytes for the ring-buffer. Default value is set to BUFSIZE.
+* `haproxy_rings.{n}.maxlen`: The maximum length of an event message stored into the ring, including formatted header. If an event message is longer than <length>, it will be truncated to this length
+* `haproxy_rings.{n}.size`: This is the optional size in bytes for the ring-buffer. Default value is set to BUFSIZE
 * `haproxy_rings.{n}.timeout`: Timeouts list declaration
-* `haproxy_rings.{n}.timeout.connect`: Set the maximum time to wait for a connection attempt to a server to succeed.
-* `haproxy_rings.{n}.timeout.server`: Set the maximum time for pending data staying into output buffer.
+* `haproxy_rings.{n}.timeout.connect`: Set the maximum time to wait for a connection attempt to a server to succeed
+* `haproxy_rings.{n}.timeout.server`: Set the maximum time for pending data staying into output buffer
 * `haproxy_rings.{n}.server`: Server list declaration
 * `haproxy_rings.{n}.server.name`: Custom name of remote server
 * `haproxy_rings.{n}.server.listen`: Remote server address
-* `haproxy_rings.{n}.server.param`: Specific server directive such as "log-proto" to set the protocol used to send messages.
+* `haproxy_rings.{n}.server.param`: Specific server directive such as "log-proto" to set the protocol used to send messages
 
-* `haproxy_logforwards`: [default: `[]`]: Declare one or multiple log forwarding section, haproxy will forward all received log messages to a log servers list.
+* `haproxy_logforwards`: [default: `[]`]: Declare one or multiple log forwarding section, haproxy will forward all received log messages to a log servers list
 * `haproxy_logforwards.{n}.name`: Creates a new logforward with name <logforward.name>
-* `haproxy_logforwards.{n}.bind`: Used to configure a stream log listener to receive messages to forward. This supports the "bind" parameters found in 5.1 paragraph including those about ssl but some statements such as "alpn" may be irrelevant for syslog protocol over TCP.
-* `haproxy_logforwards.{n}.dgram-bind`: Used to configure a datagram log listener to receive messages to forward. Addresses must be in IPv4 or IPv6 form,followed by a port. This supports for some of the "bind" parameters found in 5.1 paragraph among which "interface", "namespace" or "transparent", the other ones being silently ignored as irrelevant for UDP/syslog case.
-* `haproxy_logforwards.{n}.backlog`: Give hints to the system about the approximate listen backlog desired size on connections accept.
-* `haproxy_logforwards.{n}.maxconn`: Fix the maximum number of concurrent connections on a log forwarder. 10 is the default.
-* `haproxy_logforwards.{n}.timeout client`: Set the maximum inactivity time on the client side.
+* `haproxy_logforwards.{n}.bind`: Used to configure a stream log listener to receive messages to forward. This supports the "bind" parameters found in 5.1 paragraph including those about ssl but some statements such as "alpn" may be irrelevant for syslog protocol over TCP
+* `haproxy_logforwards.{n}.dgram-bind`: Used to configure a datagram log listener to receive messages to forward. Addresses must be in IPv4 or IPv6 form,followed by a port. This supports for some of the "bind" parameters found in 5.1 paragraph among which "interface", "namespace" or "transparent", the other ones being silently ignored as irrelevant for UDP/syslog case
+* `haproxy_logforwards.{n}.backlog`: Give hints to the system about the approximate listen backlog desired size on connections accept
+* `haproxy_logforwards.{n}.maxconn`: Fix the maximum number of concurrent connections on a log forwarder. 10 is the default
+* `haproxy_logforwards.{n}.timeout client`: Set the maximum inactivity time on the client side
 * `haproxy_logforwards.{n}.log`: Log list declaration
 * `haproxy_logforwards.{n}.log.address`: [required]: Used to configure target log servers
-* `haproxy_logforwards.{n}.log.param`: [optional]: A list of parameters common to this log declarations. See more details on proxies documentation.
+* `haproxy_logforwards.{n}.log.param`: [optional]: A list of parameters common to this log declarations. See more details on proxies documentation
 
 ## Dependencies
 
