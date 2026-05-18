@@ -37,7 +37,7 @@ done
 
 find "{{ haproxy_global_crt_base }}" -mindepth 1 -name "*.ocsp" -mtime +0 -delete;
 
-{% if ansible_service_mgr == 'systemd' %}
+{% if ansible_facts['service_mgr'] == 'systemd' %}
 systemctl reload haproxy;
 {% else %}
 service haproxy reload;
