@@ -8,7 +8,7 @@
     - name: include (first found) variables
       ansible.builtin.include_vars: "{{ item }}"
       with_first_found:
-        - "{{ playbook_dir }}/vars/_{{ ansible_facts['ansible_distribution_release'] }}.yml"
+        - "{{ playbook_dir }}/vars/_{{ ansible_facts['distribution_release'] }}.yml"
         - "{{ playbook_dir }}/vars/_{{ ansible_facts['distribution'] | lower }}.yml"
         - "{{ playbook_dir }}/vars/_default.yml"
     - name: include variables
