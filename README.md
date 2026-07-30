@@ -547,7 +547,7 @@ None
       - name: http
         description: Front-end for all HTTP traffic
         bind:
-          - listen: "{{ ansible_eth0['ipv4']['address'] }}:80"
+          - listen: "{{ ansible_facts['eth0'] ['ipv4']['address'] }}:80"
         mode: http
         redirect:
           - string: 'scheme https code 301'
@@ -556,7 +556,7 @@ None
       - name: https
         description: Front-end for all HTTPS traffic
         bind:
-          - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
+          - listen: "{{ ansible_facts['eth0'] ['ipv4']['address'] }}:443"
             param:
               - ssl
               - 'crt star-example1-com.pem'
@@ -582,17 +582,17 @@ None
             cond: 'if { ssl_fc }'
         server:
           - name: web-01
-            listen: "{{ ansible_lo['ipv4']['address'] }}:8001"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:8001"
             param:
               - 'maxconn 501'
               - check
           - name: web-02
-            listen: "{{ ansible_lo['ipv4']['address'] }}:8002"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:8002"
             param:
               - 'maxconn 502'
               - check
           - name: web-03
-            listen: "{{ ansible_lo['ipv4']['address'] }}:8003"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:8003"
             param:
               - 'maxconn 503'
               - check
@@ -611,12 +611,12 @@ None
           - fall 2
         server:
           - name: mqtt-1
-            listen: "{{ ansible_lo['ipv4']['address'] }}:1883"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:1883"
             param:
               - check
 
           - name: mqtt-2
-            listen: "{{ ansible_lo['ipv4']['address'] }}:1883"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:1883"
             param:
               - check
               - backup
@@ -665,7 +665,7 @@ None
       - name: stats
         description: Global statistics
         bind:
-          - listen: "{{ ansible_eth0['ipv4']['address'] }}:1936"
+          - listen: "{{ ansible_facts['eth0'] ['ipv4']['address'] }}:1936"
             param:
               - ssl
               - 'crt star-example0-com.pem'
@@ -686,7 +686,7 @@ None
       - name: ssl-proxy
         description: Proxy for all HTTPS traffic
         bind:
-          - listen: "{{ ansible_eth0['ipv4']['address'] }}:443"
+          - listen: "{{ ansible_facts['eth0'] ['ipv4']['address'] }}:443"
             param:
               - ssl
               - 'crt star-example1-com.pem'
@@ -700,7 +700,7 @@ None
         mode: http
         server:
           - name: "{{ inventory_hostname }}"
-            listen: "{{ ansible_lo['ipv4']['address'] }}:80"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:80"
             param:
               - send-proxy
         rspadd:
@@ -713,8 +713,8 @@ None
       - name: http
         description: Front-end for all HTTP traffic
         bind:
-          - listen: "{{ ansible_eth0['ipv4']['address'] }}:80"
-          - listen: "{{ ansible_lo['ipv4']['address'] }}:80"
+          - listen: "{{ ansible_facts['eth0'] ['ipv4']['address'] }}:80"
+          - listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:80"
             param:
               - accept-proxy
         bind_process:
@@ -740,17 +740,17 @@ None
             cond: 'if { dst_port 443 }'
         server:
           - name: web-01
-            listen: "{{ ansible_lo['ipv4']['address'] }}:8001"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:8001"
             param:
               - 'maxconn 501'
               - check
           - name: web-02
-            listen: "{{ ansible_lo['ipv4']['address'] }}:8002"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:8002"
             param:
               - 'maxconn 502'
               - check
           - name: web-03
-            listen: "{{ ansible_lo['ipv4']['address'] }}:8003"
+            listen: "{{ ansible_facts['lo']['ipv4']['address'] }}:8003"
             param:
               - 'maxconn 503'
               - check
