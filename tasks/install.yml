@@ -2,9 +2,11 @@
 ---
 - name: install | dependencies
   ansible.builtin.apt:
-    name: "{{ item.name }}"
-    state: "{{ item.state }}"
-  with_items: "{{ haproxy_dependencies }}"
+    name: "{{ dep.name }}"
+    state: "{{ dep.state }}"
+  loop: "{{ haproxy_dependencies }}"
+  loop_control:
+    loop_var: dep
   tags:
     - haproxy-install-dependencies
 

@@ -30,18 +30,22 @@
 
 - name: repository | cleanup
   ansible.builtin.file:
-    path: "{{ item }}"
+    path: "{{ repo_path }}"
     state: absent
-  with_items: "{{ haproxy_repository_files_absent }}"
+  loop: "{{ haproxy_repository_files_absent }}"
+  loop_control:
+    loop_var: repo_path
   tags:
     - haproxy-repository-cleanup
 
 - name: repository | add
   ansible.builtin.apt_repository:
-    repo: "{{ item.type }} {{ item.url }} {{ item.component }}"
-    state: "{{ item.state | default('present') }}"
+    repo: "{{ repo.type }} {{ repo.url }} {{ repo.component }}"
+    state: "{{ repo.state | default('present') }}"
     update_cache: true
     mode: '0644'
-  with_items: "{{ haproxy_repositories }}"
+  loop: "{{ haproxy_repositories }}"
+  loop_control:
+    loop_var: repo
   tags:
     - haproxy-repository-add

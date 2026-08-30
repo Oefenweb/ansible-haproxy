@@ -2,23 +2,27 @@
 ---
 - name: acl | create directories
   ansible.builtin.file:
-    path: "{{ item.dest | dirname }}"
+    path: "{{ acl_file.dest | dirname }}"
     state: directory
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
+    owner: "{{ acl_file.owner | default('root') }}"
+    group: "{{ acl_file.group | default('root') }}"
     mode: '0750'
-  with_items: "{{ haproxy_acl_files }}"
+  loop: "{{ haproxy_acl_files }}"
+  loop_control:
+    loop_var: acl_file
   tags:
     - haproxy-acl-create-directories
 
 - name: acl | update files
   ansible.builtin.template:
     src: etc/haproxy/acl.j2
-    dest: "{{ item.dest }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
-    mode: "{{ item.mode | default('0640') }}"
-  with_items: "{{ haproxy_acl_files }}"
+    dest: "{{ acl_file.dest }}"
+    owner: "{{ acl_file.owner | default('root') }}"
+    group: "{{ acl_file.group | default('root') }}"
+    mode: "{{ acl_file.mode | default('0640') }}"
+  loop: "{{ haproxy_acl_files }}"
+  loop_control:
+    loop_var: acl_file
   notify: restart haproxy
   tags:
     - haproxy-acl-update-files

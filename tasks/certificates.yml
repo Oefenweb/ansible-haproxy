@@ -2,35 +2,41 @@
 ---
 - name: certificates | create directories
   ansible.builtin.file:
-    path: "{{ item.dest | dirname }}"
+    path: "{{ ssl_map.dest | dirname }}"
     state: directory
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
+    owner: "{{ ssl_map.owner | default('root') }}"
+    group: "{{ ssl_map.group | default('root') }}"
     mode: '0750'
-  with_items: "{{ haproxy_ssl_map }}"
-  when: item.state is undefined or item.state == 'present'
+  loop: "{{ haproxy_ssl_map }}"
+  loop_control:
+    loop_var: ssl_map
+  when: ssl_map.state is undefined or ssl_map.state == 'present'
   tags:
     - haproxy-certificates-create-directories
 
 - name: certificates | copy files
   ansible.builtin.copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
-    mode: "{{ item.mode | default('0640') }}"
-  with_items: "{{ haproxy_ssl_map }}"
-  when: item.state is undefined or item.state == 'present'
+    src: "{{ ssl_map.src }}"
+    dest: "{{ ssl_map.dest }}"
+    owner: "{{ ssl_map.owner | default('root') }}"
+    group: "{{ ssl_map.group | default('root') }}"
+    mode: "{{ ssl_map.mode | default('0640') }}"
+  loop: "{{ haproxy_ssl_map }}"
+  loop_control:
+    loop_var: ssl_map
+  when: ssl_map.state is undefined or ssl_map.state == 'present'
   notify: restart haproxy
   tags:
     - haproxy-certificates-copy-files
 
 - name: certificates | remove files
   ansible.builtin.file:
-    path: "{{ item.dest }}"
+    path: "{{ ssl_map.dest }}"
     state: absent
-  with_items: "{{ haproxy_ssl_map }}"
-  when: item.state is defined and item.state == 'absent'
+  loop: "{{ haproxy_ssl_map }}"
+  loop_control:
+    loop_var: ssl_map
+  when: ssl_map.state is defined and ssl_map.state == 'absent'
   notify: restart haproxy
   tags:
     - haproxy-certificates-remove-files
